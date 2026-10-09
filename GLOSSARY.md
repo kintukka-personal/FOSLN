@@ -41,3 +41,15 @@ _Avoid_: launch price, introductory price, RRP, compare-at price.
 A former regular price shown struck through next to a lower sale price. It is honest only if the Model really sold at that regular price for a reasonable period just before the sale.
 
 _Avoid_: compare-at price, original price, retail value.
+
+## Sale
+
+A period when a Model sells below its regular price, with the regular price shown as the was price. An offer that states a saving against the regular price, such as "20% off", is a sale.
+
+_Avoid_: promo, deal, discount.
+
+## Offer
+
+A short-term incentive that leaves the shown price unchanged, such as free express delivery, a gift or store credit. An offer that states a saving is a sale, not an offer.
+
+_Avoid_: promo, deal, discount.

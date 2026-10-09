@@ -26,6 +26,6 @@ _Avoid_: ship, fulfil (both blur dispatch and delivery).
 
 ## Market
 
-A country FOSLN sells into, with its own currency and prices. The launch Market is **Australia**, priced in AUD.
+A country FOSLN sells into, with its own tax, delivery and consumer rules. A Market's prices can be in a currency other than its own. The launch Market is **Australia**, priced in USD.
 
 _Avoid_: region, territory.

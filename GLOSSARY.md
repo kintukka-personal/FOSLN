@@ -29,3 +29,15 @@ _Avoid_: ship, fulfil (both blur dispatch and delivery).
 A country FOSLN sells into, with its own tax, delivery and consumer rules. A Market's prices can be in a currency other than its own. The launch Market is **Australia**, priced in USD.
 
 _Avoid_: region, territory.
+
+## Regular price
+
+The one price a Model is sold at, the same for every Dial. A Model has one regular price at a time. A change of price makes a new regular price.
+
+_Avoid_: launch price, introductory price, RRP, compare-at price.
+
+## Was price
+
+A former regular price shown struck through next to a lower sale price. It is honest only if the Model really sold at that regular price for a reasonable period just before the sale.
+
+_Avoid_: compare-at price, original price, retail value.

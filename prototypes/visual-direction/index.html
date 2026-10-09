@@ -46,7 +46,7 @@ button { font: inherit; color: inherit; }
 .hdr nav { display: flex; gap: 20px; }
 .hdr nav a { color: inherit; text-decoration: none; opacity: .8; }
 .hdr .tools { display: flex; gap: 14px; align-items: center; }
-.cur { border: 1px solid var(--line); padding: 4px 9px; font: 500 11px/1 var(--mono); letter-spacing: .06em; background: none; cursor: pointer; }
+.cur { border: 1px solid var(--line); min-height: 36px; padding: 0 12px; font: 500 12px/1 var(--mono); letter-spacing: .06em; background: none; cursor: pointer; }
 .bag { font-size: 13px; opacity: .85; }
 .wm { font-family: var(--display); letter-spacing: .18em; font-size: 17px; }
 @media (max-width: 640px) { .hdr nav { display: none; } .hdr { padding: 14px 16px; } }
@@ -55,11 +55,15 @@ button { font: inherit; color: inherit; }
 .price { font-size: 30px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 .price-note { font-size: 13px; color: var(--muted); }
 .dials { display: flex; gap: 14px; flex-wrap: wrap; }
-.dial-btn { display: grid; justify-items: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; font: 500 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.dial-btn .sw { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); box-shadow: inset 0 0 0 3px var(--page); }
+.dial-btn { display: grid; justify-items: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dial-btn .sw { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); box-shadow: inset 0 0 0 3px var(--page); }
 .dial-btn[aria-pressed="true"] { color: var(--ink); }
 .dial-btn[aria-pressed="true"] .sw { border-color: var(--accent); box-shadow: inset 0 0 0 3px var(--page), 0 0 0 1px var(--accent); }
-.cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border: 0; cursor: pointer; background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: 15px; letter-spacing: .01em; width: 100%; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border: 0; cursor: pointer; background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: 15px; letter-spacing: .01em; width: 100%; transition: transform .15s ease, filter .2s ease; }
+.cta:hover { filter: brightness(1.08); }
+.cta:active { transform: translateY(1px); }
+a { cursor: pointer; transition: opacity .2s ease; }
+a:hover { opacity: .75; }
 
 /* motion demo dial */
 .mdial { width: 120px; height: 120px; }
@@ -87,7 +91,8 @@ button { font: inherit; color: inherit; }
 .a-call.r { flex-direction: row-reverse; text-align: right; }
 .a-steel { font: 800 clamp(64px, 14vw, 170px)/.9 "Archivo", sans-serif; font-stretch: 125%; letter-spacing: -.01em; text-align: center; margin: 0; padding-bottom: 26px;
   background: repeating-linear-gradient(180deg, #f4f5f6 0 17%, #8c9197 17% 18.5%, #c9cdd1 18.5% 36%, #6b6f74 36% 37.5%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.a-sub { display: flex; justify-content: space-between; gap: 16px; padding: 0 24px 22px; font: 400 11px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); flex-wrap: wrap; }
+.a-sub { display: flex; justify-content: center; gap: 32px; padding: 0 24px 26px; flex-wrap: wrap; }
+.a-sub a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 4px; font-size: 15px; }
 .a-pdp { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); background: var(--surface); }
 .a-pdp .vis { position: relative; display: grid; place-items: center; padding: 40px 20px; min-height: 560px; background: radial-gradient(60% 60% at 50% 50%, #26282d, #1B1C1F 70%); }
 .a-pdp .vis svg.ring { position: absolute; width: min(520px, 90%); height: auto; opacity: .35; }
@@ -126,7 +131,7 @@ button { font: inherit; color: inherit; }
 /* ───────── C · PLINTH ───────── */
 .c-hero { background: #E7E7E3; display: grid; grid-template-rows: auto auto 1fr; }
 .c-hero .wm { font-family: "Archivo", sans-serif; font-weight: 600; font-stretch: 125%; letter-spacing: .14em; font-size: 14px; }
-.c-hero h1 { margin: 0; padding: 40px 24px 0; font: 300 clamp(30px, 4.4vw, 56px)/1.05 var(--display); letter-spacing: -.02em; max-width: 16ch; }
+.c-hero h1 { margin: 0; padding: 40px 24px 0; font: 300 clamp(28px, 3.6vw, 48px)/1.08 var(--display); letter-spacing: -.02em; max-width: 24ch; text-wrap: balance; }
 .c-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); margin-top: 44px; border-top: 1px solid var(--line); }
 .c-cell { background: #E7E7E3; padding: 28px 24px 22px; display: grid; gap: 16px; position: relative; }
 .c-cell .ph { display: grid; place-items: center; height: 420px; background: linear-gradient(#EFEFEC, #DCDCD7); }
@@ -142,9 +147,8 @@ button { font: inherit; color: inherit; }
 .c-pdp h2 { margin: 0; font: 700 52px/.95 "Archivo", sans-serif; font-stretch: 125%; letter-spacing: .02em; }
 .c-pdp .lede { margin: 0; font-size: 16px; max-width: 34ch; }
 .c-pdp .cta { background: #151617; color: #F3F3F0; }
-.c-pdp table { border-collapse: collapse; width: 100%; font: 400 12px/1.4 var(--mono); }
-.c-pdp td { border-top: 1px solid var(--line); padding: 9px 0; }
-.c-pdp td:last-child { text-align: right; color: var(--muted); }
+.c-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; padding-top: 18px; border-top: 1px solid var(--line); font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.c-facts b { display: block; color: var(--ink); font-weight: 500; }
 .c-pdp .price { font-family: "Archivo", sans-serif; font-weight: 500; }
 @media (max-width: 820px) { .c-row, .c-pdp { grid-template-columns: 1fr; } .c-cell .ph { height: 340px; } .c-cell .ph img, .c-cell .ph svg { height: 290px; } .c-pdp .ph { min-height: 420px; } .c-pdp .ph .w { height: 360px; } }
 
@@ -159,7 +163,9 @@ button { font: inherit; color: inherit; }
 .d-half.st .nm { color: #C9CDD1; }
 .d-half.au .nm { color: #D6B271; }
 .d-half .row { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
-.d-half .row span { font: 400 11px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.d-shop { font-size: 15px; text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid currentColor; }
+.d-half.st .d-shop { color: #C9CDD1; }
+.d-half.au .d-shop { color: #D6B271; }
 .d-top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; }
 .d-top .wm { position: absolute; left: 50%; transform: translateX(-50%); }
 .d-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: linear-gradient(transparent, rgba(255,255,255,.25), transparent); }
@@ -178,7 +184,7 @@ button { font: inherit; color: inherit; }
 /* floating chooser */
 .bar { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; z-index: 50; width: max-content; max-width: 100%; }
 .bar .grp { display: flex; gap: 4px; padding: 4px; background: var(--bar-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; }
-.bar button { border: 0; background: transparent; color: var(--bar-ink); padding: 9px 14px; border-radius: 999px; font: 500 12px/1 "Hanken Grotesk", Arial, sans-serif; cursor: pointer; white-space: nowrap; }
+.bar button { border: 0; background: transparent; color: var(--bar-ink); min-height: 40px; padding: 0 16px; border-radius: 999px; font: 500 13px/1 "Hanken Grotesk", Arial, sans-serif; cursor: pointer; white-space: nowrap; }
 .bar button[aria-pressed="true"] { background: var(--bar-on); color: var(--bar-on-ink); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -204,7 +210,7 @@ button { font: inherit; color: inherit; }
         </div>
         <div>
           <p class="a-steel" data-hero-name>ACIER</p>
-          <div class="a-sub"><span>N° 01 ACIER · N° 02 CADRE</span><span>Quartz watches · Dispatched in 24 hours</span></div>
+          <div class="a-sub"><a href="#steel">Shop ACIER</a><a href="#steel">Shop CADRE</a></div>
         </div>
       </div>
     </div>
@@ -216,7 +222,7 @@ button { font: inherit; color: inherit; }
           <span data-watch="a"></span>
         </div>
         <div class="info">
-          <span class="no" data-no>N° 01 · Quartz watch</span>
+          <span class="no" data-no>Quartz watch</span>
           <h2 data-name>ACIER</h2>
           <p class="lede" data-lede>A round steel case and a link bracelet, with <em>nothing on the dial but the hands</em>.</p>
           <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
@@ -282,8 +288,8 @@ button { font: inherit; color: inherit; }
         <div class="hdr"><span class="wm">FOSLN</span><nav><a href="#plinth">Watches</a><a href="#plinth">About</a></nav><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Bag (0)</span></div></div>
         <h1>Two quartz watches. Nothing on the dial but the hands.</h1>
         <div class="c-row">
-          <div class="c-cell"><div class="ph"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="c-meta"><span class="c-name">ACIER</span><span class="c-idx">Round · steel · $149</span></div><a class="c-link" href="#plinth">View ACIER</a></div>
-          <div class="c-cell"><div class="ph" style="position:relative"><span data-cadre="champagne"></span><span class="stand-in">Stand-in drawing · no CADRE photo yet</span></div><div class="c-meta"><span class="c-name">CADRE</span><span class="c-idx">Square · gold frame · $169</span></div><a class="c-link" href="#plinth">View CADRE</a></div>
+          <div class="c-cell"><div class="ph"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="c-meta"><span class="c-name">ACIER</span><span class="c-idx">Round steel, $149</span></div><a class="c-link" href="#plinth">View ACIER</a></div>
+          <div class="c-cell"><div class="ph" style="position:relative"><span data-cadre="champagne"></span><span class="stand-in">Stand-in drawing · no CADRE photo yet</span></div><div class="c-meta"><span class="c-name">CADRE</span><span class="c-idx">Square gold frame, $169</span></div><a class="c-link" href="#plinth">View CADRE</a></div>
         </div>
       </div>
     </div>
@@ -292,13 +298,13 @@ button { font: inherit; color: inherit; }
       <div class="frame c-pdp">
         <div class="ph"><span data-watch="c"></span></div>
         <div class="info">
-          <span class="c-idx" data-no>Model 1 of 2</span>
+          <span class="c-idx" data-no>Round steel case</span>
           <h2 data-name>ACIER</h2>
           <p class="lede" data-lede>A round steel case and a link bracelet. Nothing on the dial but the hands.</p>
           <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
           <div class="dials" data-dials></div>
           <button class="cta" type="button" data-cta>Add to bag</button>
-          <table data-table></table>
+          <div class="facts c-facts" data-facts></div>
         </div>
       </div>
     </div>
@@ -320,8 +326,8 @@ button { font: inherit; color: inherit; }
       <div class="frame">
         <div class="d-top"><div class="hdr"><nav><a href="#metals">ACIER</a><a href="#metals">CADRE</a></nav><span class="wm">FOSLN</span><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Bag</span></div></div></div>
         <div class="d-hero">
-          <div class="d-half st"><div class="vis"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="row"><span class="nm">ACIER</span><span>Round · steel · $149</span></div></div>
-          <div class="d-half au"><div class="vis" style="position:relative"><span data-cadre="black"></span></div><span class="stand-in">Stand-in drawing · no CADRE photo yet</span><div class="row"><span class="nm">CADRE</span><span>Square · gold frame · $169</span></div></div>
+          <div class="d-half st"><div class="vis"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="row"><span class="nm">ACIER</span><a class="d-shop" href="#metals">Shop ACIER, $149</a></div></div>
+          <div class="d-half au"><div class="vis" style="position:relative"><span data-cadre="black"></span></div><span class="stand-in">Stand-in drawing · no CADRE photo yet</span><div class="row"><span class="nm">CADRE</span><a class="d-shop" href="#metals">Shop CADRE, $169</a></div></div>
           <div class="d-seam"></div>
         </div>
       </div>
@@ -368,11 +374,11 @@ button { font: inherit; color: inherit; }
 <script>
 const DIRS = { steel: "A · Steel Instrument", golden: "B · Golden Hour", plinth: "C · Plinth", metals: "D · Two Metals" };
 const MODELS = {
-  acier: { name: "ACIER", price: "$149", no: { steel: "N° 01 · Quartz watch", plinth: "Model 1 of 2", metals: "Stainless steel · Quartz" },
+  acier: { name: "ACIER", price: "$149", no: { steel: "Quartz watch", plinth: "Round steel case", metals: "Stainless steel, quartz" },
     lede: { steel: 'A round steel case and a link bracelet, with <em>nothing on the dial but the hands</em>.', other: "A round steel case and a link bracelet. Nothing on the dial but the hands." },
     dials: [{ id: "chrome", label: "Chrome", sw: "radial-gradient(circle at 40% 35%, #fff, #c9cdd1 45%, #8c9197)" }, { id: "onyx", label: "Onyx", sw: "radial-gradient(circle at 40% 35%, #444, #0b0b0c 60%)" }],
     facts: [["Case", "Round, steel"], ["Movement", "Quartz"], ["Bracelet", "Steel links"], ["Dispatch", "Within 24 hours"]] },
-  cadre: { name: "CADRE", price: "$169", no: { steel: "N° 02 · Quartz watch", plinth: "Model 2 of 2", metals: "Gold frame · Quartz" },
+  cadre: { name: "CADRE", price: "$169", no: { steel: "Quartz watch", plinth: "Square case, gold frame", metals: "Gold frame, quartz" },
     lede: { steel: 'A square case inside a gold frame, with <em>nothing on the dial but the hands</em>.', other: "A square case inside a gold frame. Nothing on the dial but the hands." },
     dials: [{ id: "black", label: "Black", sw: "radial-gradient(circle at 40% 35%, #3a3a3a, #0c0c0c 60%)" }, { id: "champagne", label: "Champagne", sw: "radial-gradient(circle at 40% 35%, #fbf0d6, #d9c08e 55%, #a8874f)" }],
     facts: [["Case", "Square, gold frame"], ["Movement", "Quartz"], ["Dial names", "To be confirmed"], ["Dispatch", "Within 24 hours"]] }
@@ -447,7 +453,6 @@ function render() {
     e.innerHTML = m.dials.map(d => `<button class="dial-btn" type="button" data-dial="${d.id}" aria-pressed="${d.id === dial}"><span class="sw" style="background:${d.sw}"></span>${d.label}</button>`).join("");
   });
   sec.querySelectorAll("[data-facts]").forEach(e => e.innerHTML = m.facts.map(([k, v]) => `<span>${k}<b>${v}</b></span>`).join(""));
-  sec.querySelectorAll("[data-table]").forEach(e => e.innerHTML = m.facts.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join(""));
   document.querySelectorAll("[data-pick]").forEach(b => b.setAttribute("aria-pressed", b.dataset.pick === state.dir));
   document.querySelectorAll("[data-m]").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === state.model));
   tick(true);

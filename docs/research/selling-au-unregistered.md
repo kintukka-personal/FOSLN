@@ -6,7 +6,7 @@ Research for [#29](https://github.com/Kintukka2/FOSLN-WATCH/issues/29), done on 
 
 - **Shopify and Shopify Payments work without an ABN.** Shopify Payments Australia has an "Individual" business type for people with no ABN. The owner must live in Australia, be at least 18, and have an Australian AUD transaction account.
 - **The smallest registration is an ABN as a sole trader.** It's free and done online. Trading under the name "FOSLN" rather than the owner's own name also needs a registered business name, which costs A$47 a year and needs an ABN first.
-- **GST starts at A$75,000.** A resident seller must register within 21 days of reaching A$75,000 of GST turnover, measured on the past 12 months or the next 12 months. Before then FOSLN charges no GST and must not show prices as "incl. GST". At A$40 an order, A$75,000 is about 1,875 orders in 12 months.
+- **GST starts at A$75,000.** A resident seller must register within 21 days of reaching A$75,000 of GST turnover, measured on the past 12 months or the next 12 months. Before then FOSLN charges no GST and must not show prices as "incl. GST". At an illustrative A$139 price, A$75,000 is about 540 orders in 12 months (about 770 at A$97).
 - **Doing business doesn't depend on registering.** The ATO judges this by what you do (aiming for profit, regular sales, run like a business), and a sole trader reports business income in their own tax return.
 - **Australian Consumer Law applies in full.** It covers anyone selling "in trade or commerce", and that includes any business activity. Registration isn't part of the test.
 - **Pricing in USD only (section 6).**
@@ -22,14 +22,14 @@ Research for [#29](https://github.com/Kintukka2/FOSLN-WATCH/issues/29), done on 
 |---|---|---|---|
 | Shopify Payments business type | Individual | Sole trader | Sole trader |
 | Cost to register | Nothing | ABN free. Business name A$47 for 1 year or A$108 for 3 years | GST registration (cost not stated, see below) |
-| GST on FOSLN's sales | None | None while under A$75,000 | 10% (1/11 of the price), about A$3.64 on an A$40 order |
+| GST on FOSLN's sales | None | None while under A$75,000 | 10% (1/11 of the price), about A$12.64 on an A$139 order |
 | Price shown on the store | One total price with no GST label | Same | One total price including GST |
 | GST on Shopify's own bill | 10% added | 10% added | None, once the ABN is added in Shopify billing |
 | Consumer guarantees | Apply | Apply | Apply |
 
 ### Assumptions behind the figures
 
-- **Order:** one A$30 watch plus A$10 shipping, so A$40 paid by the customer. The Supplier sends it from China straight to an Australian customer. That's well under the A$1,000 low-value limit.
+- **Order:** FOSLN pays the Supplier A$30 for the watch plus A$10 shipping, so A$40 a watch in cost. The examples use an illustrative customer price of **A$139** (US$97 at US$1 = A$1.4332, the price #10 used); the real price is still to be decided. The Supplier sends it from China straight to an Australian customer. That's well under the A$1,000 low-value limit.
 - **Currency:** the store sells and pays out in AUD only. So the currency conversion fee below doesn't apply to these sales.
 - **Arithmetic is mine:** fee examples and order counts are worked out from the published rates. They aren't quoted from a source.
 
@@ -103,7 +103,7 @@ From [Shopify AU pricing][shopify-au-pricing]:
 | Advanced | 1.35% + 30¢ | 2.7% + 30¢ | 3.3% + 30¢ |
 | Plus | 1.15% + 30¢ | 2.6% + 30¢ | 3.2% + 30¢ |
 
-- **On one A$40 order (Basic, my arithmetic):** about A$0.98 for a standard card, A$1.46 for Amex, and A$1.70 for a card issued outside Australia.
+- **On one A$139 order (Basic, my arithmetic):** about A$2.66 for a standard card, A$4.33 for Amex, and A$5.17 for a card issued outside Australia.
 - **Domestic and international.** Shopify defines domestic as cards "issued in the same country or region as your store" and cross-border as cards issued anywhere else ([Shopify, Fees and costs][shopify-fees]).
 - **Accepted cards.** Visa, Mastercard, American Express and UnionPay. Apple Pay, Google Pay and Shop Pay are switched on automatically ([Shopify, Payment methods in Australia][sp-methods]).
 - **Currency conversion fee.** It's **2%** for all Shopify Payments regions other than the US (1.5%) ([Shopify, Fees and costs][shopify-fees]). It applies only "when you accept payments in a currency different from your payout currency". An AUD-only store paid out in AUD doesn't pay it. Since 6 April 2026 it has been worked out on the gross order amount ([Shopify, Currency conversion calculation][shopify-ccc]).
@@ -130,7 +130,7 @@ From [Shopify AU pricing][shopify-au-pricing]:
 - **Deadline.** You must apply "within 21 days after becoming required to be registered" ([GST Act s 25-1][gst-act]). If you register late, the ATO says you may owe GST on sales since the date you were required to register, even if your prices didn't include it ([ATO][ato-noreg], read via search extract).
 - **Voluntary registration.** You may register below the threshold if you carry on an enterprise ([GST Act s 23-10][gst-act]). The ATO says you generally stay registered for at least 12 months ([ATO, Registering for GST][ato-reg], read via search extract).
 - **ABN first.** For a resident business, ordinary GST registration needs an ABN ([ATO, Registering for GST][ato-reg], read via search extract). The simplified ARN registration in #10's findings is for non-resident businesses, so it doesn't apply to an Australian-resident owner.
-- **In FOSLN's case (my arithmetic):** at A$40 an order, A$75,000 is about 1,875 orders in 12 months.
+- **In FOSLN's case (my arithmetic):** at A$139 an order, A$75,000 is about 540 orders in 12 months (about 770 at A$97).
 
 ### Is it the same as for an offshore seller?
 
@@ -153,7 +153,7 @@ From [Shopify AU pricing][shopify-au-pricing]:
 
 - **One total price, always.** A seller must state "in a prominent way and as a single figure, the single price" ([Australian Consumer Law s 48(1)][cca]). That price includes "any tax, duty, fee, levy or charge imposed on the person making the representation", and the Act gives GST as an example ([s 48(7)(b), Example 2][cca]). Delivery charges may be shown separately, but a known minimum delivery charge must be stated ([s 48(2)–(3)][cca]).
 - **Before registering.** No GST is payable, so there's no GST to include. The ATO says that if you're "not registered and are not required to be registered for GST, you don't include GST in the price" ([ATO][ato-noreg], read via search extract). Invoices "should not include the words 'tax invoice'" ([ATO, Setting up your business invoices][ato-invoice], read via search extract). The sources don't use the phrase "incl. GST". My inference is that a store label claiming prices include GST would be inaccurate before registration.
-- **After registering.** The single price must include GST ([s 48(7)(b)][cca]). The ATO says "As soon as it's clear that GST applies, you must show the GST-inclusive price" ([ATO, How Australian GST works][ato-how], cited in #10). At the same A$40 price, FOSLN would then keep about A$36.36 (my arithmetic).
+- **After registering.** The single price must include GST ([s 48(7)(b)][cca]). The ATO says "As soon as it's clear that GST applies, you must show the GST-inclusive price" ([ATO, How Australian GST works][ato-how], cited in #10). At the same A$139 price, FOSLN would then keep about A$126.36 (my arithmetic).
 - **In Shopify.** Shopify collects tax only for regions you set up under Settings > Taxes and duties > Collect sales tax, with your tax number. You can leave the number blank while your application is pending ([Shopify, Setting up taxes][shopify-taxsetup]). "All prices include tax" is a setting on the same page ([Shopify, Including or excluding tax][shopify-taxincl], cited in #10). Shopify doesn't file or pay GST for you ([Shopify, Setting up taxes][shopify-taxsetup]).
 
 ---
@@ -217,7 +217,7 @@ Added on 9 October 2026 after the owner asked about showing Australian consumers
   - Conversion fees aren't returned on refunds ([Shopify, Fees and costs][shopify-fees]).
 - **Card rate.** An Australian-issued card is a domestic card, because Shopify bases domestic or cross-border on where the card was issued ([Shopify, Fees and costs][shopify-fees]). So my reading is that the domestic rate (1.7% + 30¢ on Basic) applies, plus the 2% conversion fee.
 - **Payout currency.** "You can receive payouts in AUD on all subscription plans." Other currencies, including USD, are available to Australian stores. Choosing a non-domestic default payout currency brings a Multi-Currency Payout fee, and multiple payout currencies need the Advanced or Plus plan ([Shopify, Payouts in Australia][sp-payouts], read via WebFetch; [Shopify, Supported payout currencies][shopify-payoutcur], read via WebFetch). The fee is 1.5% on Advanced for non-US regions, and 1% on Plus ([Shopify, Payouts in multiple currencies][shopify-mcp], read via WebFetch).
-- **Example (my arithmetic, approximate).** At US$1 = A$1.4332 ([currency-converter.org.uk, 9 Oct 2026][fx], from #10), A$40 is about US$27.91. On a sale paid out in AUD, FOSLN would pay about A$0.80 in conversion fee, on top of about A$0.98 in card fees on Basic.
+- **Example (my arithmetic, approximate).** At US$1 = A$1.4332 ([currency-converter.org.uk, 9 Oct 2026][fx], from #10), A$139 is about US$97. On a sale paid out in AUD, FOSLN would pay about A$2.78 in conversion fee, on top of about A$2.66 in card fees on Basic.
 
 ### (d) What an Australian cardholder pays on a USD charge
 
@@ -235,7 +235,7 @@ Each bank's own fee documents, read 9 October 2026:
 
 - **On top of the fee.** The card scheme sets the exchange rate. Westpac says it is "either a government mandated exchange rate or a wholesale exchange rate, selected by Mastercard Worldwide", and that Westpac's own quoted rates aren't used ([Westpac Debit Mastercard T&Cs][wbc-debit]).
 - **ACCC.** It says international transaction fees are usually around 3% ([ACCC, Foreign currency and money exchange][accc-fx], read via search extract).
-- **Example (my arithmetic, approximate).** On a US$27.91 charge worth about A$40, a 3.5% fee adds about A$1.40, and a 2.2% fee about A$0.88.
+- **Example (my arithmetic, approximate).** On a US$97 charge worth about A$139, a 3.5% fee adds about A$4.87, and a 2.2% fee about A$3.06.
 
 ---
 

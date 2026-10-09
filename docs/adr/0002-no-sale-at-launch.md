@@ -1,6 +1,6 @@
 # 2. No sale at launch
 
-- **Status:** accepted
+- **Status:** accepted, superseded in part by [ADR 0003](0003-sales-need-no-minimum-hold.md)
 - **Date:** 9 October 2026
 - **Decided in:** [Decide the launch price for each Model](https://github.com/Kintukka2/FOSLN-WATCH/issues/28)
 
@@ -22,7 +22,7 @@ Each Model launches at one regular price, with no sale and no was price.
 
 - **ACIER** is **$149** and **CADRE** is **$169**, in USD, the same for every Dial.
 - No launch price will rise later.
-- A sale is possible only after the regular price has held for a reasonable period. [Decide how prices are presented](https://github.com/Kintukka2/FOSLN-WATCH/issues/24) sets the rules for it.
+- ~~A sale is possible only after the regular price has held for a reasonable period.~~ Superseded by [ADR 0003](0003-sales-need-no-minimum-hold.md): a sale can start at any time, with no minimum hold.
 - A later change of price makes a new regular price. It never becomes a was price.
 
 ## Alternatives considered

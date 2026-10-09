@@ -4,6 +4,19 @@ Issues for this repo live in GitHub Issues at [Kintukka2/FOSLN-WATCH](https://gi
 
 Where `gh` isn't available, use the GitHub MCP tools for the same operations.
 
+In Claude Code cloud sessions, GitHub's GraphQL API is blocked. The `gh issue …` and `gh label …` subcommands depend on it, so they fail there. Use the REST equivalents through `gh api`:
+
+| Operation | REST call |
+| --- | --- |
+| Create | `gh api repos/{owner}/{repo}/issues --input body.json` (JSON with `title`, `body`, `labels`) |
+| Read | `gh api repos/{owner}/{repo}/issues/<number>`, plus `…/<number>/comments` |
+| Comment | `gh api repos/{owner}/{repo}/issues/<number>/comments -F body=@comment.md` |
+| Labels | `gh api repos/{owner}/{repo}/issues/<number>/labels -f 'labels[]=<label>'`; create one with `gh api repos/{owner}/{repo}/labels -f name=<label>` |
+| Assign | `gh api repos/{owner}/{repo}/issues/<number>/assignees -f 'assignees[]=<login>'` |
+| Close | `gh api -X PATCH repos/{owner}/{repo}/issues/<number> -f state=closed -f state_reason=completed` (or `not_planned`) |
+
+The wayfinding `gh api` calls below are already REST, so they work everywhere.
+
 ## Settings
 
 - **PRs as a request surface**: off. Only issues count as requests; pull requests are not pulled into triage. Set to `on` to treat open PRs as requests too.

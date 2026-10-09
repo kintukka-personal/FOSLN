@@ -1,0 +1,493 @@
+<meta charset="utf-8">
+<title>FOSLN Visual Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* PROTOTYPE. Throwaway comps for "Lock the visual direction" (Kintukka2/FOSLN-WATCH#14). Not production code.
+   Layout: four directions on one page, chosen by #steel #golden #plinth #metals and the floating bar.
+   Each direction commits to its own single look, so colours are set per direction rather than per viewer theme. */
+:root {
+  --page: #121314; --ink: #ECECE9; --muted: #8C9197; --line: rgba(201,205,209,.18);
+  --accent: #C9CDD1; --accent-ink: #121314; --surface: #1B1C1F;
+  --display: "Libre Baskerville", Georgia, serif; --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
+  --bar-bg: rgba(10,10,11,.82); --bar-ink: #F4F5F6; --bar-on: #F4F5F6; --bar-on-ink: #111;
+  color-scheme: dark;
+}
+:root[data-dir="steel"]  { --page:#121314; --ink:#ECECE9; --muted:#8C9197; --line:rgba(201,205,209,.18); --accent:#C9CDD1; --accent-ink:#121314; --surface:#1B1C1F;
+  --display:"Libre Baskerville", Georgia, serif; --body:"Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace; color-scheme: dark; }
+:root[data-dir="golden"] { --page:#16130F; --ink:#F1E8D6; --muted:#9B8C74; --line:rgba(207,174,108,.22); --accent:#DDBB76; --accent-ink:#1A140B; --surface:#201B15;
+  --display:"Manrope", "Helvetica Neue", Arial, sans-serif; --body:"Manrope", "Helvetica Neue", Arial, sans-serif; --mono:"Manrope", "Helvetica Neue", Arial, sans-serif; color-scheme: dark; }
+:root[data-dir="plinth"] { --page:#E7E7E3; --ink:#151617; --muted:#6B6D70; --line:rgba(21,22,23,.14); --accent:#151617; --accent-ink:#F3F3F0; --surface:#F3F3F0;
+  --display:"Archivo", "Arial Narrow", Arial, sans-serif; --body:"Archivo", Arial, sans-serif; --mono:"IBM Plex Mono", ui-monospace, monospace;
+  --bar-bg: rgba(21,22,23,.88); color-scheme: light; }
+:root[data-dir="metals"] { --page:#111214; --ink:#EDEBE6; --muted:#8E9093; --line:rgba(237,235,230,.14); --accent:#C9CDD1; --accent-ink:#111214; --surface:#191A1D;
+  --display:"Libre Baskerville", Georgia, serif; --body:"Manrope", "Helvetica Neue", Arial, sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace; color-scheme: dark; }
+:root[data-dir="metals"][data-model="cadre"] { --page:#14110D; --accent:#D6B271; --accent-ink:#17120A; --line:rgba(214,178,113,.2); --surface:#1D1913; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--page); }
+body { background: var(--page); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; padding-inline: 16px; padding-block: 0 112px; transition: background .5s, color .5s; }
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin-inline: auto; }
+.proto-note { max-width: 1180px; margin: 0 auto; padding-block: 14px; display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px dashed var(--line); }
+.dir { display: grid; gap: 72px; padding-block: 28px 40px; }
+.frame-label { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; gap: 12px; align-items: center; }
+.frame-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.frame { position: relative; overflow: hidden; border: 1px solid var(--line); }
+.stand-in { position: absolute; left: 50%; transform: translateX(-50%); bottom: 6px; font: 500 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; background: rgba(0,0,0,.55); color: #fff; white-space: nowrap; z-index: 3; }
+:root[data-dir="plinth"] .stand-in { background: rgba(255,255,255,.7); color: #151617; }
+
+/* shared store header */
+.hdr { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 24px; position: relative; z-index: 2; font-size: 13px; }
+.hdr nav { display: flex; gap: 20px; }
+.hdr nav a { color: inherit; text-decoration: none; opacity: .8; }
+.hdr .tools { display: flex; gap: 14px; align-items: center; }
+.cur { border: 1px solid var(--line); padding: 4px 9px; font: 500 11px/1 var(--mono); letter-spacing: .06em; background: none; cursor: pointer; }
+.bag { font-size: 13px; opacity: .85; }
+.wm { font-family: var(--display); letter-spacing: .18em; font-size: 17px; }
+@media (max-width: 640px) { .hdr nav { display: none; } .hdr { padding: 14px 16px; } }
+
+/* price block, per "Decide how prices are presented" */
+.price { font-size: 30px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.price-note { font-size: 13px; color: var(--muted); }
+.dials { display: flex; gap: 14px; flex-wrap: wrap; }
+.dial-btn { display: grid; justify-items: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; font: 500 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dial-btn .sw { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); box-shadow: inset 0 0 0 3px var(--page); }
+.dial-btn[aria-pressed="true"] { color: var(--ink); }
+.dial-btn[aria-pressed="true"] .sw { border-color: var(--accent); box-shadow: inset 0 0 0 3px var(--page), 0 0 0 1px var(--accent); }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border: 0; cursor: pointer; background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: 15px; letter-spacing: .01em; width: 100%; }
+
+/* motion demo dial */
+.mdial { width: 120px; height: 120px; }
+.hand { transform-origin: 60px 60px; transform-box: view-box; }
+[data-motion="step"] .hand.s { transition: transform .22s cubic-bezier(.3,1.9,.5,1); }
+
+/* spec card shared */
+.spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.spec > div { background: var(--page); padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.spec h3 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.chip { display: grid; gap: 6px; font: 400 11px/1.3 var(--mono); color: var(--muted); }
+.chip i { display: block; height: 40px; border: 1px solid var(--line); }
+.spec p { margin: 0; font-size: 14px; }
+.specimen-d { font-family: var(--display); font-size: 34px; line-height: 1.1; }
+.specimen-m { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* ───────── A · STEEL INSTRUMENT ───────── */
+.a-hero { background: radial-gradient(120% 90% at 50% 30%, #23252a 0%, #121314 62%); min-height: 640px; display: grid; grid-template-rows: auto 1fr auto; }
+.a-hero .hdr .wm { font-weight: 400; }
+.a-stage { position: relative; display: grid; place-items: center; padding: 10px 16px 0; }
+.a-stage img { height: min(460px, 70vw); width: auto; filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)); }
+.a-call { position: absolute; font: 400 10px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+.a-call::before { content: ""; width: 70px; height: 1px; background: rgba(201,205,209,.4); }
+.a-call.r { flex-direction: row-reverse; text-align: right; }
+.a-steel { font: 800 clamp(64px, 14vw, 170px)/.9 "Archivo", sans-serif; font-stretch: 125%; letter-spacing: -.01em; text-align: center; margin: 0; padding-bottom: 26px;
+  background: repeating-linear-gradient(180deg, #f4f5f6 0 17%, #8c9197 17% 18.5%, #c9cdd1 18.5% 36%, #6b6f74 36% 37.5%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.a-sub { display: flex; justify-content: space-between; gap: 16px; padding: 0 24px 22px; font: 400 11px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); flex-wrap: wrap; }
+.a-pdp { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); background: var(--surface); }
+.a-pdp .vis { position: relative; display: grid; place-items: center; padding: 40px 20px; min-height: 560px; background: radial-gradient(60% 60% at 50% 50%, #26282d, #1B1C1F 70%); }
+.a-pdp .vis svg.ring { position: absolute; width: min(520px, 90%); height: auto; opacity: .35; }
+.a-pdp .vis .w { height: 480px; width: auto; position: relative; }
+.a-pdp .info { padding: 44px 36px; display: grid; gap: 22px; align-content: center; border-left: 1px solid var(--line); }
+.a-pdp .no { font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.a-pdp h2 { margin: 0; font: 400 46px/1.05 var(--display); }
+.a-pdp .lede { font: 400 18px/1.5 var(--display); margin: 0; }
+.a-pdp .lede em { font-style: italic; }
+.a-pdp .cta { background: #0B0B0C; color: #F4F5F6; box-shadow: inset 0 0 0 1px #8C9197; }
+.a-pdp .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font: 400 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+.a-pdp .facts b { display: block; color: var(--ink); font-weight: 500; }
+@media (max-width: 820px) { .a-pdp { grid-template-columns: 1fr; } .a-pdp .info { border-left: 0; border-top: 1px solid var(--line); padding: 28px 20px; } .a-pdp .vis { min-height: 420px; } .a-pdp .vis .w { height: 360px; } .a-call { display: none; } }
+
+/* ───────── B · GOLDEN HOUR ───────── */
+.b-hero { background: radial-gradient(70% 70% at 18% 8%, rgba(201,154,78,.55), transparent 60%), linear-gradient(#070605, #16130F 70%); min-height: 640px; display: grid; grid-template-rows: auto 1fr; }
+.b-hero .wm { font-weight: 800; letter-spacing: .32em; font-size: 14px; }
+.b-stage { position: relative; display: grid; place-items: end center; overflow: hidden; }
+.b-word { position: absolute; top: 4%; left: 0; right: 0; text-align: center; font: 800 clamp(90px, 22vw, 300px)/.85 var(--display); letter-spacing: -.04em; color: #EADBB9; margin: 0; }
+.b-pair { position: relative; display: flex; align-items: flex-end; justify-content: center; gap: 4vw; padding-top: 120px; }
+.b-pair img, .b-pair svg { height: min(480px, 64vw); width: auto; filter: drop-shadow(0 40px 40px rgba(0,0,0,.55)); }
+.b-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: linear-gradient(transparent, #16130F); border-top: 1px solid rgba(207,174,108,.4); }
+.b-cap { position: absolute; bottom: 26px; left: 28px; right: 28px; display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; z-index: 2; }
+.b-cap p { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -.01em; max-width: 18ch; }
+.b-cap a { color: #DDBB76; font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.b-pdp { background: radial-gradient(60% 50% at 15% 0%, rgba(201,154,78,.42), transparent 65%), #16130F; display: grid; }
+.b-pdp .top { position: relative; min-height: 520px; display: grid; place-items: end center; overflow: hidden; }
+.b-pdp .top .b-word { top: 6%; font-size: clamp(90px, 19vw, 250px); }
+.b-pdp .top .w { position: relative; height: 470px; width: auto; filter: drop-shadow(0 40px 40px rgba(0,0,0,.55)); margin-bottom: -40px; }
+.b-pdp .foot { border-top: 1px solid rgba(207,174,108,.4); background: #1A1611; padding: 56px 28px 28px; display: grid; grid-template-columns: 1fr auto; gap: 22px 28px; align-items: end; }
+.b-pdp .foot .cta { grid-column: 1 / -1; border-radius: 14px; background: linear-gradient(100deg, #E2C383, #B88D4C 55%, #E7CC8E); font-weight: 700; min-height: 58px; }
+.b-pdp .price { font-weight: 800; font-size: 34px; }
+.b-pdp .kick { font-size: 11px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: #B5935A; display: flex; justify-content: space-between; padding: 20px 28px 0; position: relative; z-index: 2; }
+@media (max-width: 640px) { .b-pair svg:nth-child(2) { display: none; } .b-pdp .foot { grid-template-columns: 1fr; } }
+
+/* ───────── C · PLINTH ───────── */
+.c-hero { background: #E7E7E3; display: grid; grid-template-rows: auto auto 1fr; }
+.c-hero .wm { font-family: "Archivo", sans-serif; font-weight: 600; font-stretch: 125%; letter-spacing: .14em; font-size: 14px; }
+.c-hero h1 { margin: 0; padding: 40px 24px 0; font: 300 clamp(30px, 4.4vw, 56px)/1.05 var(--display); letter-spacing: -.02em; max-width: 16ch; }
+.c-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); margin-top: 44px; border-top: 1px solid var(--line); }
+.c-cell { background: #E7E7E3; padding: 28px 24px 22px; display: grid; gap: 16px; position: relative; }
+.c-cell .ph { display: grid; place-items: center; height: 420px; background: linear-gradient(#EFEFEC, #DCDCD7); }
+.c-cell .ph img, .c-cell .ph svg { height: 360px; width: auto; filter: drop-shadow(0 22px 22px rgba(0,0,0,.18)); }
+.c-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.c-name { font: 700 22px/1 "Archivo", sans-serif; font-stretch: 125%; letter-spacing: .06em; }
+.c-idx { font: 400 11px/1.4 var(--mono); color: var(--muted); letter-spacing: .04em; }
+.c-link { font: 500 13px/1 var(--body); color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
+.c-pdp { background: #F3F3F0; display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); }
+.c-pdp .ph { display: grid; place-items: center; background: #E1E1DC; min-height: 600px; position: relative; }
+.c-pdp .ph .w { height: 520px; width: auto; filter: drop-shadow(0 26px 26px rgba(0,0,0,.18)); }
+.c-pdp .info { padding: 40px 32px; display: grid; gap: 22px; align-content: start; }
+.c-pdp h2 { margin: 0; font: 700 52px/.95 "Archivo", sans-serif; font-stretch: 125%; letter-spacing: .02em; }
+.c-pdp .lede { margin: 0; font-size: 16px; max-width: 34ch; }
+.c-pdp .cta { background: #151617; color: #F3F3F0; }
+.c-pdp table { border-collapse: collapse; width: 100%; font: 400 12px/1.4 var(--mono); }
+.c-pdp td { border-top: 1px solid var(--line); padding: 9px 0; }
+.c-pdp td:last-child { text-align: right; color: var(--muted); }
+.c-pdp .price { font-family: "Archivo", sans-serif; font-weight: 500; }
+@media (max-width: 820px) { .c-row, .c-pdp { grid-template-columns: 1fr; } .c-cell .ph { height: 340px; } .c-cell .ph img, .c-cell .ph svg { height: 290px; } .c-pdp .ph { min-height: 420px; } .c-pdp .ph .w { height: 360px; } }
+
+/* ───────── D · TWO METALS ───────── */
+.d-hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 640px; position: relative; }
+.d-half { position: relative; display: grid; grid-template-rows: 1fr auto; padding: 84px 28px 28px; overflow: hidden; }
+.d-half.st { background: radial-gradient(80% 70% at 50% 40%, #26282d, #111214 70%); }
+.d-half.au { background: radial-gradient(80% 70% at 50% 40%, #2c2418, #14110D 70%); }
+.d-half .vis { display: grid; place-items: center; }
+.d-half img, .d-half svg { height: min(430px, 44vw); width: auto; filter: drop-shadow(0 30px 34px rgba(0,0,0,.6)); }
+.d-half .nm { font: 400 clamp(30px, 4vw, 48px)/1 var(--display); letter-spacing: .08em; }
+.d-half.st .nm { color: #C9CDD1; }
+.d-half.au .nm { color: #D6B271; }
+.d-half .row { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.d-half .row span { font: 400 11px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.d-top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; }
+.d-top .wm { position: absolute; left: 50%; transform: translateX(-50%); }
+.d-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: linear-gradient(transparent, rgba(255,255,255,.25), transparent); }
+.d-pdp { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); background: var(--surface); }
+.d-pdp .vis { display: grid; place-items: center; min-height: 580px; position: relative; overflow: hidden; }
+.d-pdp .vis .w { height: 500px; width: auto; position: relative; }
+.d-pdp .vis .sheen { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%); transform: translateX(-100%); pointer-events: none; }
+.d-pdp .vis:hover .sheen { transform: translateX(100%); transition: transform 1.4s ease; }
+.d-pdp .info { padding: 48px 36px; display: grid; gap: 22px; align-content: center; }
+.d-pdp h2 { margin: 0; font: 400 50px/1 var(--display); letter-spacing: .08em; color: var(--accent); }
+.d-pdp .lede { margin: 0; font-size: 16px; max-width: 36ch; }
+.d-pdp .metal { font: 400 11px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.d-pdp .cta { border-radius: 2px; }
+@media (max-width: 820px) { .d-hero, .d-pdp { grid-template-columns: 1fr; } .d-seam { display: none; } .d-half img, .d-half svg { height: 320px; } .d-pdp .vis { min-height: 420px; } .d-pdp .vis .w { height: 360px; } .d-top .wm { position: static; transform: none; } }
+
+/* floating chooser */
+.bar { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; z-index: 50; width: max-content; max-width: 100%; }
+.bar .grp { display: flex; gap: 4px; padding: 4px; background: var(--bar-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; }
+.bar button { border: 0; background: transparent; color: var(--bar-ink); padding: 9px 14px; border-radius: 999px; font: 500 12px/1 "Hanken Grotesk", Arial, sans-serif; cursor: pointer; white-space: nowrap; }
+.bar button[aria-pressed="true"] { background: var(--bar-on); color: var(--bar-on-ink); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="proto-note">
+  <span>Prototype · throwaway comps for "Lock the visual direction"</span>
+  <span id="dir-name">A · Steel Instrument</span>
+</div>
+
+<main class="wrap">
+  <!-- A -->
+  <section class="dir" id="steel" data-motion="step" hidden>
+    <div>
+      <div class="frame-label">Home · first screen</div>
+      <div class="frame a-hero">
+        <div class="hdr"><span class="wm">FOSLN</span><nav><a href="#steel">Watches</a><a href="#steel">ACIER</a><a href="#steel">CADRE</a></nav><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Bag</span></div></div>
+        <div class="a-stage">
+          <img src="img/acier-onyx.webp" alt="ACIER with the Onyx dial" fetchpriority="high">
+          <span class="a-call" style="left:12%;top:28%">Onyx<br>dial</span>
+          <span class="a-call" style="left:12%;top:58%">Steel<br>case</span>
+          <span class="a-call r" style="right:12%;top:22%">Local time<br><span data-time>--:--:--</span></span>
+          <span class="a-call r" style="right:12%;top:46%">Quartz<br>movement</span>
+        </div>
+        <div>
+          <p class="a-steel" data-hero-name>ACIER</p>
+          <div class="a-sub"><span>N° 01 ACIER · N° 02 CADRE</span><span>Quartz watches · Dispatched in 24 hours</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">PDP · first screen · <span data-model-label>ACIER</span></div>
+      <div class="frame a-pdp">
+        <div class="vis">
+          <svg class="ring" viewBox="0 0 200 200" aria-hidden="true" data-ring></svg>
+          <span data-watch="a"></span>
+        </div>
+        <div class="info">
+          <span class="no" data-no>N° 01 · Quartz watch</span>
+          <h2 data-name>ACIER</h2>
+          <p class="lede" data-lede>A round steel case and a link bracelet, with <em>nothing on the dial but the hands</em>.</p>
+          <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
+          <div class="dials" data-dials></div>
+          <button class="cta" type="button" data-cta>Add to bag</button>
+          <div class="facts" data-facts></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">The system</div>
+      <div class="spec">
+        <div><h3>Wordmark and type</h3><span class="wm" style="font-size:28px">FOSLN</span><span class="specimen-d">Libre Baskerville for statements</span><span class="specimen-m">JetBrains Mono for labels · Hanken Grotesk for UI</span><p>Model names in wide brushed-steel capitals, cut into bands like bracelet links.</p></div>
+        <div><h3>Palette</h3><div class="chips"><span class="chip"><i style="background:#121314"></i>Ink #121314</span><span class="chip"><i style="background:#1B1C1F"></i>Graphite #1B1C1F</span><span class="chip"><i style="background:#C9CDD1"></i>Steel #C9CDD1</span><span class="chip"><i style="background:#8C9197"></i>Steel dim #8C9197</span><span class="chip"><i style="background:#ECECE9"></i>Paper #ECECE9</span></div><p>Cold and monochrome. CADRE's gold is the only warm colour on the site, and it comes from the photo, not the UI.</p></div>
+        <div><h3>Motion · quartz step</h3><svg class="mdial step" viewBox="0 0 120 120" data-mdial></svg><p>Everything moves in one-second steps with a small overshoot, like a quartz seconds hand. Letters lock in link by link. The watch photo is on screen from the first frame.</p></div>
+        <div><h3>CTA</h3><p><b>"Add to bag"</b>: a dark bar with a fine steel edge. "Bag" in the header.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="dir" id="golden" data-motion="calm" hidden>
+    <div>
+      <div class="frame-label">Home · first screen</div>
+      <div class="frame b-hero">
+        <div class="hdr"><span class="wm">FOSLN</span><nav><a href="#golden">Watches</a><a href="#golden">ACIER</a><a href="#golden">CADRE</a></nav><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Cart</span></div></div>
+        <div class="b-stage">
+          <p class="b-word">FOSLN</p>
+          <div class="b-pair"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"><span data-cadre="black"></span></div><span class="stand-in">CADRE: stand-in drawing · no photo yet</span>
+          <div class="b-floor"></div>
+          <div class="b-cap"><p>Two quartz watches, lit at golden hour.</p><a href="#golden">Shop ACIER and CADRE</a></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">PDP · first screen · <span data-model-label>ACIER</span></div>
+      <div class="frame b-pdp">
+        <div class="kick"><span>Quartz watch</span><span>FOSLN</span></div>
+        <div class="top"><p class="b-word" data-name>ACIER</p><span data-watch="b"></span></div>
+        <div class="foot">
+          <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
+          <div class="dials" data-dials></div>
+          <button class="cta" type="button" data-cta>Add to cart</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">The system</div>
+      <div class="spec">
+        <div><h3>Wordmark and type</h3><span class="wm" style="font-size:22px">FOSLN</span><span class="specimen-d" style="font-weight:800">Manrope, one family</span><p>Giant Model names sit behind the watch, edge to edge. Spaced capitals for small labels.</p></div>
+        <div><h3>Palette</h3><div class="chips"><span class="chip"><i style="background:#16130F"></i>Stone #16130F</span><span class="chip"><i style="background:#C99A4E"></i>Glow #C99A4E</span><span class="chip"><i style="background:#EADBB9"></i>Champagne #EADBB9</span><span class="chip"><i style="background:#DDBB76"></i>Gold #DDBB76</span><span class="chip"><i style="background:#9B8C74"></i>Muted #9B8C74</span></div><p>Warm on every page. ACIER's chrome reads warm too. For Onyx, the glow drops to an ember.</p></div>
+        <div><h3>Motion · golden drift</h3><svg class="mdial calm" viewBox="0 0 120 120" data-mdial></svg><p>Soft and continuous. The watch floats, its shadow breathes and the light drifts with the pointer. Pieces build in left to right.</p></div>
+        <div><h3>CTA</h3><p><b>"Add to cart"</b>: a gold gradient button with rounded corners. "Cart" in the header.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="dir" id="plinth" data-motion="still" hidden>
+    <div>
+      <div class="frame-label">Home · first screen</div>
+      <div class="frame c-hero">
+        <div class="hdr"><span class="wm">FOSLN</span><nav><a href="#plinth">Watches</a><a href="#plinth">About</a></nav><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Bag (0)</span></div></div>
+        <h1>Two quartz watches. Nothing on the dial but the hands.</h1>
+        <div class="c-row">
+          <div class="c-cell"><div class="ph"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="c-meta"><span class="c-name">ACIER</span><span class="c-idx">Round · steel · $149</span></div><a class="c-link" href="#plinth">View ACIER</a></div>
+          <div class="c-cell"><div class="ph" style="position:relative"><span data-cadre="champagne"></span><span class="stand-in">Stand-in drawing · no CADRE photo yet</span></div><div class="c-meta"><span class="c-name">CADRE</span><span class="c-idx">Square · gold frame · $169</span></div><a class="c-link" href="#plinth">View CADRE</a></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">PDP · first screen · <span data-model-label>ACIER</span></div>
+      <div class="frame c-pdp">
+        <div class="ph"><span data-watch="c"></span></div>
+        <div class="info">
+          <span class="c-idx" data-no>Model 1 of 2</span>
+          <h2 data-name>ACIER</h2>
+          <p class="lede" data-lede>A round steel case and a link bracelet. Nothing on the dial but the hands.</p>
+          <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
+          <div class="dials" data-dials></div>
+          <button class="cta" type="button" data-cta>Add to bag</button>
+          <table data-table></table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">The system</div>
+      <div class="spec">
+        <div><h3>Wordmark and type</h3><span class="wm" style="font-family:Archivo,sans-serif;font-weight:600;font-stretch:125%;font-size:24px">FOSLN</span><span class="specimen-d" style="font-weight:300">Archivo, wide for names, light for statements</span><span class="specimen-m">IBM Plex Mono for data</span></div>
+        <div><h3>Palette</h3><div class="chips"><span class="chip"><i style="background:#E7E7E3"></i>Plinth #E7E7E3</span><span class="chip"><i style="background:#F3F3F0"></i>Paper #F3F3F0</span><span class="chip"><i style="background:#DCDCD7"></i>Stone #DCDCD7</span><span class="chip"><i style="background:#151617"></i>Ink #151617</span><span class="chip"><i style="background:#6B6D70"></i>Muted #6B6D70</span></div><p>Cool, pale gallery stone. Both metals stand out on it, and the photos carry all the colour.</p></div>
+        <div><h3>Motion · still</h3><svg class="mdial" viewBox="0 0 120 120" data-mdial></svg><p>Almost none. Short fades, no loops, no build-ins. The watches do the work.</p></div>
+        <div><h3>CTA</h3><p><b>"Add to bag"</b>: a flat ink bar with square corners. "Bag (0)" in the header.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="dir" id="metals" data-motion="step" hidden>
+    <div>
+      <div class="frame-label">Home · first screen</div>
+      <div class="frame">
+        <div class="d-top"><div class="hdr"><nav><a href="#metals">ACIER</a><a href="#metals">CADRE</a></nav><span class="wm">FOSLN</span><div class="tools"><button class="cur" type="button">USD $</button><span class="bag" data-bag>Bag</span></div></div></div>
+        <div class="d-hero">
+          <div class="d-half st"><div class="vis"><img src="img/acier-chrome.webp" alt="ACIER with the Chrome dial" fetchpriority="high"></div><div class="row"><span class="nm">ACIER</span><span>Round · steel · $149</span></div></div>
+          <div class="d-half au"><div class="vis" style="position:relative"><span data-cadre="black"></span></div><span class="stand-in">Stand-in drawing · no CADRE photo yet</span><div class="row"><span class="nm">CADRE</span><span>Square · gold frame · $169</span></div></div>
+          <div class="d-seam"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">PDP · first screen · <span data-model-label>ACIER</span> · the accent follows the Model</div>
+      <div class="frame d-pdp">
+        <div class="vis"><span data-watch="d"></span><div class="sheen"></div></div>
+        <div class="info">
+          <span class="metal" data-no>Stainless steel · Quartz</span>
+          <h2 data-name>ACIER</h2>
+          <p class="lede" data-lede>A round steel case and a link bracelet. Nothing on the dial but the hands.</p>
+          <div><div class="price" data-price>$149</div><div class="price-note">Free delivery in Australia</div></div>
+          <div class="dials" data-dials></div>
+          <button class="cta" type="button" data-cta>Add to bag</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="frame-label">The system</div>
+      <div class="spec">
+        <div><h3>Wordmark and type</h3><span class="wm" style="font-size:26px">FOSLN</span><span class="specimen-d">Libre Baskerville for names</span><span class="specimen-m">Manrope for UI · JetBrains Mono for labels</span></div>
+        <div><h3>Palette</h3><div class="chips"><span class="chip"><i style="background:#111214"></i>Graphite #111214</span><span class="chip"><i style="background:#C9CDD1"></i>Steel #C9CDD1</span><span class="chip"><i style="background:#14110D"></i>Warm black #14110D</span><span class="chip"><i style="background:#D6B271"></i>Gold #D6B271</span><span class="chip"><i style="background:#EDEBE6"></i>Bone #EDEBE6</span></div><p>One brand, two metals. ACIER pages run cool steel and CADRE pages run warm gold, with the same type and layout.</p></div>
+        <div><h3>Motion · quartz step + sheen</h3><svg class="mdial step" viewBox="0 0 120 120" data-mdial></svg><p>Quartz steps from Steel Instrument, plus a slow band of light across the metal on hover.</p></div>
+        <div><h3>CTA</h3><p><b>"Add to bag"</b>: a solid bar in the Model's metal. "Bag" in the header.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="bar" role="toolbar" aria-label="Prototype controls">
+  <div class="grp" data-dirs>
+    <button type="button" data-pick="steel">A · Steel</button>
+    <button type="button" data-pick="golden">B · Golden hour</button>
+    <button type="button" data-pick="plinth">C · Plinth</button>
+    <button type="button" data-pick="metals">D · Two metals</button>
+  </div>
+  <div class="grp" data-models>
+    <button type="button" data-m="acier">ACIER</button>
+    <button type="button" data-m="cadre">CADRE</button>
+  </div>
+</div>
+
+<script>
+const DIRS = { steel: "A · Steel Instrument", golden: "B · Golden Hour", plinth: "C · Plinth", metals: "D · Two Metals" };
+const MODELS = {
+  acier: { name: "ACIER", price: "$149", no: { steel: "N° 01 · Quartz watch", plinth: "Model 1 of 2", metals: "Stainless steel · Quartz" },
+    lede: { steel: 'A round steel case and a link bracelet, with <em>nothing on the dial but the hands</em>.', other: "A round steel case and a link bracelet. Nothing on the dial but the hands." },
+    dials: [{ id: "chrome", label: "Chrome", sw: "radial-gradient(circle at 40% 35%, #fff, #c9cdd1 45%, #8c9197)" }, { id: "onyx", label: "Onyx", sw: "radial-gradient(circle at 40% 35%, #444, #0b0b0c 60%)" }],
+    facts: [["Case", "Round, steel"], ["Movement", "Quartz"], ["Bracelet", "Steel links"], ["Dispatch", "Within 24 hours"]] },
+  cadre: { name: "CADRE", price: "$169", no: { steel: "N° 02 · Quartz watch", plinth: "Model 2 of 2", metals: "Gold frame · Quartz" },
+    lede: { steel: 'A square case inside a gold frame, with <em>nothing on the dial but the hands</em>.', other: "A square case inside a gold frame. Nothing on the dial but the hands." },
+    dials: [{ id: "black", label: "Black", sw: "radial-gradient(circle at 40% 35%, #3a3a3a, #0c0c0c 60%)" }, { id: "champagne", label: "Champagne", sw: "radial-gradient(circle at 40% 35%, #fbf0d6, #d9c08e 55%, #a8874f)" }],
+    facts: [["Case", "Square, gold frame"], ["Movement", "Quartz"], ["Dial names", "To be confirmed"], ["Dispatch", "Within 24 hours"]] }
+};
+const state = { dir: "steel", model: "acier", dial: { acier: "chrome", cadre: "black" } };
+
+/* CADRE stand-in: a drawn square case. There is no CADRE photo yet. */
+let uid = 0;
+function cadreSVG(dial) {
+  const k = "c" + (uid++);
+  const face = dial === "champagne" ? ["#F6EAD0", "#D9C08E"] : ["#2A2A2C", "#0A0A0B"];
+  const ink = dial === "champagne" ? "#3A2E1A" : "#E9E2D2";
+  let idx = "";
+  for (let i = 0; i < 12; i++) { const a = i * 30, long = i % 3 === 0; idx += `<rect x="149" y="${long ? 168 : 171}" width="2" height="${long ? 14 : 8}" fill="${ink}" opacity="${long ? .9 : .5}" transform="rotate(${a} 150 260)"/>`; }
+  return `<svg viewBox="0 0 300 520" class="cadre" role="img" aria-label="CADRE stand-in drawing, ${dial} dial">
+  <defs>
+    <linearGradient id="${k}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DDA4"/><stop offset=".35" stop-color="#C69A4F"/><stop offset=".6" stop-color="#F0D597"/><stop offset="1" stop-color="#8E6A32"/></linearGradient>
+    <linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d6f73"/><stop offset=".5" stop-color="#d4d7da"/><stop offset="1" stop-color="#5d5f63"/></linearGradient>
+    <radialGradient id="${k}d" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="${face[0]}"/><stop offset="1" stop-color="${face[1]}"/></radialGradient>
+  </defs>
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${4 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${404 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  <rect x="40" y="120" width="220" height="280" rx="34" fill="url(#${k}b)"/>
+  <rect x="52" y="132" width="196" height="256" rx="26" fill="url(#${k}g)"/>
+  <rect x="68" y="148" width="164" height="224" rx="16" fill="url(#${k}d)"/>
+  <rect x="261" y="246" width="12" height="28" rx="3" fill="url(#${k}b)"/>
+  ${idx}
+  <text x="150" y="208" text-anchor="middle" font-family="Libre Baskerville, Georgia, serif" font-size="11" letter-spacing="2" fill="${ink}" opacity=".85">FOSLN</text>
+  <g data-hands data-cx="150" data-cy="260">
+    <rect class="hand h" x="147" y="214" width="6" height="50" rx="3" fill="${ink}" style="transform-origin:150px 260px"/>
+    <rect class="hand m" x="148" y="190" width="4" height="74" rx="2" fill="${ink}" style="transform-origin:150px 260px"/>
+    <rect class="hand s" x="149.25" y="182" width="1.5" height="92" fill="#C69A4F" style="transform-origin:150px 260px"/>
+    <circle cx="150" cy="260" r="4.5" fill="${ink}"/>
+  </g>
+</svg>`;
+}
+
+function ticks(svg, r1, r2) {
+  let s = "";
+  for (let i = 0; i < 60; i++) { const big = i % 5 === 0; s += `<line x1="100" y1="${100 - r1}" x2="100" y2="${100 - (big ? r2 - 4 : r2)}" stroke="currentColor" stroke-width="${big ? 1.2 : .6}" transform="rotate(${i * 6} 100 100)"/>`; }
+  svg.innerHTML = s; svg.style.color = "var(--accent)";
+}
+
+function mdial(svg) {
+  let s = "";
+  for (let i = 0; i < 60; i++) { const big = i % 5 === 0; s += `<line x1="60" y1="6" x2="60" y2="${big ? 14 : 10}" stroke="var(--muted)" stroke-width="${big ? 1.4 : .6}" transform="rotate(${i * 6} 60 60)"/>`; }
+  s += `<g data-hands data-cx="60" data-cy="60"><rect class="hand h" x="58" y="34" width="4" height="28" rx="2" fill="var(--ink)" style="transform-origin:60px 60px"/><rect class="hand m" x="58.75" y="20" width="2.5" height="42" rx="1.25" fill="var(--ink)" style="transform-origin:60px 60px"/><rect class="hand s" x="59.4" y="14" width="1.2" height="56" fill="var(--accent)" style="transform-origin:60px 60px"/><circle cx="60" cy="60" r="3" fill="var(--ink)"/></g>`;
+  svg.innerHTML = s;
+}
+
+function watchMarkup(model, dial, cls) {
+  if (model === "acier") return `<img class="w ${cls || ""}" src="img/acier-${dial}.webp" alt="ACIER with the ${dial === "chrome" ? "Chrome" : "Onyx"} dial">`;
+  return `<span class="w ${cls || ""}" style="display:block;position:relative">${cadreSVG(dial).replace('class="cadre"', 'class="cadre" style="height:100%;width:auto"')}</span><span class="stand-in">Stand-in drawing · no CADRE photo yet</span>`;
+}
+
+function render() {
+  const sec = document.getElementById(state.dir);
+  document.querySelectorAll(".dir").forEach(s => s.hidden = s !== sec);
+  document.documentElement.dataset.dir = state.dir;
+  document.documentElement.dataset.model = state.model;
+  document.getElementById("dir-name").textContent = DIRS[state.dir];
+  const m = MODELS[state.model], dial = state.dial[state.model];
+  sec.querySelectorAll("[data-name]").forEach(e => e.textContent = m.name);
+  sec.querySelectorAll("[data-model-label]").forEach(e => e.textContent = m.name);
+  sec.querySelectorAll("[data-price]").forEach(e => e.textContent = m.price);
+  sec.querySelectorAll("[data-no]").forEach(e => e.textContent = m.no[state.dir] || "");
+  sec.querySelectorAll("[data-lede]").forEach(e => e.innerHTML = state.dir === "steel" ? m.lede.steel : m.lede.other);
+  sec.querySelectorAll("[data-watch]").forEach(e => {
+    e.outerHTML = `<span data-watch="${e.dataset.watch}" style="display:contents">${watchMarkup(state.model, dial)}</span>`;
+  });
+  sec.querySelectorAll("[data-dials]").forEach(e => {
+    e.innerHTML = m.dials.map(d => `<button class="dial-btn" type="button" data-dial="${d.id}" aria-pressed="${d.id === dial}"><span class="sw" style="background:${d.sw}"></span>${d.label}</button>`).join("");
+  });
+  sec.querySelectorAll("[data-facts]").forEach(e => e.innerHTML = m.facts.map(([k, v]) => `<span>${k}<b>${v}</b></span>`).join(""));
+  sec.querySelectorAll("[data-table]").forEach(e => e.innerHTML = m.facts.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join(""));
+  document.querySelectorAll("[data-pick]").forEach(b => b.setAttribute("aria-pressed", b.dataset.pick === state.dir));
+  document.querySelectorAll("[data-m]").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === state.model));
+  tick(true);
+}
+
+document.querySelectorAll("[data-cadre]").forEach(e => { e.outerHTML = cadreSVG(e.dataset.cadre); });
+document.querySelectorAll("[data-ring]").forEach(s => ticks(s, 96, 88));
+document.querySelectorAll("[data-mdial]").forEach(mdial);
+
+document.addEventListener("click", ev => {
+  const d = ev.target.closest("[data-pick]"); if (d) { state.dir = d.dataset.pick; history.replaceState(null, "", "#" + state.dir); render(); return; }
+  const m = ev.target.closest("[data-m]"); if (m) { state.model = m.dataset.m; render(); return; }
+  const dl = ev.target.closest("[data-dial]"); if (dl) { state.dial[state.model] = dl.dataset.dial; render(); return; }
+  const c = ev.target.closest("[data-cta]"); if (c) { const t = c.textContent; c.textContent = t.includes("cart") ? "✓ Added" : "In your bag"; setTimeout(() => c.textContent = t, 1400); }
+});
+window.addEventListener("hashchange", () => { const h = location.hash.slice(1); if (DIRS[h]) { state.dir = h; render(); } });
+
+/* live hands: steps (quartz), smooth sweep (golden), or plain steps (plinth) */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastSec = -1, turns = 0;
+function tick(force) {
+  const now = new Date(), s = now.getSeconds(), ms = now.getMilliseconds();
+  const motion = document.getElementById(state.dir).dataset.motion;
+  if (s !== lastSec || force || motion === "calm") {
+    if (s === 0 && lastSec === 59) turns++;
+    lastSec = s;
+    const sweep = motion === "calm" && !reduce ? (s + ms / 1000) : s;
+    const sa = (turns * 60 + sweep) * 6, ma = (now.getMinutes() + s / 60) * 6, ha = ((now.getHours() % 12) + now.getMinutes() / 60) * 30;
+    document.querySelectorAll("[data-hands]").forEach(g => {
+      g.querySelector(".s").style.transform = `rotate(${sa}deg)`;
+      g.querySelector(".m").style.transform = `rotate(${ma}deg)`;
+      g.querySelector(".h").style.transform = `rotate(${ha}deg)`;
+    });
+    const p = n => String(n).padStart(2, "0");
+    document.querySelectorAll("[data-time]").forEach(e => e.textContent = `${p(now.getHours())}:${p(now.getMinutes())}:${p(s)}`);
+  }
+}
+(function loop() { tick(false); requestAnimationFrame(loop); })();
+
+const start = location.hash.slice(1);
+if (DIRS[start]) state.dir = start;
+render();
+</script>

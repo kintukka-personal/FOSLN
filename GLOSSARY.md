@@ -8,7 +8,7 @@ _Avoid_: style, line.
 
 ## Dial
 
-The face a Model is offered in. Choosing a Dial is how a customer picks between versions of one Model. ACIER comes in two Dials, **Chrome** and **Onyx**.
+The face a Model is offered in. Choosing a Dial is how a customer picks between versions of one Model. ACIER comes in two Dials, **Chrome** and **Onyx**. CADRE comes in two Dials, one black and one champagne; their names are not yet chosen.
 
 _Avoid_: colourway, colour, finish.
 

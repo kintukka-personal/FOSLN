@@ -246,7 +246,15 @@ a { color: inherit; }
 .e-buy .price .amt { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pdp[data-model="acier"] { --metal-text: linear-gradient(105deg, #7D838A 0%, #F2F4F5 28%, #9EA4AA 46%, #FFFFFF 62%, #8A9096 100%); }
 .pdp[data-model="cadre"] { --metal-text: linear-gradient(105deg, #8E6A32 0%, #F3DDA4 28%, #B48A45 46%, #FFF1C9 62%, #9A7438 100%); }
-.pdp[data-variant="e"] .b-strip .ph:first-child { display: grid; }
+.e-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 20px; flex-wrap: wrap; }
+.e-row .dials { justify-items: end; gap: 8px; }
+.e-row .dials .row { gap: 10px; }
+/* smaller swatches that keep a 44px tap target */
+.e-row .sw { width: 34px; height: 34px; }
+.e-row .sw::before { content: ""; position: absolute; inset: -5px; }
+.e-row .sw[aria-pressed="true"]::after { inset: -4px; }
+.pdp[data-model="cadre"] .e-row .sw { border-radius: 8px; }
+.pdp[data-model="cadre"] .e-row .sw[aria-pressed="true"]::after { border-radius: 11px; }
 
 /* ── phone width: every variant collapses to one column ── */
 @container (max-width: 760px) {
@@ -401,9 +409,9 @@ const NOTES = {
     ["Section order", "The bench (the watch on its ticking dial, with the name in steel or gold under it) beside the statement, quartz line, price, Dials, Add to bag, policy lines and size line. Then a photo strip, description, Size & fit, Specifications, Delivery, returns and warranty, the other Model and the footer."],
     ["Gallery", "One live watch on the bench. The other shots sit in a sideways strip under the first screen, at every width."],
     ["Dial switching", "Named swatches under the price swap the bench watch, the statement's Dial word and the ?variant= link. ACIER Chrome has no hands-free photo yet, so its printed hands stand still."],
-    ["Price and CTA", "The price in brushed metal, $149 or $169, with no strikethrough. Add to bag is the solid metal bar. When it lands, a lap of light runs round the dial. On phones a bar sticks to the bottom until the main button is on screen."],
-    ["Spec table and fit", "A size line with a Size & fit link sits under the button. The full fit guidance and spec table are full-width sections below, as in B."],
-    ["Policy notes", "Three short lines under the button, and a full three-column section lower down."],
+    ["Price and CTA", "The price in brushed metal, $149 or $169, with no strikethrough, and the Dial swatches on the same row to its right. Add to bag is the solid metal bar. When it lands, a lap of light runs round the dial. On phones a bar sticks to the bottom until the main button is on screen."],
+    ["Spec table and fit", "Size & fit is the last line of the list under the button and jumps to the full section. The fit guidance and spec table are full-width sections below, as in B."],
+    ["Policy notes", "A short list under the button: Dispatched within 24 hours, the warranty, and Size & fit. Returns and delivery times sit in the full section lower down and on their pages."],
     ["Motion", "The backdrop dial lights the current second with a six-second trail. The hands step like quartz. The watch tilts and the light follows the pointer, drifting when idle. The name has no build-in, which stays on the home page. Reduced motion: no tilt or drift, and the hands update without visible movement."]
   ] },
   a: { t: "A · Sticky buy box", s: "The common DTC pattern. Photos scroll; the buy box stays put.", d: [
@@ -574,8 +582,12 @@ const VARIANTS = {
         <p class="e-statement">${M.statement(dial)}</p>
         <p class="e-aside">${M.aside}</p>
         <div class="e-buy">
-          <div class="price-block"><div class="price"><span class="amt">${money(M.price)}</span>${state.aud ? `<span class="est">≈ A$${M.aud} estimate</span>` : ""}</div><div class="price-note">Free delivery in Australia</div></div>
-          ${dials()}${cta()}${policies()}${sizeLine("fit")}
+          <div class="e-row"><div class="price-block"><div class="price"><span class="amt">${money(M.price)}</span>${state.aud ? `<span class="est">≈ A$${M.aud} estimate</span>` : ""}</div><div class="price-note">Free delivery in Australia</div></div>${dials()}</div>
+          ${cta()}<ul class="policies">
+            <li><span><a href="#" data-noop>Dispatched within 24 hours</a></span></li>
+            <li><span><a href="#" data-noop><span class="tbd">2</span>-year warranty</a></span></li>
+            <li><span><a href="#" data-jump="fit">Size & fit</a></span></li>
+          </ul>
         </div>
       </div></section>
       <div class="b-strip">${SLOTS.map(s => `<div>${photo(s)}<div class="cap">${s.label}</div></div>`).join("")}</div>

@@ -178,6 +178,7 @@ a { color: inherit; }
   <div class="stage"><div class="viewport" id="vp"></div></div>
   <div class="bar" role="toolbar" aria-label="Prototype controls">
     <div class="grp" data-group="v">
+      <button type="button" data-val="e">Chosen · D + A</button>
       <button type="button" data-val="a">A · Wrist guide</button>
       <button type="button" data-val="b">B · Life size on screen</button>
       <button type="button" data-val="c">C · Printable sheet</button>
@@ -211,7 +212,7 @@ const MODELS = {
 };
 /* "Example" range is a stand-in to show the layout once a sample is measured. It is not a FOSLN figure. */
 const EX_RANGE = { acier: [15, 20], cadre: [14.5, 19] };
-const state = { v: "a", m: "acier", f: "desktop", r: "none", wrist: 17, k: 96 / 25.4, notes: false };
+const state = { v: "e", m: "acier", f: "desktop", r: "none", wrist: 17, k: 96 / 25.4, notes: false };
 const $ = s => document.querySelector(s);
 const mmTop = cm => cm * 10 / 3; /* the flat top of a wrist is about a third of its circumference */
 
@@ -256,7 +257,7 @@ function facts() {
 }
 
 /* ── A · wrist guide: your wrist, drawn to scale with the watch on it ── */
-function vA() {
+function vA(noFacts) {
   const M = MODELS[state.m], cm = state.wrist, top = mmTop(cm), s = 3.4;
   const vw = 520, vh = 300, cx = 250, cy = 150, w = top * s;
   /* forearm on the left, hand on the right; the wrist is narrowest at the watch */
@@ -281,14 +282,13 @@ function vA() {
   const verdict = inside
     ? `<b>The lugs sit inside the top of your wrist.</b><span>${M.name} spans ${M.L} mm across a wrist top of about ${Math.round(top)} mm, so it covers ${pct}% of it.</span>`
     : `<b>The lugs reach past the top of your wrist.</b><span>${M.name} spans ${M.L} mm, and a ${cm} cm wrist is about ${Math.round(top)} mm across the top. It will wear large.</span>`;
-  const sq = M.shape === "square" ? `<p class="mono-cap" style="margin:12px 0 0">Square cases wear a little larger than round ones of the same width.</p>` : "";
   return `<div class="a-grid">
     <div><p class="lead">Pick your wrist size, in cm, and see <em>${M.name}</em> on it.</p>
       <div class="chips" role="group" aria-label="Wrist size in cm">${chips}</div>
-      <div class="verdict" aria-live="polite">${verdict}</div>${sq}
+      <div class="verdict" aria-live="polite">${verdict}</div>
       <p class="mono-cap" style="margin:12px 0 0">Drawn to scale. The top of a wrist is taken as a third of its size; yours may be wider or narrower.</p></div>
     <figure class="a-fig">${svg}</figure>
-  </div>${facts()}`;
+  </div>${noFacts ? "" : facts()}`;
 }
 
 /* ── B · life size on screen, after matching a bank card ── */
@@ -368,19 +368,28 @@ function vC() {
 }
 
 /* ── D · on the wrist: captioned photos on two wrist sizes ── */
-function vD() {
+function vD(noFacts) {
   const M = MODELS[state.m];
   const sizes = M.shape === "square" ? [15, 18] : [16, 19];
   const shot = cm => `<div><div class="ph"><div class="need"><b>${M.name} on a ${cm} cm wrist</b><span>Photo needed: straight down, natural light, the same framing for both wrists</span></div></div>
     <div class="cap"><span>Worn on a <b>${cm} cm</b> wrist</span><span>${M.dial} Dial</span></div></div>`;
   return `<p class="lead">How <em>${M.name}</em> looks on two different wrists.</p>
   <div class="d-photos">${sizes.map(shot).join("")}</div>
-  <p class="mono-cap" style="margin:12px 0 0">${M.name} is ${M.shape === "square" ? `${M.W} mm wide and ${M.L} mm long` : `${M.W} mm across and ${M.L} mm lug to lug`}. ${M.shape === "square" ? "Square cases wear a little larger than round ones of the same width." : ""}</p>
-  ${facts()}`;
+  ${noFacts ? "" : facts()}`;
+}
+
+/* ── E · chosen: D's photos, then A's wrist guide, then the facts ── */
+function vE() {
+  return `${vD(true)}<div style="margin-top:48px">${vA(true)}</div>${facts()}`;
 }
 
 /* ── notes ── */
 const NOTES = {
+  e: { t: "Chosen · Photos, then wrist guide", s: "D\u2019s two captioned wrist photos, then A\u2019s wrist guide, then the three facts.", d: [
+    ["Order", "Photos on two wrists first, because they answer \u201chow does it look on a wrist?\u201d at a glance. Then the wrist guide for the buyer\u2019s own size. Then bracelet range, measuring and taking out links."],
+    ["Before the photos exist", "The photo row is left out and the section opens on the wrist guide."],
+    ["CADRE", "No \u201csquare cases wear larger\u201d line. The figures and the drawing speak for themselves."]
+  ] },
   a: { t: "A · Wrist guide", s: "The buyer picks their wrist size and sees the watch drawn on it, to scale.", d: [
     ["Shape", "Wrist chips from 14 to 21 cm. The drawing shows the wrist from above with the watch on it, both at one scale, and marks the lug to lug against the top of the wrist."],
     ["Answer", "A plain verdict: the lugs sit inside the top of the wrist, or reach past it. It also says how much of the wrist top the watch covers."],
@@ -406,7 +415,7 @@ const NOTES = {
 };
 const COMMON = [
   "A full-width Size & fit section below the first screen, before Specifications, reached from the “Size & fit” link under Add to bag.",
-  "The same section for both Models. CADRE adds one line: square cases wear a little larger than round ones of the same width.",
+  "The same section for both Models, with no extra line for CADRE.",
   "Wrist sizes are in cm only.",
   "Three facts under every form: the bracelet range (hidden until a sample is measured), how to measure your wrist, and how to take out links.",
   "The forms can be combined. D's photos work with any of the other three."
@@ -426,7 +435,7 @@ function renderNotes() {
 /* ── page ── */
 function render() {
   const M = MODELS[state.m], vp = $("#vp"), keep = vp.scrollTop;
-  const body = { a: vA, b: vB, c: vC, d: vD }[state.v]();
+  const body = { a: () => vA(), b: vB, c: vC, d: () => vD(), e: vE }[state.v]();
   vp.innerHTML = `<div class="pdp" data-model="${state.m}">
     <header class="hdr"><nav><span aria-current="${state.m === "acier"}">ACIER</span><span aria-current="${state.m === "cadre"}">CADRE</span></nav><span class="menu">Menu</span><span class="wm">FOSLN</span><div class="tools"><span class="cur">USD $</span><span>Bag</span></div></header>
     <div class="stub"><div class="box"><b>The bench, photo strip and About</b><span>Settled in “Design the PDP layout”</span></div></div>
@@ -451,7 +460,7 @@ function render() {
   const p = (location.hash || "").slice(1).split("-");
   if (p.length !== 4) return;
   const [v, m, f, r] = p;
-  if (["a", "b", "c", "d"].includes(v)) state.v = v;
+  if (["a", "b", "c", "d", "e"].includes(v)) state.v = v;
   if (MODELS[m]) state.m = m;
   if (f === "desktop" || f === "phone") state.f = f;
   if (r === "none" || r === "ex") state.r = r;

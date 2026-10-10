@@ -1,0 +1,588 @@
+<meta charset="utf-8">
+<title>FOSLN Spec Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* PROTOTYPE. Throwaway spec tables for "Design the spec table" (Kintukka2/FOSLN-WATCH#19). Not production code.
+   Layout: the Specifications section of PDP layout E, in four designs (A-D), for ACIER or CADRE, in a desktop or phone frame.
+   Built on the locked Direction D, Two Metals, with E's onyx backdrop: dark only, so this page commits to one dark look. */
+:root {
+  --onyx: #0B0B0C; --warm-black: #0E0C09; --bone: #EDEBE6; --muted: #9A9C9F;
+  --steel: #C9CDD1; --gold: #D6B271;
+  --page: var(--onyx); --surface: #131416; --raise: #1B1C1F; --accent: var(--steel); --accent-ink: #111214;
+  --line: rgba(237,235,230,.12); --slot: #141517;
+  --metal-text: linear-gradient(105deg, #7D838A 0%, #F2F4F5 28%, #9EA4AA 46%, #FFFFFF 62%, #8A9096 100%);
+  --display: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --chrome-bg: #0A0A0B; --chrome-ink: #F2F2F0; --chrome-dim: #A3A5A8; --chrome-line: rgba(255,255,255,.14);
+  color-scheme: dark;
+}
+.pdp[data-model="cadre"] {
+  --page: var(--warm-black); --surface: #16130E; --raise: #1F1B14; --accent: var(--gold); --accent-ink: #17120A;
+  --line: rgba(214,178,113,.16); --slot: #17140F;
+  --metal-text: linear-gradient(105deg, #8E6A32 0%, #F3DDA4 28%, #B48A45 46%, #FFF1C9 62%, #9A7438 100%);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--chrome-bg); color: var(--bone); font: 400 15px/1.55 var(--body); }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── prototype chrome ── */
+.proto { height: 100%; display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); }
+.note { display: flex; gap: 16px; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 8px 16px; font: 500 12px/1.4 var(--mono); color: var(--chrome-dim); border-bottom: 1px solid var(--chrome-line); }
+.note b { color: var(--chrome-ink); font-weight: 500; }
+.note .url { color: var(--chrome-ink); overflow-wrap: anywhere; }
+.stage { min-height: 0; display: grid; place-items: stretch center; padding: 12px 16px; overflow: hidden; }
+.viewport { container-type: inline-size; width: 100%; max-width: 1440px; height: 100%; overflow-y: auto; overflow-x: hidden; border: 1px solid var(--chrome-line); border-radius: 6px; background: var(--page); position: relative; }
+.proto[data-frame="phone"] .viewport { width: 390px; max-width: 100%; max-height: 844px; border-radius: 28px; border-width: 6px; border-color: #26272A; }
+.bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--chrome-line); }
+.grp { display: flex; gap: 2px; padding: 3px; max-width: 100%; overflow-x: auto; scrollbar-width: none; border: 1px solid var(--chrome-line); border-radius: 999px; background: #141416; }
+.grp button { border: 0; background: transparent; color: var(--chrome-ink); min-height: 36px; padding: 0 14px; border-radius: 999px; font: 500 13px/1 var(--body); cursor: pointer; white-space: nowrap; }
+.grp button[aria-pressed="true"] { background: var(--chrome-ink); color: #111; }
+.grp .k { align-self: center; padding: 0 6px 0 10px; font: 500 12px/1 var(--mono); color: var(--chrome-dim); white-space: nowrap; }
+.notes { position: fixed; right: 16px; bottom: 76px; width: min(460px, calc(100vw - 32px)); max-height: min(72vh, 680px); overflow: auto; z-index: 40; background: #161618; color: var(--chrome-ink); border: 1px solid var(--chrome-line); border-radius: 10px; padding: 18px 20px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.notes h2 { margin: 0 0 4px; font: 600 16px/1.3 var(--body); }
+.notes h3 { margin: 18px 0 8px; font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--chrome-dim); }
+.notes .sub { margin: 0 0 14px; color: var(--chrome-dim); font-size: 13px; }
+.notes dl { margin: 0; display: grid; gap: 12px; }
+.notes dt { font: 500 12px/1.3 var(--mono); color: var(--chrome-dim); }
+.notes dd { margin: 3px 0 0; font-size: 14px; line-height: 1.5; }
+.notes ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; line-height: 1.5; }
+@media (max-width: 700px) { .grp[data-frames] { display: none; } .stage { padding: 0; } .viewport, .proto[data-frame="phone"] .viewport { width: 100%; max-height: none; border: 0; border-radius: 0; } .notes { bottom: 150px; } }
+
+/* ── the PDP around the section ── */
+.pdp { background: var(--page); color: var(--bone); min-height: 100%; }
+.hdr { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; height: 60px; padding: 0 28px; background: color-mix(in srgb, var(--page) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.hdr nav { display: flex; gap: 22px; font: 500 13px/1 var(--body); letter-spacing: .08em; color: var(--muted); }
+.hdr nav span[aria-current="true"] { color: var(--accent); box-shadow: inset 0 -1px 0 var(--accent); padding-bottom: 4px; }
+.hdr .menu { display: none; font: 500 13px/1 var(--body); color: var(--muted); }
+.wm { font: 400 17px/1 var(--display); letter-spacing: .32em; padding-left: .32em; color: var(--bone); }
+.tools { display: flex; justify-content: flex-end; gap: 18px; font: 500 13px/1 var(--body); }
+.tools .cur { color: var(--muted); }
+.stub { margin: 0 auto; max-width: 1100px; padding: 28px; }
+.stub .box { display: grid; gap: 4px; place-items: center; text-align: center; min-height: 120px; padding: 20px; border: 1px dashed var(--line); border-radius: 4px; }
+.stub b { font: 600 15px/1.3 var(--body); color: var(--muted); }
+.stub span { font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.sec { padding: 56px 28px; border-top: 1px solid var(--line); }
+.sec .wrap { max-width: 1100px; margin: 0 auto; }
+.blk-h { margin: 0 0 24px; font: 600 20px/1.3 var(--body); color: var(--bone); text-wrap: balance; }
+.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.sec-head .blk-h { margin: 0; }
+.sec-head .for { font: 400 12px/1.4 var(--mono); letter-spacing: .06em; color: var(--muted); }
+.sec-head .for b { color: var(--accent); font-weight: 500; }
+.slotnote { margin: 28px 0 0; font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.sub-in { color: var(--muted); font-weight: 400; }
+.tbd { border-bottom: 1px dotted var(--accent); color: var(--bone); cursor: help; }
+.sub-v { display: block; margin-top: 2px; font: 400 13px/1.45 var(--body); color: var(--muted); }
+.foot { padding: 36px 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+
+/* explanations, shared */
+.q { flex: none; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 6px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; cursor: pointer; font: 500 12px/1 var(--mono); color: var(--accent); vertical-align: 1px; position: relative; }
+.q::before { content: ""; position: absolute; inset: -11px; }
+.q[aria-expanded="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.help { margin: 6px 0 2px; max-width: 46ch; font: 400 13px/1.5 var(--body); color: var(--muted); }
+
+/* ── A · the ledger ── */
+.a-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 72px; }
+.a-grp h3 { margin: 0 0 14px; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.a-grp dl { margin: 0; display: grid; gap: 14px; }
+.a-row { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 4px 20px; align-items: baseline; }
+.a-row dt { font: 400 12px/1.5 var(--mono); letter-spacing: .03em; color: var(--muted); display: flex; align-items: center; }
+.a-row dd { margin: 0; font: 500 15px/1.45 var(--body); font-variant-numeric: tabular-nums; }
+.a-row .help { grid-column: 1 / -1; margin: 0; }
+
+/* ── B · the drawing ── */
+.b-top { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; }
+.b-fig { margin: 0; display: grid; gap: 10px; }
+.b-fig svg { width: 100%; height: auto; display: block; }
+.b-fig figcaption { font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.b-size h3, .b-rest h3 { margin: 0 0 12px; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.b-size ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.b-size li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; align-items: baseline; padding: 12px 12px; margin: 0 -12px; border-radius: 3px; cursor: default; transition: background .2s; }
+.b-size li[data-dim] { cursor: pointer; }
+.b-size li.on { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.b-size .k { font: 400 13px/1.4 var(--body); color: var(--muted); display: flex; align-items: center; }
+.b-size .k i { display: inline-block; width: 14px; height: 1px; margin-right: 10px; background: var(--accent); vertical-align: middle; }
+.b-size li:not([data-dim]) .k i { background: transparent; }
+.b-size .v { font: 500 20px/1.2 var(--body); font-variant-numeric: tabular-nums; text-align: right; }
+.b-size .v small { display: block; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.b-size .help { grid-column: 1 / -1; }
+.b-rest { margin-top: 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+.b-rest dl { margin: 0; display: grid; gap: 12px; }
+.b-rest dt { font: 400 12px/1.4 var(--mono); color: var(--muted); display: flex; align-items: center; }
+.b-rest dd { margin: 2px 0 0; font: 500 15px/1.45 var(--body); }
+.drw .body { fill: var(--surface); stroke: var(--accent); stroke-width: 1.4; }
+.drw .fine { fill: none; stroke: var(--accent); stroke-width: .8; opacity: .55; }
+.drw .frame { fill: none; stroke: var(--accent); stroke-width: 5; opacity: .9; }
+.drw .dialf { fill: var(--raise); stroke: var(--accent); stroke-width: .8; opacity: .9; }
+.drw .band { fill: var(--surface); stroke: var(--accent); stroke-width: 1; }
+.drw .hand { stroke: var(--bone); stroke-linecap: round; }
+.drw .sec-hand { stroke: var(--accent); stroke-width: 1.2; transition: transform .3s cubic-bezier(.3, 2.2, .55, 1); transform-box: view-box; }
+.drw .dim line, .drw .dim path { stroke: var(--accent); stroke-width: 1; opacity: .8; transition: stroke .2s, opacity .2s, stroke-width .2s; }
+.drw .dim .ext { stroke-dasharray: 2 3; opacity: .45; }
+.drw .dim text { fill: var(--accent); font: 500 16px var(--mono); transition: fill .2s; }
+.drw .dim.on line, .drw .dim.on path { stroke: var(--bone); opacity: 1; stroke-width: 1.6; }
+.drw .dim.on text { fill: var(--bone); }
+.drw .lbl { fill: var(--muted); font: 400 13px var(--mono); letter-spacing: .08em; }
+
+/* ── C · plain answers ── */
+.c-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+.c-item { padding: 22px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; align-content: start; }
+.c-item h3 { margin: 0; font: 400 19px/1.35 var(--display); color: var(--bone); text-wrap: balance; }
+.c-item p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--bone); max-width: 46ch; }
+.c-item .fig { font: 400 12px/1.5 var(--mono); letter-spacing: .03em; color: var(--accent); }
+.c-item a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+.c-all { margin-top: 32px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.c-all summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 56px; font: 600 15px/1.3 var(--body); }
+.c-all summary::-webkit-details-marker { display: none; }
+.c-all summary::after { content: "+"; font: 400 20px/1 var(--body); color: var(--accent); }
+.c-all[open] summary::after { content: "\2212"; }
+.c-all .in { padding: 4px 0 28px; }
+
+/* ── D · headline figures, one column ── */
+.d-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-bottom: 44px; background: var(--line); border-block: 1px solid var(--line); }
+.d-fig { background: var(--page); padding: 22px 20px 20px; display: grid; gap: 8px; align-content: start; }
+.d-fig .n { font: 400 clamp(30px, 4.4cqi, 46px)/1 var(--display); letter-spacing: -.01em; font-variant-numeric: lining-nums tabular-nums; background: var(--metal-text); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+.d-fig .n small { font: 500 14px/1 var(--mono); letter-spacing: 0; -webkit-text-fill-color: var(--muted); margin-left: 4px; }
+.d-fig .c { font: 400 12px/1.4 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.d-fig .c b { color: var(--bone); font-weight: 400; }
+.d-sheet { display: grid; gap: 36px; max-width: 860px; }
+.d-grp { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 12px 40px; }
+.d-grp h3 { margin: 0; font: 500 12px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.d-grp dl { margin: 0; display: grid; gap: 18px; }
+.d-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 4px 24px; align-items: baseline; }
+.d-row dt { font: 500 14px/1.4 var(--body); color: var(--bone); }
+.d-row dt .help { margin: 3px 0 0; font-size: 13px; font-weight: 400; }
+.d-row dd { margin: 0; font: 500 15px/1.45 var(--body); font-variant-numeric: tabular-nums; }
+
+/* ── phone width ── */
+@container (max-width: 760px) {
+  .hdr { grid-template-columns: auto 1fr auto; padding: 0 16px; }
+  .hdr nav { display: none; }
+  .hdr .menu { display: block; }
+  .hdr .wm { justify-self: center; font-size: 15px; }
+  .tools { gap: 12px; }
+  .stub { padding: 20px 16px; }
+  .sec { padding: 40px 16px; }
+  .foot { padding: 28px 16px; }
+  .a-grid { grid-template-columns: 1fr; gap: 32px; }
+  .a-row { grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr); gap: 2px 14px; }
+  .b-top { grid-template-columns: 1fr; gap: 20px; }
+  .b-rest { grid-template-columns: 1fr; gap: 28px; margin-top: 32px; }
+  .c-list { grid-template-columns: 1fr; }
+  .c-item h3 { font-size: 17px; }
+  .d-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 32px; }
+  .d-fig { padding: 18px 14px 16px; }
+  .d-fig .n { font-size: 26px; }
+  .d-grp { grid-template-columns: 1fr; gap: 14px; }
+  .d-row { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, .drw .sec-hand { transition: none !important; }
+}
+</style>
+
+<div class="proto" id="proto" data-frame="desktop">
+  <div class="note">
+    <span><b>Prototype</b> for "Design the spec table". Throwaway. Figures are the provisional ones; dotted TBC marks a figure no source gives yet.</span>
+    <span class="url" id="url"></span>
+  </div>
+  <div class="stage"><div class="viewport" id="vp"></div></div>
+  <div class="bar" role="toolbar" aria-label="Prototype controls">
+    <div class="grp" data-group="v">
+      <button type="button" data-val="a">A · Ledger</button>
+      <button type="button" data-val="b">B · Drawing</button>
+      <button type="button" data-val="c">C · Plain answers</button>
+      <button type="button" data-val="d">D · Headline figures</button>
+    </div>
+    <div class="grp" data-group="m">
+      <button type="button" data-val="acier">ACIER</button>
+      <button type="button" data-val="cadre">CADRE</button>
+    </div>
+    <div class="grp" data-group="dial" id="dial-grp"></div>
+    <div class="grp" data-group="f" data-frames>
+      <button type="button" data-val="desktop">Desktop</button>
+      <button type="button" data-val="phone">Phone</button>
+    </div>
+    <div class="grp" data-group="u">
+      <span class="k">Units</span>
+      <button type="button" data-val="mm">mm</button>
+      <button type="button" data-val="in">mm + in</button>
+    </div>
+    <div class="grp" data-group="x">
+      <span class="k">Unknowns</span>
+      <button type="button" data-val="show">Show TBC</button>
+      <button type="button" data-val="hide">Hide row</button>
+    </div>
+    <div class="grp">
+      <button type="button" id="notes-btn" aria-pressed="false" aria-controls="notes">What it decides</button>
+    </div>
+  </div>
+  <aside class="notes" id="notes" hidden aria-live="polite"></aside>
+</div>
+
+<script>
+/* Provisional figures from docs/specs/models.md ("Gather verified specs for ACIER and CADRE").
+   null = no source gives it yet (TBC). Nothing here claims a steel case. */
+const MODELS = {
+  acier: {
+    name: "ACIER", shape: "round",
+    dials: [["chrome", "Chrome"], ["onyx", "Onyx"]],
+    W: 37, L: 43, T: 9.5, B: 16.3, g: 69,
+    caseShape: "Round bezel on a faceted case",
+    dialSub: "Nothing on it but the hands",
+    date: "None", dateSub: null
+  },
+  cadre: {
+    name: "CADRE", shape: "square",
+    dials: [["noir", "Noir"], ["champagne", "Champagne"]],
+    W: 32, L: 36.3, T: 10, B: 16.8, g: 67,
+    caseShape: "Square, with a gold frame round the dial",
+    dialSub: "Roman numerals at XII, IX and VI, Arabic for the other hours",
+    date: "Yes, at 3 o'clock", dateSub: null
+  }
+};
+
+const HELP = {
+  lug: "From the top edge of the case to the bottom edge, where the bracelet joins. It tells you how much of your wrist the watch covers.",
+  thick: "From the case back to the top of the crystal, so you can tell whether it slips under a cuff.",
+  band: "Measured where the bracelet meets the case.",
+  wrist: "The wrist sizes the bracelet closes round, from the smallest to the largest, with links taken out or left in.",
+  crystal: "Mineral glass, hardened to resist scratches.",
+  quartz: "Runs on a battery, so it keeps time without winding.",
+  water: "30 m is a pressure rating from a lab test, not a depth you can dive to."
+};
+
+const state = { v: "b", m: "acier", f: "desktop", u: "mm", x: "hide", dial: { acier: "onyx", cadre: "noir" }, notes: false, hot: null };
+const $ = s => document.querySelector(s);
+const TBC_TITLE = "No source gives this yet. It is measured on a sample in “Verify the specs against the samples”.";
+const tbc = `<span class="tbd" title="${TBC_TITLE}">TBC</span>`;
+
+/* ── units ── */
+const inch = mm => (mm / 25.4).toFixed(2);
+function len(mm) { return state.u === "in" ? `${mm} mm <span class="sub-in">(${inch(mm)} in)</span>` : `${mm} mm`; }
+function pair(a, b) { return state.u === "in" ? `${a} × ${b} mm <span class="sub-in">(${inch(a)} × ${inch(b)} in)</span>` : `${a} × ${b} mm`; }
+function grams(g) { return state.u === "in" ? `${g} g <span class="sub-in">(${(g / 28.35).toFixed(1)} oz)</span>` : `${g} g`; }
+
+/* ── the one row list both Models share: same labels, same order ── */
+function groups() {
+  const M = MODELS[state.m], dialName = M.dials.find(d => d[0] === state.dial[state.m])[1];
+  const sq = M.shape === "square";
+  const G = [
+    { g: "Size", rows: [
+      { k: "Case", v: sq ? pair(M.W, M.L) : len(M.W), sub: sq ? "Width × length" : "Diameter", dim: "case" },
+      { k: "Lug to lug", v: len(M.L), sub: sq ? "The full length of the case" : null, dim: "lug", help: HELP.lug },
+      { k: "Thickness", v: len(M.T), dim: "thick", help: HELP.thick },
+      { k: "Bracelet width", v: len(M.B), dim: "band", help: HELP.band },
+      { k: "Fits wrists", v: null, help: HELP.wrist },
+      { k: "Weight", v: grams(M.g), sub: "With the full bracelet" }
+    ] },
+    { g: "Case and dial", rows: [
+      { k: "Case", v: M.caseShape },
+      { k: "Dial", v: dialName, sub: M.dialSub },
+      { k: "Date", v: M.date },
+      { k: "Crystal", v: "Hardened mineral", help: HELP.crystal }
+    ] },
+    { g: "Bracelet", rows: [
+      { k: "Bracelet", v: "Stainless steel links" },
+      { k: "Clasp", v: null },
+      { k: "Resizing", v: null, help: "How links come out, and what you need to do it." }
+    ] },
+    { g: "Movement and care", rows: [
+      { k: "Movement", v: "Quartz", help: HELP.quartz },
+      { k: "Battery", v: null },
+      { k: "Water resistance", v: "3 bar (30 m)", sub: "Splashes and rain only. Not for swimming or showering.", help: HELP.water },
+      { k: "Warranty", v: null }
+    ] }
+  ];
+  if (state.x === "hide") G.forEach(gr => gr.rows = gr.rows.filter(r => r.v !== null));
+  return G.filter(gr => gr.rows.length);
+}
+
+const val = r => r.v === null ? tbc : r.v;
+let qid = 0;
+const qBtn = r => r.help ? `<button type="button" class="q" aria-expanded="false" aria-controls="h${++qid}" aria-label="What is ${r.k.toLowerCase()}?">?</button>` : "";
+const qHelp = r => r.help ? `<p class="help" id="h${qid}" hidden>${r.help}</p>` : "";
+
+/* ── A · ledger ── */
+function vA() {
+  return `<div class="a-grid">${groups().map(gr => `<section class="a-grp"><h3>${gr.g}</h3><dl>${gr.rows.map(r => {
+    const b = qBtn(r);
+    return `<div class="a-row"><dt>${r.k}${b}</dt><dd>${val(r)}${r.sub ? `<span class="sub-v">${r.sub}</span>` : ""}</dd>${qHelp(r)}</div>`;
+  }).join("")}</dl></section>`).join("")}</div>`;
+}
+
+/* ── B · drawing: front and side views, one scale for both Models ── */
+function drawing() {
+  const M = MODELS[state.m], s = 5, sq = M.shape === "square";
+  const W = M.W * s, L = M.L * s, T = M.T * s, B = M.B * s;
+  const cx = 170, cy = 192, cx2 = 345, stub = 34;
+  const top = cy - L / 2, bot = cy + L / 2;
+  const dimTop = top - stub - 16, dimBot = bot + stub + 18, dimLeft = cx - W / 2 - 26;
+  const tick = (x, y) => `<path d="M${x - 4} ${y + 4} L${x + 4} ${y - 4}"/>`;
+  const fmt = n => String(n);
+
+  /* bracelet stubs, front and side, fading away from the case */
+  const links = (x, w, y0, y1, step) => { let o = ""; for (let y = y0 + step; y < y1; y += step) o += `<line x1="${x}" y1="${y}" x2="${x + w}" y2="${y}"/>`; return o; };
+  const frontBand = `<g mask="url(#fadeT)"><rect class="band" x="${cx - B / 2}" y="${top - stub}" width="${B}" height="${stub + 2}"/><g class="fine">${links(cx - B / 2, B, top - stub, top, 11)}</g></g>
+    <g mask="url(#fadeB)"><rect class="band" x="${cx - B / 2}" y="${bot - 2}" width="${B}" height="${stub + 2}"/><g class="fine">${links(cx - B / 2, B, bot, bot + stub, 11)}</g></g>`;
+  const sb = 3.2 * s;
+  const sideBand = `<g mask="url(#fadeT)"><rect class="band" x="${cx2 + T / 2 - sb - 4}" y="${top - stub}" width="${sb}" height="${stub + 2}"/></g>
+    <g mask="url(#fadeB)"><rect class="band" x="${cx2 + T / 2 - sb - 4}" y="${bot - 2}" width="${sb}" height="${stub + 2}"/></g>`;
+
+  /* front view */
+  let front, r;
+  if (!sq) {
+    const p = [[-.29, -.5], [.29, -.5], [.5, -.17], [.5, .17], [.29, .5], [-.29, .5], [-.5, .17], [-.5, -.17]];
+    const poly = k => p.map(([x, y]) => `${cx + x * W * k},${cy + y * L * k}`).join(" ");
+    r = W / 2 * .86;
+    front = `<polygon class="body" points="${poly(1)}"/><polygon class="fine" points="${poly(.9)}"/>
+      <circle class="fine" cx="${cx}" cy="${cy}" r="${r}"/><circle class="dialf" cx="${cx}" cy="${cy}" r="${r * .84}"/>`;
+    r = r * .84;
+  } else {
+    const fi = 2.2 * s, di = 3.6 * s;
+    r = (W - 2 * di) / 2;
+    front = `<rect class="body" x="${cx - W / 2}" y="${top}" width="${W}" height="${L}" rx="${2.4 * s}"/>
+      <rect class="frame" x="${cx - W / 2 + fi}" y="${top + fi}" width="${W - 2 * fi}" height="${L - 2 * fi}" rx="${1.4 * s}"/>
+      <rect class="dialf" x="${cx - W / 2 + di}" y="${top + di}" width="${W - 2 * di}" height="${L - 2 * di}" rx="${.8 * s}"/>
+      <rect class="fine" x="${cx + W / 2 - di - 5.2 * s}" y="${cy - 1.5 * s}" width="${3.6 * s}" height="${3 * s}" style="opacity:.9"/>
+      <rect class="body" x="${cx + W / 2}" y="${cy - 1.6 * s}" width="${1.6 * s}" height="${3.2 * s}" rx="2"/>`;
+  }
+  let ticks = "";
+  for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180, r1 = r * .9, r0 = r * (i % 3 ? .82 : .74); if (sq && i === 3) continue; ticks += `<line x1="${cx + Math.sin(a) * r0}" y1="${cy - Math.cos(a) * r0}" x2="${cx + Math.sin(a) * r1}" y2="${cy - Math.cos(a) * r1}"/>`; }
+  const hand = (deg, l, w) => { const a = deg * Math.PI / 180; return `<line class="hand" x1="${cx}" y1="${cy}" x2="${cx + Math.sin(a) * l}" y2="${cy - Math.cos(a) * l}" stroke-width="${w}"/>`; };
+  const hands = `${hand(305, r * .5, 3.2)}${hand(60, r * .74, 2.2)}
+    <line class="sec-hand" id="sec-hand" x1="${cx}" y1="${cy + r * .16}" x2="${cx}" y2="${cy - r * .86}" style="transform-origin:${cx}px ${cy}px;transform:rotate(${(Math.floor(Date.now() / 1000) % 3600) * 6}deg)"/>
+    <circle cx="${cx}" cy="${cy}" r="2.6" fill="var(--bone)"/>`;
+
+  /* side view: crystal faces left, towards the front view */
+  const cr = 1.1 * s;
+  const side = `<rect class="body" x="${cx2 - T / 2 + cr}" y="${top}" width="${T - cr}" height="${L}" rx="${sq ? 2.4 * s : T * .3}"/>
+    <path class="fine" style="opacity:.9" d="M${cx2 - T / 2 + cr} ${cy - r * 1.02} Q${cx2 - T / 2 - cr} ${cy} ${cx2 - T / 2 + cr} ${cy + r * 1.02}"/>
+    <line class="fine" x1="${cx2 + T / 2 - 2.6 * s}" y1="${top + 6}" x2="${cx2 + T / 2 - 2.6 * s}" y2="${bot - 6}"/>
+    <ellipse class="body" cx="${cx2 + 1}" cy="${cy}" rx="${1.6 * s}" ry="${1.6 * s}"/>`;
+
+  /* dimensions */
+  const dims = `
+    <g class="dim" data-dim="band">
+      <line class="ext" x1="${cx - B / 2}" y1="${top - stub + 6}" x2="${cx - B / 2}" y2="${dimTop - 6}"/><line class="ext" x1="${cx + B / 2}" y1="${top - stub + 6}" x2="${cx + B / 2}" y2="${dimTop - 6}"/>
+      <line x1="${cx - B / 2 - 6}" y1="${dimTop}" x2="${cx + B / 2 + 6}" y2="${dimTop}"/>${tick(cx - B / 2, dimTop)}${tick(cx + B / 2, dimTop)}
+      <text x="${cx + B / 2 + 12}" y="${dimTop + 5}">${fmt(M.B)} mm</text>
+    </g>
+    <g class="dim" data-dim="case">
+      <line class="ext" x1="${cx - W / 2}" y1="${sq ? bot - 4 : cy + L * .17}" x2="${cx - W / 2}" y2="${dimBot + 6}"/><line class="ext" x1="${cx + W / 2}" y1="${sq ? bot - 4 : cy + L * .17}" x2="${cx + W / 2}" y2="${dimBot + 6}"/>
+      <line x1="${cx - W / 2 - 6}" y1="${dimBot}" x2="${cx + W / 2 + 6}" y2="${dimBot}"/>${tick(cx - W / 2, dimBot)}${tick(cx + W / 2, dimBot)}
+      <text x="${cx}" y="${dimBot + 22}" text-anchor="middle">${fmt(M.W)} mm${sq ? " wide" : ""}</text>
+    </g>
+    <g class="dim" data-dim="lug">
+      <line class="ext" x1="${sq ? cx - W / 2 + 4 : cx - W * .29}" y1="${top}" x2="${dimLeft - 6}" y2="${top}"/><line class="ext" x1="${sq ? cx - W / 2 + 4 : cx - W * .29}" y1="${bot}" x2="${dimLeft - 6}" y2="${bot}"/>
+      <line x1="${dimLeft}" y1="${top - 6}" x2="${dimLeft}" y2="${bot + 6}"/>${tick(dimLeft, top)}${tick(dimLeft, bot)}
+      <text x="${dimLeft - 10}" y="${cy}" text-anchor="middle" transform="rotate(-90 ${dimLeft - 10} ${cy})">${fmt(M.L)} mm${sq ? " long" : ""}</text>
+    </g>
+    <g class="dim" data-dim="thick">
+      <line class="ext" x1="${cx2 - T / 2}" y1="${cy - r}" x2="${cx2 - T / 2}" y2="${dimTop - 6}"/><line class="ext" x1="${cx2 + T / 2}" y1="${top + 4}" x2="${cx2 + T / 2}" y2="${dimTop - 6}"/>
+      <line x1="${cx2 - T / 2 - 6}" y1="${dimTop}" x2="${cx2 + T / 2 + 6}" y2="${dimTop}"/>${tick(cx2 - T / 2, dimTop)}${tick(cx2 + T / 2, dimTop)}
+      <text x="${cx2 + T / 2 + 12}" y="${dimTop + 5}">${fmt(M.T)} mm</text>
+    </g>`;
+
+  return `<svg class="drw" viewBox="0 0 460 392" role="img" aria-label="${M.name} drawn front and side, with its case, lug-to-lug, thickness and bracelet width marked">
+    <defs>
+      <linearGradient id="gT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>
+      <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="fadeT" maskUnits="userSpaceOnUse" x="0" y="0" width="460" height="392"><rect x="0" y="${top - stub - 1}" width="460" height="${stub + 4}" fill="url(#gT)"/></mask>
+      <mask id="fadeB" maskUnits="userSpaceOnUse" x="0" y="0" width="460" height="392"><rect x="0" y="${bot - 3}" width="460" height="${stub + 4}" fill="url(#gB)"/></mask>
+    </defs>
+    ${frontBand}${sideBand}
+    ${front}<g class="fine" style="opacity:.8">${ticks}</g>${hands}
+    ${side}
+    ${dims}
+    <text class="lbl" x="${cx}" y="16" text-anchor="middle">FRONT</text>
+    <text class="lbl" x="${cx2}" y="16" text-anchor="middle">SIDE</text>
+  </svg>`;
+}
+function vB() {
+  const G = groups(), size = G.find(g => g.g === "Size"), rest = G.filter(g => g.g !== "Size");
+  return `<div class="b-top">
+    <figure class="b-fig">${drawing()}<figcaption>Both Models are drawn at the same scale, so CADRE draws smaller than ACIER. Not life size: the life-size check belongs to Size & fit.</figcaption></figure>
+    <div class="b-size"><h3>Size</h3><ul>${size.rows.map(r => {
+      const b = qBtn(r);
+      return `<li${r.dim ? ` data-dim="${r.dim}" tabindex="0"` : ""}><span class="k"><i></i>${r.k}${b}</span><span class="v">${val(r)}${r.sub ? `<small>${r.sub}</small>` : ""}</span>${qHelp(r)}</li>`;
+    }).join("")}</ul></div>
+  </div>
+  <div class="b-rest">${rest.map(gr => `<section><h3>${gr.g}</h3><dl>${gr.rows.map(r => `<div><dt>${r.k}${qBtn(r)}</dt><dd>${val(r)}${r.sub ? `<span class="sub-v">${r.sub}</span>` : ""}</dd>${qHelp(r)}</div>`).join("")}</dl></section>`).join("")}</div>`;
+}
+
+/* ── C · plain answers ── */
+function vC() {
+  const M = MODELS[state.m], sq = M.shape === "square", hide = state.x === "hide";
+  const dialName = M.dials.find(d => d[0] === state.dial[state.m])[1];
+  const items = [
+    ["How big is it?", sq
+      ? `${M.W} mm wide and ${M.L} mm long, and ${M.T} mm thick. Square cases wear a little larger than round ones of the same width.`
+      : `${M.W} mm across, ${M.L} mm from the top of the case to the bottom, and ${M.T} mm thick.`,
+      sq ? `Case ${pair(M.W, M.L)} · thickness ${len(M.T)}` : `Case ${len(M.W)} · lug to lug ${len(M.L)} · thickness ${len(M.T)}`],
+    ["Will it fit my wrist?", `${hide ? "" : `It closes round wrists from ${tbc}. `}<a href="#" data-noop>Size & fit</a> shows how it sits.`, null],
+    ["How heavy is it?", `${M.g} g with the full bracelet.`, `Weight ${grams(M.g)}`],
+    ["Can I get it wet?", "Rain and splashes, yes. Swimming and showers, no.", "Water resistance 3 bar (30 m)"],
+    ["How tough is the glass?", "It's hardened mineral crystal, which resists scratches better than ordinary glass.", "Crystal: hardened mineral"],
+    ["What keeps it running?", `A quartz movement on a battery, so there's nothing to wind.${hide ? "" : ` Battery: ${tbc}.`}`, "Movement: quartz"],
+    ["Does it show the date?", sq ? "Yes, in a window at 3 o'clock." : "No. There's nothing on the dial but the hands.", sq ? `Dial: ${dialName} · date at 3 o'clock` : `Dial: ${dialName}`],
+    ["What's the bracelet?", `Stainless steel links, ${M.B} mm wide at the case.${hide ? "" : ` Clasp: ${tbc}.`}`, `Bracelet width ${len(M.B)}`],
+    ...(hide ? [] : [["What if something goes wrong?", `It's covered by a ${tbc} warranty. <a href="#" data-noop>Warranty & care</a> has the detail.`, null]])
+  ];
+  return `<div class="c-list">${items.map(([q, a, f]) => `<div class="c-item"><h3>${q}</h3><p>${a}</p>${f ? `<span class="fig">${f}</span>` : ""}</div>`).join("")}</div>
+  <details class="c-all"><summary>All specifications</summary><div class="in">${vA()}</div></details>`;
+}
+
+/* ── D · headline figures, then one column ── */
+function vD() {
+  const M = MODELS[state.m], sq = M.shape === "square";
+  const n = (v, u) => `${v}<small>${u}</small>`;
+  const figs = [
+    [sq ? n(`${M.W}×${M.L}`, "mm") : n(M.W, "mm"), sq ? "Case, <b>width × length</b>" : "Case <b>diameter</b>"],
+    [n(M.L, "mm"), "Lug to lug"],
+    [n(M.T, "mm"), "Thickness"],
+    [n(M.g, "g"), "Weight, with bracelet"]
+  ];
+  return `<div class="d-figs">${figs.map(([v, c]) => `<div class="d-fig"><span class="n">${v}</span><span class="c">${c}</span></div>`).join("")}</div>
+  <div class="d-sheet">${groups().map(gr => `<section class="d-grp"><h3>${gr.g}</h3><dl>${gr.rows.map(r => `<div class="d-row"><dt>${r.k}${r.help ? `<p class="help">${r.help}</p>` : ""}</dt><dd>${val(r)}${r.sub ? `<span class="sub-v">${r.sub}</span>` : ""}</dd></div>`).join("")}</dl></section>`).join("")}</div>`;
+}
+
+/* ── notes ── */
+const NOTES = {
+  a: { t: "A · Ledger", s: "Four groups in a two-by-two grid, as in the Direction D comps.", d: [
+    ["Shape", "Grouped facts in two columns. Each row is a small mono label with the value beside it in bone. No rule under each row."],
+    ["Explanations", "Hidden behind a ? on the terms that need one: lug to lug, thickness, bracelet width, wrist range, crystal, quartz, water resistance and resizing."],
+    ["Phone", "The groups stack into one column, label and value still side by side."],
+    ["Trade-off", "Densest and quickest to scan. The sizes are just one group among four, so the size story doesn't stand out."]
+  ] },
+  b: { t: "B · Drawing", s: "A technical drawing carries the size figures, and the rest sits beneath it.", d: [
+    ["Shape", "Front and side views with dimension lines for case, lug to lug, thickness and bracelet width, beside the Size list. Hovering or tapping a row lights its line on the drawing."],
+    ["Scale", "Both Models are drawn at the same scale, so switching Model shows how much smaller CADRE is. It is not life size; the life-size check stays with Size & fit."],
+    ["Data", "The drawing is built from the same figures as the rows, so a corrected figure redraws it. No artwork to redo after the sample check."],
+    ["Motion", "The seconds hand steps like quartz, as on the bench. Reduced motion: it stands still."],
+    ["Trade-off", "The strongest answer to “how big is it?”, and the most work to build. It needs one drawing per case shape."]
+  ] },
+  c: { t: "C · Plain answers", s: "The buyer's questions, answered in a sentence each, with the full ledger folded underneath.", d: [
+    ["Shape", "Nine questions in two columns, in Libre Baskerville. Each answer is one or two sentences, with the figure behind it in mono. “All specifications” opens design A."],
+    ["Why", "The questions come from the Timex Q&A in the research: fit, links, water and size. Nobody asked about lug to lug."],
+    ["Copy", "The wording here is a stand-in. The final lines come from “Decide the brand voice and PDP copy”."],
+    ["Trade-off", "Reads as the most helpful and the most like a person talking. Enthusiasts have to open a fold to see a plain table."]
+  ] },
+  d: { t: "D · Headline figures", s: "Four large figures, then every spec in one long column with its explanation showing.", d: [
+    ["Shape", "Case, lug to lug, thickness and weight in brushed-metal numerals across the top. Below, one column grouped by heading, as Baymard advises for a single product."],
+    ["Explanations", "Always visible under the label, so nothing is behind a tap."],
+    ["Trade-off", "The figures read like a spec sheet from a watchmaker. It is the longest of the four on a phone."]
+  ] }
+};
+const COMMON = [
+  "The same rows, labels and order on both Models. Only the case row changes shape: a diameter for ACIER, width × length for CADRE.",
+  "Size comes first: case, lug to lug, thickness, bracelet width, wrist range, weight.",
+  "“Bracelet width”, not “lug width”, because buyers mix up lug width and lug to lug.",
+  "CADRE's lug to lug is its case length, and the table says so.",
+  "Water resistance always reads “3 bar (30 m). Splashes and rain only. Not for swimming or showering.”",
+  "No “stainless steel case” until the Supplier confirms it in writing: the bracelet row says steel, the case row names only the shape. CADRE's frame is “gold”, never gold-plated.",
+  "“Hardened mineral” crystal, never Hardlex. Band length (225 and 200 mm) isn't shown, because it isn't a wrist range.",
+  "Every figure comes from one data source per Model, so the table, the drawing and the headline figures can't disagree."
+];
+const OPEN = [
+  "Which design, or which parts of which.",
+  "Unknown figures at launch: show a dotted TBC, or hide the row until the samples are measured. Use the Unknowns switch.",
+  "Units: mm only (Australia is metric), or mm with inches beside them. Use the Units switch.",
+  "The movement row says “Quartz”. Should it say where the movement is made?"
+];
+function renderNotes() {
+  const N = NOTES[state.v];
+  $("#notes").innerHTML = `<h2>${N.t}</h2><p class="sub">${N.s}</p>
+    <dl>${N.d.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+    <h3>In every design</h3><ul>${COMMON.map(c => `<li>${c}</li>`).join("")}</ul>
+    <h3>Still to decide</h3><ul>${OPEN.map(c => `<li>${c}</li>`).join("")}</ul>`;
+}
+
+/* ── page ── */
+function render() {
+  const M = MODELS[state.m];
+  const vp = $("#vp"), keep = vp.scrollTop;
+  qid = 0;
+  const body = { a: vA, b: vB, c: vC, d: vD }[state.v]();
+  vp.innerHTML = `<div class="pdp" data-model="${state.m}">
+    <header class="hdr"><nav><span aria-current="${state.m === "acier"}">ACIER</span><span aria-current="${state.m === "cadre"}">CADRE</span></nav><span class="menu">Menu</span><span class="wm">FOSLN</span><div class="tools"><span class="cur">USD $</span><span>Bag</span></div></header>
+    <div class="stub"><div class="box"><b>The bench, photo strip and About</b><span>Settled in “Design the PDP layout”</span></div></div>
+    <div class="stub"><div class="box"><b>Size & fit</b><span>Designed in “Design the fit guidance”. It comes before the specs.</span></div></div>
+    <section class="sec" id="specs" aria-labelledby="specs-h"><div class="wrap">
+      <div class="sec-head"><h2 class="blk-h" id="specs-h">Specifications</h2><span class="for">${M.name} · <b>${M.dials.find(d => d[0] === state.dial[state.m])[1]}</b></span></div>
+      ${body}
+    </div></section>
+    <div class="stub"><div class="box"><b>Delivery, Returns, Warranty & care</b><span>Then the other Model and the footer</span></div></div>
+    <footer class="foot"><span class="wm" style="font-size:14px">FOSLN</span><span>Prices in USD</span></footer>
+  </div>`;
+  vp.scrollTop = keep;
+
+  $("#dial-grp").innerHTML = M.dials.map(([id, label]) => `<button type="button" data-val="${id}">${label}</button>`).join("");
+  document.querySelectorAll(".grp[data-group]").forEach(g => {
+    const k = g.dataset.group, cur = k === "dial" ? state.dial[state.m] : state[k];
+    g.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.val === cur)));
+  });
+  $("#proto").dataset.frame = state.f;
+  $("#url").textContent = `fosln.com/products/${state.m}?variant=${state.dial[state.m]}#specs`;
+  $("#notes").hidden = !state.notes;
+  $("#notes-btn").setAttribute("aria-pressed", String(state.notes));
+  if (state.notes) renderNotes();
+  try { history.replaceState(null, "", "#" + [state.v, state.m, state.dial[state.m], state.f, state.u, state.x].join("-")); } catch (e) {}
+}
+
+/* restore from a bare-token hash, e.g. #b-cadre-noir-phone-mm-show */
+(function () {
+  const p = (location.hash || "").slice(1).split("-");
+  if (p.length !== 6) return;
+  const [v, m, d, f, u, x] = p;
+  if ("abcd".includes(v) && v.length === 1) state.v = v;
+  if (MODELS[m]) { state.m = m; if (MODELS[m].dials.some(q => q[0] === d)) state.dial[m] = d; }
+  if (f === "desktop" || f === "phone") state.f = f;
+  if (u === "mm" || u === "in") state.u = u;
+  if (x === "show" || x === "hide") state.x = x;
+})();
+
+/* ── events ── */
+document.addEventListener("click", e => {
+  const gb = e.target.closest(".grp[data-group] button");
+  if (gb) {
+    const k = gb.closest(".grp").dataset.group;
+    if (k === "dial") state.dial[state.m] = gb.dataset.val; else state[k] = gb.dataset.val;
+    render(); return;
+  }
+  if (e.target.closest("#notes-btn")) { state.notes = !state.notes; render(); return; }
+  const q = e.target.closest(".q");
+  if (q) {
+    const open = q.getAttribute("aria-expanded") !== "true";
+    q.setAttribute("aria-expanded", String(open));
+    document.getElementById(q.getAttribute("aria-controls")).hidden = !open;
+    return;
+  }
+  if (e.target.closest("[data-noop]")) { e.preventDefault(); return; }
+  const li = e.target.closest(".b-size li[data-dim]");
+  if (li) { const on = !li.classList.contains("on"); light(on ? li.dataset.dim : null); }
+});
+function light(dim) {
+  document.querySelectorAll(".b-size li[data-dim]").forEach(l => l.classList.toggle("on", l.dataset.dim === dim));
+  document.querySelectorAll(".drw .dim").forEach(g => g.classList.toggle("on", g.dataset.dim === dim));
+}
+document.addEventListener("mouseover", e => { const li = e.target.closest(".b-size li[data-dim]"); if (li) light(li.dataset.dim); });
+document.addEventListener("mouseout", e => { const li = e.target.closest(".b-size li[data-dim]"); if (li && !li.contains(e.relatedTarget)) light(null); });
+document.addEventListener("focusin", e => { const li = e.target.closest(".b-size li[data-dim]"); if (li) light(li.dataset.dim); });
+
+/* quartz-step seconds hand on the drawing */
+const still = matchMedia("(prefers-reduced-motion: reduce)");
+setInterval(() => {
+  const h = document.getElementById("sec-hand");
+  if (!h || still.matches) return;
+  h.style.transform = `rotate(${(Math.floor(Date.now() / 1000) % 3600) * 6}deg)`;
+}, 1000);
+
+render();
+</script>

@@ -8,17 +8,17 @@
    Layout: one PDP template in four structures (A-D), for ACIER or CADRE, in a desktop or phone frame.
    Built on the locked Direction D, Two Metals: dark only, so this page deliberately commits to one dark look. */
 :root {
-  --graphite: #111214; --warm-black: #14110D; --bone: #EDEBE6; --muted: #9A9C9F;
+  --graphite: #0B0B0C; --warm-black: #0E0C09; --bone: #EDEBE6; --muted: #9A9C9F;
   --steel: #C9CDD1; --gold: #D6B271;
-  --page: var(--graphite); --surface: #191A1D; --raise: #202226; --accent: var(--steel); --accent-ink: #111214;
-  --line: rgba(237,235,230,.13); --slot: #1C1D20;
+  --page: var(--graphite); --surface: #131416; --raise: #1B1C1F; --accent: var(--steel); --accent-ink: #111214;
+  --line: rgba(237,235,230,.12); --slot: #141517;
   --display: "Libre Baskerville", Georgia, "Times New Roman", serif;
   --body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --chrome-bg: #0A0A0B; --chrome-ink: #F2F2F0; --chrome-dim: #A3A5A8; --chrome-line: rgba(255,255,255,.14);
   color-scheme: dark;
 }
-.pdp[data-model="cadre"] { --page: var(--warm-black); --surface: #1C1813; --raise: #241F18; --accent: var(--gold); --accent-ink: #17120A; --line: rgba(214,178,113,.18); --slot: #1F1A14; }
+.pdp[data-model="cadre"] { --page: var(--warm-black); --surface: #16130E; --raise: #1F1B14; --accent: var(--gold); --accent-ink: #17120A; --line: rgba(214,178,113,.16); --slot: #17140F; }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -134,11 +134,15 @@ a { color: inherit; }
 .xsell .x-n { font: 400 24px/1.1 var(--display); letter-spacing: .1em; }
 .xsell .x-n[data-m="acier"] { color: var(--steel); }
 .xsell .x-n[data-m="cadre"] { color: var(--gold); }
-.foot { padding: 28px; border-top: 1px solid var(--line); display: grid; gap: 18px; font-size: 13px; color: var(--muted); }
-.foot .cols { display: flex; flex-wrap: wrap; gap: 14px 40px; }
-.foot .cols div { display: grid; gap: 6px; }
-.foot .cols b { color: var(--bone); font-weight: 600; }
-.foot .base { display: flex; flex-wrap: wrap; gap: 8px 22px; padding-top: 14px; border-top: 1px solid var(--line); }
+.foot { padding: 48px 28px 28px; border-top: 1px solid var(--line); display: grid; gap: 40px; font-size: 13px; color: var(--muted); }
+.foot .top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: start; }
+.foot .top .wm { font-size: 15px; }
+.foot .cols { display: grid; grid-template-columns: repeat(3, max-content); gap: 24px 72px; align-items: start; }
+.foot .cols div { display: grid; gap: 10px; align-content: start; }
+.foot .cols b { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.foot .cols span { font-size: 14px; color: var(--bone); }
+.foot .base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12px; }
+.foot .base .legal { display: flex; gap: 20px; }
 
 /* accordions (A) */
 .acc { border-top: 1px solid var(--line); }
@@ -267,7 +271,10 @@ a { color: inherit; }
   .specs, .acc .specs, .c-ch .specs { grid-template-columns: 1fr 1fr; gap: 20px; }
   .specs > div:last-child { grid-column: 1 / -1; }
   .fit, .pol3 { grid-template-columns: 1fr; }
-  .xsell, .foot { padding: 24px 16px; }
+  .xsell { padding: 24px 16px; }
+  .foot { padding: 36px 16px 24px; gap: 32px; }
+  .foot .top { grid-template-columns: 1fr; gap: 28px; }
+  .foot .cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 16px; }
   .sbar { padding-inline: 16px; }
 
   .a-grid { grid-template-columns: 1fr; }
@@ -544,11 +551,11 @@ function xsell() {
   const o = state.m === "acier" ? "cadre" : "acier", O = MODELS[o];
   return `<div class="xsell"><div class="x-l"><span class="x-k">Also from FOSLN</span><button type="button" class="x-n" data-m="${o}">${O.name}</button></div><span>${o === "cadre" ? "Square case, gold frame" : "Round case, steel"}, ${money(O.price)}</span></div>`;
 }
-const footer = () => `<footer class="foot"><div class="cols">
+const footer = () => `<footer class="foot"><div class="top"><span class="wm">FOSLN</span><div class="cols">
   <div><b>Watches</b><span>ACIER</span><span>CADRE</span></div>
   <div><b>Help</b><span>Delivery</span><span>Returns</span><span>Warranty & care</span><span>FAQ</span><span>Contact</span></div>
-  <div><b>FOSLN</b><span>About</span></div></div>
-  <div class="base"><span>Privacy</span><span>Terms</span><span>Prices in US dollars (USD). Free delivery in Australia.</span><span>© 2026 FOSLN</span></div></footer>`;
+  <div><b>FOSLN</b><span>About</span></div></div></div>
+  <div class="base"><span>Prices in US dollars (USD). Free delivery in Australia.</span><span class="legal"><span>Privacy</span><span>Terms</span><span>© 2026 FOSLN</span></span></div></footer>`;
 function header() {
   return `<header class="hdr"><nav aria-label="Models">${["acier", "cadre"].map(k => `<button type="button" data-m="${k}" aria-current="${k === state.m}">${MODELS[k].name}</button>`).join("")}</nav>
   <button type="button" class="menu" aria-label="Menu">Menu</button><span class="wm">FOSLN</span>

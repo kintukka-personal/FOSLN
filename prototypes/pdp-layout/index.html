@@ -1,0 +1,659 @@
+<meta charset="utf-8">
+<title>FOSLN PDP Layouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* PROTOTYPE. Throwaway layouts for "Design the PDP layout" (Kintukka2/FOSLN-WATCH#18). Not production code.
+   Layout: one PDP template in four structures (A-D), for ACIER or CADRE, in a desktop or phone frame.
+   Built on the locked Direction D, Two Metals: dark only, so this page deliberately commits to one dark look. */
+:root {
+  --graphite: #111214; --warm-black: #14110D; --bone: #EDEBE6; --muted: #9A9C9F;
+  --steel: #C9CDD1; --gold: #D6B271;
+  --page: var(--graphite); --surface: #191A1D; --raise: #202226; --accent: var(--steel); --accent-ink: #111214;
+  --line: rgba(237,235,230,.13); --slot: #1C1D20;
+  --display: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --chrome-bg: #0A0A0B; --chrome-ink: #F2F2F0; --chrome-dim: #A3A5A8; --chrome-line: rgba(255,255,255,.14);
+  color-scheme: dark;
+}
+.pdp[data-model="cadre"] { --page: var(--warm-black); --surface: #1C1813; --raise: #241F18; --accent: var(--gold); --accent-ink: #17120A; --line: rgba(214,178,113,.18); --slot: #1F1A14; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--chrome-bg); color: var(--bone); font: 400 15px/1.55 var(--body); }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── prototype chrome ── */
+.proto { height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
+.note { display: flex; gap: 16px; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 8px 16px; font: 500 12px/1.4 var(--mono); color: var(--chrome-dim); border-bottom: 1px solid var(--chrome-line); }
+.note b { color: var(--chrome-ink); font-weight: 500; }
+.note .url { color: var(--chrome-ink); overflow-wrap: anywhere; }
+.stage { min-height: 0; display: grid; place-items: stretch center; padding: 12px 16px; overflow: hidden; }
+.viewport { container-type: inline-size; width: 100%; max-width: 1440px; height: 100%; overflow-y: auto; overflow-x: hidden; border: 1px solid var(--chrome-line); border-radius: 6px; background: var(--page); scroll-behavior: smooth; position: relative; }
+.proto[data-frame="phone"] .viewport { width: 390px; max-width: 100%; max-height: 844px; border-radius: 28px; border-width: 6px; border-color: #26272A; }
+.bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--chrome-line); }
+.grp { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--chrome-line); border-radius: 999px; background: #141416; }
+.grp button { border: 0; background: transparent; color: var(--chrome-ink); min-height: 36px; padding: 0 14px; border-radius: 999px; font: 500 13px/1 var(--body); cursor: pointer; white-space: nowrap; }
+.grp button[aria-pressed="true"] { background: var(--chrome-ink); color: #111; }
+.notes { position: fixed; right: 16px; bottom: 76px; width: min(440px, calc(100vw - 32px)); max-height: min(70vh, 640px); overflow: auto; z-index: 40; background: #161618; color: var(--chrome-ink); border: 1px solid var(--chrome-line); border-radius: 10px; padding: 18px 20px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.notes h2 { margin: 0 0 4px; font: 600 16px/1.3 var(--body); }
+.notes .sub { margin: 0 0 14px; color: var(--chrome-dim); font-size: 13px; }
+.notes dl { margin: 0; display: grid; gap: 12px; }
+.notes dt { font: 500 12px/1.3 var(--mono); color: var(--chrome-dim); }
+.notes dd { margin: 3px 0 0; font-size: 14px; line-height: 1.5; }
+@media (max-width: 700px) { .grp[data-frames] { display: none; } .stage { padding: 0; } .viewport, .proto[data-frame="phone"] .viewport { width: 100%; max-height: none; border: 0; border-radius: 0; } .notes { bottom: 120px; } }
+
+/* ── shared PDP parts ── */
+.pdp { background: var(--page); color: var(--bone); min-height: 100%; }
+.hdr { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; height: 60px; padding: 0 28px; background: color-mix(in srgb, var(--page) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.hdr nav { display: flex; gap: 22px; }
+.hdr nav button, .hdr .menu { background: none; border: 0; padding: 10px 0; cursor: pointer; font: 500 13px/1 var(--body); letter-spacing: .08em; color: var(--muted); }
+.hdr nav button[aria-current="true"] { color: var(--accent); box-shadow: inset 0 -1px 0 var(--accent); }
+.hdr .menu { display: none; }
+.wm { font: 400 17px/1 var(--display); letter-spacing: .32em; padding-left: .32em; color: var(--bone); }
+.tools { display: flex; justify-content: flex-end; gap: 18px; align-items: center; }
+.tools button { background: none; border: 0; cursor: pointer; min-height: 44px; padding: 0 2px; font: 500 13px/1 var(--body); }
+.tools .cur { color: var(--muted); }
+
+.name { margin: 0; font: 400 44px/1.05 var(--display); letter-spacing: .1em; color: var(--accent); }
+.lede { margin: 0; font-size: 16px; line-height: 1.55; max-width: 38ch; color: var(--bone); }
+.price-block { display: grid; gap: 2px; }
+.price { font: 600 26px/1.2 var(--body); font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.price .est { font: 500 14px/1.2 var(--body); color: var(--muted); }
+.price-note { font-size: 14px; color: var(--muted); }
+.dials { display: grid; gap: 10px; }
+.dials .lbl { font: 500 12px/1 var(--mono); color: var(--muted); letter-spacing: .04em; }
+.dials .lbl b { color: var(--bone); font-weight: 500; }
+.dials .row { display: flex; gap: 12px; }
+.sw { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); padding: 0; cursor: pointer; position: relative; background-clip: padding-box; }
+.pdp[data-model="cadre"] .sw { border-radius: 10px; }
+.sw[aria-pressed="true"]::after { content: ""; position: absolute; inset: -5px; border: 1.5px solid var(--accent); border-radius: inherit; }
+.pdp[data-model="cadre"] .sw[aria-pressed="true"]::after { border-radius: 14px; }
+.cta { width: 100%; min-height: 54px; border: 0; border-radius: 2px; background: var(--accent); color: var(--accent-ink); font: 700 15px/1 var(--body); letter-spacing: .04em; cursor: pointer; transition: transform .12s, filter .2s; }
+.cta:hover { filter: brightness(1.06); }
+.cta:active { transform: translateY(1px) scale(.995); }
+.policies { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+.policies li { display: flex; gap: 10px; align-items: baseline; }
+.policies li::before { content: ""; flex: none; width: 10px; height: 1px; background: var(--accent); transform: translateY(-4px); }
+.policies a { color: var(--bone); text-decoration: none; border-bottom: 1px solid var(--line); }
+.tbd { border-bottom: 1px dotted var(--accent); color: var(--bone); }
+.size-line { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; font: 400 13px/1.5 var(--mono); color: var(--bone); }
+.size-line .k { color: var(--muted); }
+.size-line a { font-family: var(--body); font-size: 14px; color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+/* photos */
+.ph { position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(70% 60% at 50% 42%, var(--raise), var(--page) 75%); }
+.ph > img, .ph > svg { position: absolute; inset: 0; margin: auto; width: 88%; height: 88%; object-fit: contain; filter: drop-shadow(0 26px 30px rgba(0,0,0,.55)); }
+.ph .pair { position: absolute; inset: 10% 6%; display: grid; grid-template-columns: 1fr 1fr; gap: 6%; }
+.ph .pair img, .ph .pair svg { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 24px rgba(0,0,0,.55)); }
+.ph.slot { background: var(--slot); }
+.ph.slot .need { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 20px; max-width: 30ch; }
+.ph.slot .need b { font: 500 13px/1.3 var(--body); color: var(--bone); }
+.ph.slot .need span { font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.ph.slot::before { content: ""; position: absolute; inset: 14px; border: 1px dashed var(--line); border-radius: 4px; pointer-events: none; }
+.ph .sheen { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.07) 50%, transparent 60%); transform: translateX(-100%); pointer-events: none; }
+.ph:hover .sheen { transform: translateX(100%); transition: transform 1.4s ease; }
+.stand { position: absolute; left: 12px; bottom: 10px; font: 400 12px/1.3 var(--mono); color: var(--muted); }
+.cap { font: 400 12px/1.4 var(--mono); color: var(--muted); padding: 8px 2px 0; }
+
+/* carousel (mobile galleries) */
+.car { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.car::-webkit-scrollbar { display: none; }
+.car .ph { scroll-snap-align: start; aspect-ratio: 4 / 4.4; }
+.dots { display: flex; gap: 8px; justify-content: center; padding: 10px 0 0; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--accent); }
+
+/* long-form blocks */
+.blk-h { margin: 0 0 18px; font: 600 20px/1.3 var(--body); color: var(--bone); }
+.copy { display: grid; gap: 12px; max-width: 62ch; }
+.copy p { margin: 0; }
+.slotnote { font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.specs h4 { margin: 0 0 10px; font: 500 12px/1 var(--mono); letter-spacing: .06em; color: var(--accent); }
+.specs dl { margin: 0; display: grid; gap: 10px; }
+.specs dt { font-size: 13px; color: var(--muted); }
+.specs dd { margin: 0; font: 500 15px/1.35 var(--body); font-variant-numeric: tabular-nums; }
+.fit { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; }
+.fit .ph { aspect-ratio: 4 / 3; }
+.fit .facts { display: grid; gap: 14px; align-content: start; }
+.fit .facts p { margin: 0; }
+.fit .scale { aspect-ratio: auto; min-height: 140px; }
+.pol3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.pol3 h4 { margin: 0 0 6px; font: 600 15px/1.3 var(--body); }
+.pol3 p { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.pol3 a { font-size: 14px; color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+.xsell { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 28px; border-top: 1px solid var(--line); }
+.xsell .x-l { display: grid; gap: 4px; }
+.xsell .x-k { font-size: 13px; color: var(--muted); }
+.xsell button { background: none; border: 0; cursor: pointer; padding: 0; text-align: left; }
+.xsell .x-n { font: 400 24px/1.1 var(--display); letter-spacing: .1em; }
+.xsell .x-n[data-m="acier"] { color: var(--steel); }
+.xsell .x-n[data-m="cadre"] { color: var(--gold); }
+.foot { padding: 28px; border-top: 1px solid var(--line); display: grid; gap: 18px; font-size: 13px; color: var(--muted); }
+.foot .cols { display: flex; flex-wrap: wrap; gap: 14px 40px; }
+.foot .cols div { display: grid; gap: 6px; }
+.foot .cols b { color: var(--bone); font-weight: 600; }
+.foot .base { display: flex; flex-wrap: wrap; gap: 8px 22px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+/* accordions (A) */
+.acc { border-top: 1px solid var(--line); }
+.acc details { border-bottom: 1px solid var(--line); }
+.acc summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 52px; font: 600 15px/1.3 var(--body); }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary::after { content: "+"; font: 400 20px/1 var(--body); color: var(--accent); }
+.acc details[open] summary::after { content: "\2212"; }
+.acc .in { padding: 0 0 20px; display: grid; gap: 14px; }
+.acc .specs { grid-template-columns: 1fr 1fr; gap: 20px; }
+.acc .fit { grid-template-columns: 1fr; }
+
+/* sticky add-to-bag bar */
+.sbar { position: sticky; bottom: 0; z-index: 6; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 10px 20px calc(10px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--line); transform: translateY(100%); transition: transform .25s steps(3, end); margin-top: -1px; }
+.sbar.on { transform: none; }
+.sbar .s-n { font: 400 15px/1 var(--display); letter-spacing: .1em; color: var(--accent); }
+.sbar .s-d { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sbar .cta { width: auto; min-height: 44px; padding: 0 22px; }
+.sbar .thumb { width: 36px; height: 44px; display: grid; place-items: center; }
+.sbar .thumb img, .sbar .thumb svg { width: 100%; height: 100%; object-fit: contain; }
+
+/* ── A · sticky buy box ── */
+.a-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.a-gal { display: grid; gap: 4px; padding: 4px; }
+.a-gal .ph { aspect-ratio: 5 / 4; }
+.a-gal .ph:first-child { aspect-ratio: 5 / 5.2; }
+.a-buy { position: sticky; top: 60px; align-self: start; max-height: calc(var(--vh, 100vh) - 60px); padding: 40px 40px 32px; display: grid; gap: 20px; }
+.a-car { display: none; }
+
+/* ── B · stage, then sections ── */
+.b-stage { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); background: var(--surface); }
+.b-stage .ph { min-height: 560px; }
+.b-stage .info { padding: 48px 44px; display: grid; gap: 20px; align-content: center; max-width: 480px; }
+.b-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 30%); gap: 4px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px; }
+.b-strip > div { scroll-snap-align: start; }
+.b-strip .ph { aspect-ratio: 4 / 5; }
+.b-strip > div:first-child { display: none; }
+.b-sec { padding: 56px 28px; border-top: 1px solid var(--line); }
+.b-sec .wrap { max-width: 1100px; margin: 0 auto; }
+.b-car { display: none; }
+
+/* ── C · pinned watch, scrolling chapters ── */
+.c-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.c-pin { position: sticky; top: 60px; align-self: start; height: calc(var(--vh, 100vh) - 60px); min-height: 520px; display: grid; grid-template-rows: 1fr auto; background: var(--surface); }
+.c-pin .ph { height: 100%; }
+.c-pin .ph[hidden] { display: none; }
+.c-pin .ph-cap { position: absolute; left: 20px; bottom: 16px; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.c-rail { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px; justify-content: center; border-top: 1px solid var(--line); }
+.c-rail button { min-height: 32px; padding: 0 12px; border: 1px solid var(--line); background: none; border-radius: 2px; cursor: pointer; font: 500 12px/1 var(--mono); color: var(--muted); }
+.c-rail button[aria-current="true"] { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.c-ch { min-height: calc(var(--vh, 100vh) - 60px); padding: 56px 44px; display: grid; gap: 20px; align-content: center; border-bottom: 1px solid var(--line); }
+.c-ch:first-child { min-height: calc(var(--vh, 100vh) - 60px); }
+.c-ch .specs { grid-template-columns: 1fr 1fr; }
+.c-ch .fit { grid-template-columns: 1fr; }
+.c-ch .fit > .ph:first-child { display: none; }
+.c-ch .pol3 { grid-template-columns: 1fr; gap: 16px; }
+.c-mob { display: none; }
+.c-nav { display: none; }
+
+/* ── D · compact, tabs ── */
+.d-top { display: grid; grid-template-columns: 76px minmax(0, 1.2fr) minmax(0, 1fr); gap: 0; min-height: calc(var(--vh, 100vh) - 60px); max-height: 760px; }
+.d-rail { display: grid; align-content: start; gap: 8px; padding: 20px 0 20px 16px; }
+.d-rail button { position: relative; aspect-ratio: 3 / 4; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 2px; background: var(--slot); cursor: pointer; overflow: hidden; display: grid; place-items: center; font: 400 12px/1.2 var(--mono); color: var(--muted); }
+.d-rail button[aria-current="true"] { border-color: var(--accent); }
+.d-rail button > img, .d-rail button > svg { position: absolute; inset: 0; margin: auto; width: 86%; height: 86%; object-fit: contain; }
+.d-main .ph { height: 100%; min-height: 480px; }
+.d-buy { padding: 36px 36px 28px; display: grid; gap: 18px; align-content: center; }
+.d-glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.d-glance div { background: var(--page); padding: 10px 12px; display: grid; gap: 2px; }
+.d-glance span { font: 400 12px/1.2 var(--mono); color: var(--muted); }
+.d-glance b { font: 500 15px/1.2 var(--body); font-variant-numeric: tabular-nums; }
+.d-glance a { color: var(--accent); }
+.d-tabs { position: sticky; top: 60px; z-index: 4; display: flex; gap: 4px; padding: 0 28px; background: var(--page); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.d-tabs button { flex: none; min-height: 52px; padding: 0 16px; border: 0; background: none; cursor: pointer; font: 600 14px/1 var(--body); color: var(--muted); box-shadow: inset 0 -2px 0 transparent; }
+.d-tabs button[aria-selected="true"] { color: var(--bone); box-shadow: inset 0 -2px 0 var(--accent); }
+.d-panel { padding: 40px 28px 56px; max-width: 1100px; margin: 0 auto; }
+.d-car { display: none; }
+
+/* ── phone width: every variant collapses to one column ── */
+@container (max-width: 760px) {
+  .hdr { grid-template-columns: auto 1fr auto; padding: 0 16px; }
+  .hdr nav { display: none; }
+  .hdr .menu { display: block; min-height: 44px; }
+  .hdr .wm { justify-self: center; font-size: 15px; }
+  .tools { gap: 12px; }
+  .name { font-size: 34px; }
+  .specs, .acc .specs, .c-ch .specs { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .specs > div:last-child { grid-column: 1 / -1; }
+  .fit, .pol3 { grid-template-columns: 1fr; }
+  .xsell, .foot { padding: 24px 16px; }
+  .sbar { padding-inline: 16px; }
+
+  .a-grid { grid-template-columns: 1fr; }
+  .a-gal { display: none; }
+  .a-car { display: block; }
+  .a-buy { position: static; max-height: none; padding: 20px 16px 28px; }
+
+  .b-stage { grid-template-columns: 1fr; }
+  .b-stage > .ph { display: none; }
+  .b-car { display: block; }
+  .b-stage .info { padding: 20px 16px 32px; }
+  .b-strip { display: none; }
+  .b-sec { padding: 40px 16px; }
+
+  .c-grid { grid-template-columns: 1fr; }
+  .c-pin { display: none; }
+  .c-mob { display: block; }
+  .c-nav { display: flex; position: sticky; top: 60px; z-index: 4; gap: 4px; padding: 0 12px; background: var(--page); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .c-nav a { flex: none; display: grid; place-items: center; min-height: 44px; padding: 0 12px; font: 600 13px/1 var(--body); color: var(--muted); text-decoration: none; }
+  .c-nav a[aria-current="true"] { color: var(--bone); box-shadow: inset 0 -2px 0 var(--accent); }
+  .c-ch, .c-ch:first-child { min-height: 0; padding: 32px 16px; align-content: start; }
+  .c-ch .fit > .ph:first-child { display: grid; }
+
+  .d-top { grid-template-columns: 1fr; min-height: 0; max-height: none; }
+  .d-rail, .d-main { display: none; }
+  .d-car { display: block; }
+  .d-buy { padding: 20px 16px 28px; }
+  .d-tabs { padding: 0 8px; }
+  .d-panel { padding: 28px 16px 40px; }
+}
+
+/* quartz-step hands on the CADRE stand-in drawing */
+.hand { transition: transform .32s cubic-bezier(.3, 2.2, .55, 1); }
+@media (prefers-reduced-motion: reduce) {
+  *, .hand { transition: none !important; scroll-behavior: auto !important; }
+  .ph:hover .sheen { transform: translateX(-100%); }
+}
+</style>
+
+<div class="proto" id="proto" data-frame="desktop">
+  <div class="note">
+    <span><b>Prototype</b> for "Design the PDP layout". Throwaway; dotted figures are placeholders.</span>
+    <span class="url" id="url">fosln.com/products/acier?variant=chrome</span>
+  </div>
+  <div class="stage"><div class="viewport" id="vp"></div></div>
+  <div class="bar" role="toolbar" aria-label="Prototype controls">
+    <div class="grp" data-variants>
+      <button type="button" data-v="a">A · Sticky buy box</button>
+      <button type="button" data-v="b">B · Stage, then sections</button>
+      <button type="button" data-v="c">C · Pinned watch</button>
+      <button type="button" data-v="d">D · Compact, tabs</button>
+    </div>
+    <div class="grp" data-models>
+      <button type="button" data-m="acier">ACIER</button>
+      <button type="button" data-m="cadre">CADRE</button>
+    </div>
+    <div class="grp" data-frames>
+      <button type="button" data-f="desktop">Desktop</button>
+      <button type="button" data-f="phone">Phone</button>
+    </div>
+    <div class="grp">
+      <button type="button" id="notes-btn" aria-pressed="false" aria-controls="notes">What it decides</button>
+    </div>
+  </div>
+  <aside class="notes" id="notes" hidden aria-live="polite"></aside>
+</div>
+
+<script>
+const MODELS = {
+  acier: {
+    name: "ACIER", price: 149, aud: 214,
+    lede: "A round bezel on a faceted case, on a steel link bracelet. Nothing on the dial but the hands.",
+    desc: ["Copy slot for the description, two or three short sentences, written in \"Decide the brand voice and PDP copy\".", "It sits below the fold in every layout, so the first screen never waits on it."],
+    dials: [
+      { id: "chrome", label: "Chrome", sw: "radial-gradient(circle at 38% 32%, #fff, #c9cdd1 45%, #7e8389)" },
+      { id: "onyx", label: "Onyx", sw: "radial-gradient(circle at 38% 32%, #4a4a4c, #0b0b0c 62%)" }
+    ],
+    size: [["Case", "37 mm"], ["Thick", "9.5 mm"], ["Wrist", "TBC"]],
+    sizeLine: "37 mm wide, 9.5 mm thick",
+    wrist: "On a 17 cm wrist (photo needed)",
+    specs: [
+      ["Size", [["Case width", "37 mm"], ["Lug to lug", "43 mm"], ["Thickness", "9.5 mm"], ["Band width at the case", "16.3 mm"], ["Fits wrists", "TBC"]]],
+      ["Build", [["Bracelet", "Stainless steel links"], ["Crystal", "Hardened mineral"], ["Water resistance", "3 bar, splashes only"], ["Weight", "69 g"]]],
+      ["Movement", [["Type", "Quartz"], ["Date", "No"], ["Battery", "TBC"]]]
+    ]
+  },
+  cadre: {
+    name: "CADRE", price: 169, aud: 243,
+    lede: "A square case with a gold frame round the dial, and a date at 3 o'clock.",
+    desc: ["Copy slot for the description, two or three short sentences, written in \"Decide the brand voice and PDP copy\".", "It sits below the fold in every layout, so the first screen never waits on it."],
+    dials: [
+      { id: "noir", label: "Noir", sw: "radial-gradient(circle at 38% 32%, #3a3a3a, #0c0c0c 62%)" },
+      { id: "champagne", label: "Champagne", sw: "radial-gradient(circle at 38% 32%, #fbf0d6, #d9c08e 55%, #a8874f)" }
+    ],
+    size: [["Case", "32 × 36.3 mm"], ["Thick", "10 mm"], ["Wrist", "TBC"]],
+    sizeLine: "32 × 36.3 mm (width × length), 10 mm thick",
+    wrist: "On a 16 cm wrist (photo needed)",
+    specs: [
+      ["Size", [["Case, width × length", "32 × 36.3 mm"], ["Thickness", "10 mm"], ["Band width at the case", "16.8 mm"], ["Fits wrists", "TBC"]]],
+      ["Build", [["Bracelet", "Stainless steel links"], ["Dial frame", "Gold coloured"], ["Crystal", "Hardened mineral"], ["Water resistance", "3 bar, splashes only"], ["Weight", "67 g"]]],
+      ["Movement", [["Type", "Quartz"], ["Date", "Yes, at 3 o'clock"], ["Battery", "TBC"]]]
+    ]
+  }
+};
+
+/* Gallery slots, the same list for both Models. Only the ACIER cut-outs exist as photos today. */
+const SLOTS = [
+  { id: "cut", label: "The watch", need: null },
+  { id: "wrist", label: "On the wrist", need: "wrist" },
+  { id: "side", label: "Side profile", need: "Shows the thickness" },
+  { id: "clasp", label: "Bracelet and clasp", need: "Links and clasp, for sizing" },
+  { id: "pair", label: "Both Dials", need: null },
+  { id: "detail", label: "Dial close-up", need: "Hands and dial plate" }
+];
+
+const NOTES = {
+  a: { t: "A · Sticky buy box", s: "The common DTC pattern. Photos scroll; the buy box stays put.", d: [
+    ["Section order", "Gallery left, buy box right. The buy box holds everything else in accordions. Below the fold: the other Model, then the footer."],
+    ["Gallery", "Desktop: six large photos stacked in the left column, scrolling past the buy box. Phone: a swipe carousel with dots."],
+    ["Dial switching", "Named swatches under the price. A switch swaps the first photo and the ?variant= link, with no reload."],
+    ["Price and CTA", "Price, delivery line, swatches, Add to bag. On desktop the button never leaves the screen. On phones a bar sticks to the bottom once it scrolls away."],
+    ["Spec table and fit", "A one-line size summary sits above the accordions. Size & fit and Specifications are accordions, closed by default."],
+    ["Policy notes", "Three short lines under the button: Dispatch, returns, warranty. Each links to its page."],
+    ["Motion", "The light sweep on hover and the button's response. Nothing plays on load."]
+  ] },
+  b: { t: "B · Stage, then sections", s: "The Direction D comp's first screen, then one full-width section per job.", d: [
+    ["Section order", "Stage (photo and buy box) > photo strip > description > Size & fit > Specifications > Delivery, returns, warranty > the other Model > footer."],
+    ["Gallery", "Desktop: one large photo on the stage, the rest in a sideways strip under it. Phone: a swipe carousel at the top."],
+    ["Dial switching", "Named swatches on the stage. A switch swaps the stage photo and the link."],
+    ["Price and CTA", "On the stage, so everything needed to buy is on the first screen. A bar sticks to the bottom once the button scrolls away, at every width."],
+    ["Spec table and fit", "Each gets a full-width section with room to be designed as a conversion surface. Fit comes before specs."],
+    ["Policy notes", "Three short lines under the button, and a full three-column section lower down."],
+    ["Motion", "The light sweep on the stage photo and the button's response."]
+  ] },
+  c: { t: "C · Pinned watch", s: "The watch stays on screen while the page explains it, chapter by chapter.", d: [
+    ["Section order", "Chapters: Buy > Size & fit > Specifications > Details > Delivery & care. Then the other Model and the footer."],
+    ["Gallery", "Desktop: the photo is pinned on the left and changes as each chapter arrives, in one step with no fade. A rail jumps between photos. Phone: a carousel, with a sticky chapter bar."],
+    ["Dial switching", "Swatches in the Buy chapter. A switch swaps the pinned photo."],
+    ["Price and CTA", "In the Buy chapter. A bar sticks to the bottom once the button scrolls away."],
+    ["Spec table and fit", "Each owns a chapter, paired with the photo that proves it: the wrist shot beside fit, the side profile beside specs."],
+    ["Policy notes", "Three short lines under the button, and a Delivery & care chapter."],
+    ["Motion", "The photo steps between shots as chapters arrive, in the quartz-step character. Reduced motion: the same steps, which are instant anyway."]
+  ] },
+  d: { t: "D · Compact, tabs", s: "Everything decisive on the first screen, details one tap away.", d: [
+    ["Section order", "First screen: thumbnails, photo, buy box with sizes at a glance. Then a sticky tab bar: Details, Size & fit, Specifications, Delivery & returns. Then the other Model and the footer."],
+    ["Gallery", "Desktop: a thumbnail rail beside one main photo. Phone: a swipe carousel."],
+    ["Dial switching", "Named swatches in the buy box. A switch swaps the main photo and the link."],
+    ["Price and CTA", "In the buy box. A bar sticks to the bottom once the button scrolls away."],
+    ["Spec table and fit", "Three key sizes sit right above the button, with a link to the fit tab. The full table and fit guidance live in tabs."],
+    ["Policy notes", "Three short lines under the button, and a Delivery & returns tab."],
+    ["Motion", "The light sweep and the button's response. Tabs switch instantly."]
+  ] }
+};
+
+const state = { v: "b", m: "acier", f: "desktop", dial: { acier: "chrome", cadre: "noir" }, aud: false, bag: 0, tab: "details", cPhoto: "cut", open: {}, notes: false };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+/* CADRE stand-in: a drawn square case, because no CADRE photo exists yet. */
+let uid = 0;
+function cadreSVG(dial) {
+  const k = "c" + (uid++);
+  const face = dial === "champagne" ? ["#F6EAD0", "#D9C08E"] : ["#2A2A2C", "#0A0A0B"];
+  const ink = dial === "champagne" ? "#3A2E1A" : "#E9E2D2";
+  let idx = "";
+  for (let i = 0; i < 12; i++) { const long = i % 3 === 0; idx += `<rect x="149" y="${long ? 168 : 171}" width="2" height="${long ? 14 : 8}" fill="${ink}" opacity="${long ? .9 : .5}" transform="rotate(${i * 30} 150 260)"/>`; }
+  return `<svg viewBox="0 0 300 520" role="img" aria-label="CADRE stand-in drawing, ${dial === "champagne" ? "Champagne" : "Noir"} Dial">
+  <defs>
+    <linearGradient id="${k}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DDA4"/><stop offset=".35" stop-color="#C69A4F"/><stop offset=".6" stop-color="#F0D597"/><stop offset="1" stop-color="#8E6A32"/></linearGradient>
+    <linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d6f73"/><stop offset=".5" stop-color="#d4d7da"/><stop offset="1" stop-color="#5d5f63"/></linearGradient>
+    <radialGradient id="${k}d" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="${face[0]}"/><stop offset="1" stop-color="${face[1]}"/></radialGradient>
+  </defs>
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${4 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${404 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  <rect x="40" y="120" width="220" height="280" rx="34" fill="url(#${k}b)"/>
+  <rect x="52" y="132" width="196" height="256" rx="26" fill="url(#${k}g)"/>
+  <rect x="68" y="148" width="164" height="224" rx="16" fill="url(#${k}d)"/>
+  <rect x="261" y="246" width="12" height="28" rx="3" fill="url(#${k}b)"/>
+  <rect x="196" y="252" width="22" height="16" rx="2" fill="${dial === "champagne" ? "#fffaf0" : "#1b1b1d"}" stroke="${ink}" stroke-opacity=".4"/>
+  ${idx}
+  <text x="150" y="208" text-anchor="middle" font-family="Libre Baskerville, Georgia, serif" font-size="11" letter-spacing="2" fill="${ink}" opacity=".85">FOSLN</text>
+  <g>
+    <rect class="hand h" x="147" y="214" width="6" height="50" rx="3" fill="${ink}" style="transform-origin:150px 260px"/>
+    <rect class="hand m" x="148" y="190" width="4" height="74" rx="2" fill="${ink}" style="transform-origin:150px 260px"/>
+    <rect class="hand s" x="149.25" y="182" width="1.5" height="92" fill="#C69A4F" style="transform-origin:150px 260px"/>
+    <circle cx="150" cy="260" r="4.5" fill="${ink}"/>
+  </g>
+</svg>`;
+}
+
+function watch(m, dial, eager) {
+  if (m === "acier") return `<img src="img/acier-${dial}.webp" alt="ACIER with the ${dial === "chrome" ? "Chrome" : "Onyx"} Dial" width="671" height="1191"${eager ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
+  return cadreSVG(dial);
+}
+
+function photo(slot, opts = {}) {
+  const M = MODELS[state.m], dial = state.dial[state.m];
+  const cls = opts.cls ? " " + opts.cls : "";
+  const attrs = opts.attrs || "";
+  if (slot.id === "cut") return `<div class="ph${cls}" ${attrs}>${watch(state.m, dial, opts.eager)}<div class="sheen"></div>${state.m === "cadre" ? '<span class="stand">Stand-in drawing, no CADRE photo yet</span>' : ""}</div>`;
+  if (slot.id === "pair") return `<div class="ph${cls}" ${attrs}><div class="pair">${M.dials.map(d => watch(state.m, d.id)).join("")}</div>${state.m === "cadre" ? '<span class="stand">Stand-in drawings</span>' : ""}</div>`;
+  const need = slot.need === "wrist" ? M.wrist : slot.need + " (photo needed)";
+  return `<div class="ph slot${cls}" ${attrs}><div class="need"><b>${slot.label}</b><span>${esc(need)}</span></div></div>`;
+}
+
+const money = n => "$" + n;
+function priceBlock() {
+  const M = MODELS[state.m];
+  return `<div class="price-block"><div class="price">${money(M.price)}${state.aud ? `<span class="est">≈ A$${M.aud} estimate</span>` : ""}</div><div class="price-note">Free delivery in Australia</div></div>`;
+}
+function dials() {
+  const M = MODELS[state.m], dial = state.dial[state.m];
+  const cur = M.dials.find(d => d.id === dial);
+  return `<div class="dials"><span class="lbl">Dial: <b>${cur.label}</b></span><div class="row" role="group" aria-label="Dial">${M.dials.map(d => `<button class="sw" type="button" data-dial="${d.id}" aria-pressed="${d.id === dial}" aria-label="${d.label}" title="${d.label}" style="background:${d.sw}"></button>`).join("")}</div></div>`;
+}
+const cta = (main = true) => `<button class="cta" type="button" data-cta${main ? " data-main" : ""}>Add to bag</button>`;
+const policies = () => `<ul class="policies">
+  <li><span><a href="#" data-noop>Dispatched within 24 hours</a>, delivered in <span class="tbd">x to y</span> business days</span></li>
+  <li><span><a href="#" data-noop><span class="tbd">30</span>-day returns</a></span></li>
+  <li><span><a href="#" data-noop><span class="tbd">2</span>-year warranty</a></span></li>
+</ul>`;
+const sizeLine = (target) => `<div class="size-line"><span><span class="k">Size</span> ${MODELS[state.m].sizeLine}</span><a href="#" data-jump="${target}">Size & fit</a></div>`;
+const buyCore = (extra = "") => `<h1 class="name">${MODELS[state.m].name}</h1><p class="lede">${MODELS[state.m].lede}</p>${priceBlock()}${dials()}${extra}${cta()}${policies()}`;
+
+function specs() {
+  return `<div class="specs">${MODELS[state.m].specs.map(([g, rows]) => `<div><h4>${g}</h4><dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v === "TBC" ? '<span class="tbd">TBC</span>' : esc(v)}</dd></div>`).join("")}</dl></div>`).join("")}</div>
+  <p class="slotnote">Provisional figures. The table itself is designed in "Design the spec table".</p>`;
+}
+function fit() {
+  const M = MODELS[state.m];
+  return `<div class="fit">${photo(SLOTS[1])}<div class="facts">
+    <p>${state.m === "cadre" ? "Square cases wear larger than round ones of the same width. CADRE is 32 mm wide and 36.3 mm long." : "ACIER is 37 mm across and 43 mm from lug to lug."}</p>
+    <div class="ph slot scale"><div class="need"><b>True-scale preview</b><span>Fit tool slot</span></div></div>
+    <p class="slotnote">Wrist range is <span class="tbd">TBC</span> until a sample is measured. The guidance itself is designed in "Design the fit guidance".</p>
+  </div></div>`;
+}
+const details = () => `<div class="copy">${MODELS[state.m].desc.map(p => `<p>${p}</p>`).join("")}<p class="slotnote">Copy slot</p></div>`;
+const pol3 = () => `<div class="pol3">
+  <div><h4>Delivery</h4><p>Free in Australia. Dispatched within 24 hours, delivered in <span class="tbd">x to y</span> business days.</p><a href="#" data-noop>Delivery</a></div>
+  <div><h4>Returns</h4><p><span class="tbd">30</span> days to return it, as the Returns page sets out.</p><a href="#" data-noop>Returns</a></div>
+  <div><h4>Warranty & care</h4><p><span class="tbd">2</span>-year warranty. 3 bar: splashes only, not for swimming or showering.</p><a href="#" data-noop>Warranty & care</a></div>
+</div>`;
+function xsell() {
+  const o = state.m === "acier" ? "cadre" : "acier", O = MODELS[o];
+  return `<div class="xsell"><div class="x-l"><span class="x-k">Also from FOSLN</span><button type="button" class="x-n" data-m="${o}">${O.name}</button></div><span>${o === "cadre" ? "Square case, gold frame" : "Round case, steel"}, ${money(O.price)}</span></div>`;
+}
+const footer = () => `<footer class="foot"><div class="cols">
+  <div><b>Watches</b><span>ACIER</span><span>CADRE</span></div>
+  <div><b>Help</b><span>Delivery</span><span>Returns</span><span>Warranty & care</span><span>FAQ</span><span>Contact</span></div>
+  <div><b>FOSLN</b><span>About</span></div></div>
+  <div class="base"><span>Privacy</span><span>Terms</span><span>Prices in US dollars (USD). Free delivery in Australia.</span><span>© 2026 FOSLN</span></div></footer>`;
+function header() {
+  return `<header class="hdr"><nav aria-label="Models">${["acier", "cadre"].map(k => `<button type="button" data-m="${k}" aria-current="${k === state.m}">${MODELS[k].name}</button>`).join("")}</nav>
+  <button type="button" class="menu" aria-label="Menu">Menu</button><span class="wm">FOSLN</span>
+  <div class="tools"><button type="button" class="cur" data-cur aria-pressed="${state.aud}">${state.aud ? "USD $ · ≈A$" : "USD $"}</button><button type="button" data-bag>Bag${state.bag ? ` (${state.bag})` : ""}</button></div></header>`;
+}
+function stickyBar() {
+  const M = MODELS[state.m], d = M.dials.find(x => x.id === state.dial[state.m]);
+  return `<div class="sbar" id="sbar" aria-hidden="true"><span class="thumb">${watch(state.m, d.id)}</span><div style="min-width:0"><div class="s-n">${M.name}</div><div class="s-d">${d.label}, ${money(M.price)}</div></div>${cta(false)}</div>`;
+}
+const carousel = () => `<div class="car" data-car>${SLOTS.map((s, i) => photo(s, { eager: i === 0 })).join("")}</div><div class="dots" data-dots>${SLOTS.map((_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>`;
+
+/* ── the four layouts ── */
+const VARIANTS = {
+  a() {
+    const acc = [["details", "Details", details()], ["fit", "Size & fit", fit()], ["specs", "Specifications", specs()], ["delivery", "Delivery & returns", pol3()]];
+    return `<div class="a-grid">
+      <div class="a-gal">${SLOTS.map((s, i) => photo(s, { eager: i === 0 })).join("")}</div>
+      <div class="a-car">${carousel()}</div>
+      <aside class="a-buy">${buyCore()}${sizeLine("fit")}
+        <div class="acc">${acc.map(([id, t, body]) => `<details data-acc="${id}" id="sec-${id}"${state.open[id] ? " open" : ""}><summary>${t}</summary><div class="in">${body}</div></details>`).join("")}</div>
+      </aside></div>${xsell()}${footer()}`;
+  },
+  b() {
+    return `<section class="b-stage">${photo(SLOTS[0], { eager: true })}<div class="b-car">${carousel()}</div><div class="info">${buyCore()}${sizeLine("fit")}</div></section>
+      <div class="b-strip">${SLOTS.map(s => `<div>${photo(s)}<div class="cap">${s.label}</div></div>`).join("")}</div>
+      <section class="b-sec"><div class="wrap"><h2 class="blk-h">About ${MODELS[state.m].name}</h2>${details()}</div></section>
+      <section class="b-sec" id="sec-fit"><div class="wrap"><h2 class="blk-h">Size & fit</h2>${fit()}</div></section>
+      <section class="b-sec"><div class="wrap"><h2 class="blk-h">Specifications</h2>${specs()}</div></section>
+      <section class="b-sec"><div class="wrap">${pol3()}</div></section>${xsell()}${footer()}`;
+  },
+  c() {
+    const chapters = [["buy", "Buy", "cut"], ["fit", "Size & fit", "wrist"], ["specs", "Specifications", "side"], ["details", "Details", "detail"], ["care", "Delivery & care", "clasp"]];
+    const body = {
+      buy: buyCore() + sizeLine("fit"),
+      fit: `<h2 class="blk-h">Size & fit</h2>${fit()}`,
+      specs: `<h2 class="blk-h">Specifications</h2>${specs()}`,
+      details: `<h2 class="blk-h">About ${MODELS[state.m].name}</h2>${details()}`,
+      care: `<h2 class="blk-h">Delivery & care</h2>${pol3()}`
+    };
+    const pinSlots = ["cut", "wrist", "side", "detail", "clasp", "pair"].map(id => SLOTS.find(s => s.id === id));
+    return `<div class="c-grid">
+      <div class="c-pin">${pinSlots.map((s, i) => photo(s, { eager: i === 0, attrs: `data-pin="${s.id}"${s.id === state.cPhoto ? "" : " hidden"}` })).join("")}
+        <div class="c-rail" role="group" aria-label="Photos">${pinSlots.map(s => `<button type="button" data-pinbtn="${s.id}" aria-current="${s.id === state.cPhoto}">${s.label}</button>`).join("")}</div></div>
+      <div><div class="c-mob">${carousel()}</div>
+        <nav class="c-nav" aria-label="Chapters">${chapters.map(([id, t], i) => `<a href="#" data-jump="${id}" data-chnav="${id}" aria-current="${i === 0}">${t}</a>`).join("")}</nav>
+        ${chapters.map(([id, , slot]) => `<section class="c-ch" id="sec-${id}" data-ch="${id}" data-slot="${slot}">${body[id]}</section>`).join("")}
+      </div></div>${xsell()}${footer()}`;
+  },
+  d() {
+    const M = MODELS[state.m];
+    const tabs = [["details", "Details", details()], ["fit", "Size & fit", fit()], ["specs", "Specifications", specs()], ["delivery", "Delivery & returns", pol3()]];
+    const glance = `<div class="d-glance">${M.size.map(([k, v]) => `<div><span>${k}</span><b>${v === "TBC" ? `<a href="#" data-jump="fit">Fit guide</a>` : v}</b></div>`).join("")}</div>`;
+    const railSlots = SLOTS;
+    return `<section class="d-top">
+      <div class="d-rail" role="group" aria-label="Photos">${railSlots.map(s => `<button type="button" data-dthumb="${s.id}" aria-current="${s.id === state.cPhoto}" aria-label="${s.label}">${s.id === "cut" ? watch(state.m, state.dial[state.m]) : s.id === "pair" ? "Both" : s.label.split(" ")[0]}</button>`).join("")}</div>
+      <div class="d-main">${photo(railSlots.find(s => s.id === state.cPhoto) || railSlots[0], { eager: true })}</div>
+      <div class="d-car">${carousel()}</div>
+      <div class="d-buy">${buyCore(glance)}</div></section>
+      <div class="d-tabs" role="tablist" id="sec-tabs">${tabs.map(([id, t]) => `<button type="button" role="tab" data-tab="${id}" aria-selected="${id === state.tab}">${t}</button>`).join("")}</div>
+      <div class="d-panel" role="tabpanel">${tabs.find(t => t[0] === state.tab)[2]}</div>${xsell()}${footer()}`;
+  }
+};
+
+let io = [];
+function render(keepScroll) {
+  const vp = $("#vp"), top = keepScroll ? vp.scrollTop : 0;
+  io.forEach(o => o.disconnect()); io = [];
+  $("#proto").dataset.frame = state.f;
+  vp.innerHTML = `<div class="pdp" data-model="${state.m}" data-variant="${state.v}">${header()}${VARIANTS[state.v]()}${stickyBar()}</div>`;
+  vp.scrollTop = top;
+  $("#url").textContent = `fosln.com/products/${state.m}?variant=${state.dial[state.m]}`;
+  document.querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === state.v));
+  document.querySelectorAll(".bar [data-m]").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === state.m));
+  document.querySelectorAll("[data-f]").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === state.f));
+  renderNotes();
+  wire();
+  tick(true);
+  try { history.replaceState(null, "", `#${state.v}-${state.m}-${state.f}`); } catch (e) {}
+}
+
+function renderNotes() {
+  const n = NOTES[state.v];
+  $("#notes").innerHTML = `<h2>${n.t}</h2><p class="sub">${n.s}</p><dl>${n.d.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>`;
+  $("#notes").hidden = !state.notes;
+  $("#notes-btn").setAttribute("aria-pressed", state.notes);
+}
+
+function wire() {
+  const vp = $("#vp");
+  /* sticky bar: shown once every visible main button has left the screen */
+  const mains = [...vp.querySelectorAll("[data-main]")];
+  const seen = new Map();
+  const bar = vp.querySelector("#sbar");
+  const o1 = new IntersectionObserver(es => {
+    es.forEach(e => seen.set(e.target, e.isIntersecting));
+    const visible = mains.filter(b => b.offsetParent !== null);
+    const anyIn = visible.some(b => seen.get(b));
+    bar.classList.toggle("on", visible.length > 0 && !anyIn);
+    bar.setAttribute("aria-hidden", String(!(visible.length > 0 && !anyIn)));
+  }, { root: vp, threshold: 0 });
+  mains.forEach(b => o1.observe(b)); io.push(o1);
+  /* carousels: move the dots */
+  vp.querySelectorAll("[data-car]").forEach(car => {
+    const dots = car.nextElementSibling.children;
+    const o = new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio > .6) { const i = [...car.children].indexOf(e.target); [...dots].forEach((d, j) => d.classList.toggle("on", j === i)); } }), { root: car, threshold: [.6] });
+    [...car.children].forEach(c => o.observe(c)); io.push(o);
+  });
+  /* C: the pinned photo steps to the chapter's shot, and the phone chapter bar follows */
+  if (state.v === "c") {
+    const o = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      setPin(e.target.dataset.slot);
+      vp.querySelectorAll("[data-chnav]").forEach(a => a.setAttribute("aria-current", a.dataset.chnav === e.target.dataset.ch));
+    }), { root: vp, rootMargin: "-45% 0px -50% 0px" });
+    vp.querySelectorAll("[data-ch]").forEach(c => o.observe(c)); io.push(o);
+  }
+}
+
+function setPin(id) {
+  state.cPhoto = id;
+  const vp = $("#vp");
+  vp.querySelectorAll("[data-pin]").forEach(p => p.hidden = p.dataset.pin !== id);
+  vp.querySelectorAll("[data-pinbtn]").forEach(b => b.setAttribute("aria-current", b.dataset.pinbtn === id));
+}
+
+function jump(id) {
+  const vp = $("#vp");
+  if (state.v === "a") { state.open[id] = true; const d = vp.querySelector(`[data-acc="${id}"]`); if (d) d.open = true; }
+  if (state.v === "d") { state.tab = id === "fit" ? "fit" : id; render(true); const t = $("#vp").querySelector("#sec-tabs"); if (t) $("#vp").scrollTo({ top: t.offsetTop - 60 }); return; }
+  const el = vp.querySelector(`#sec-${id}`);
+  if (el) vp.scrollTo({ top: el.getBoundingClientRect().top - vp.getBoundingClientRect().top + vp.scrollTop - (state.v === "c" && state.f === "phone" ? 104 : 60) });
+}
+
+/* quartz-step hands on the CADRE drawing */
+function tick(snap) {
+  const now = new Date(), s = now.getSeconds(), mi = now.getMinutes() + s / 60, h = (now.getHours() % 12) + mi / 60;
+  document.querySelectorAll("#vp svg").forEach(svg => {
+    const set = (sel, deg) => svg.querySelectorAll(sel).forEach(el => { if (snap) { el.style.transition = "none"; } el.style.transform = `rotate(${deg}deg)`; if (snap) requestAnimationFrame(() => el.style.transition = ""); });
+    set(".hand.h", h * 30); set(".hand.m", mi * 6); set(".hand.s", s * 6);
+  });
+}
+setInterval(() => tick(false), 1000);
+
+document.addEventListener("click", ev => {
+  const t = ev.target;
+  const v = t.closest("[data-v]"); if (v) { state.v = v.dataset.v; state.cPhoto = "cut"; render(); return; }
+  const m = t.closest("[data-m]"); if (m) { state.m = m.dataset.m; state.cPhoto = "cut"; render(); return; }
+  const f = t.closest("[data-f]"); if (f) { state.f = f.dataset.f; render(); return; }
+  if (t.closest("#notes-btn")) { state.notes = !state.notes; renderNotes(); return; }
+  const d = t.closest("[data-dial]"); if (d) { state.dial[state.m] = d.dataset.dial; render(true); return; }
+  if (t.closest("[data-cur]")) { state.aud = !state.aud; render(true); return; }
+  const c = t.closest("[data-cta]"); if (c) {
+    state.bag++;
+    const bag = $("#vp").querySelector("[data-bag]"); if (bag) bag.textContent = `Bag (${state.bag})`;
+    $("#vp").querySelectorAll("[data-cta]").forEach(b => { b.textContent = "Added to bag"; setTimeout(() => b.textContent = "Add to bag", 1400); });
+    return;
+  }
+  const j = t.closest("[data-jump]"); if (j) { ev.preventDefault(); jump(j.dataset.jump); return; }
+  const p = t.closest("[data-pinbtn]"); if (p) { setPin(p.dataset.pinbtn); return; }
+  const dt = t.closest("[data-dthumb]"); if (dt) { state.cPhoto = dt.dataset.dthumb; render(true); return; }
+  const tb = t.closest("[data-tab]"); if (tb) { state.tab = tb.dataset.tab; render(true); return; }
+  if (t.closest("[data-noop]")) { ev.preventDefault(); }
+});
+document.addEventListener("toggle", ev => { const d = ev.target; if (d.dataset && d.dataset.acc) state.open[d.dataset.acc] = d.open; }, true);
+
+/* frame height, for layouts that fill one screen of the frame */
+new ResizeObserver(() => { const vp = $("#vp"); vp.style.setProperty("--vh", vp.clientHeight + "px"); }).observe($("#vp"));
+
+/* read a bare #b-cadre-phone style anchor */
+window.addEventListener("hashchange", () => boot());
+function boot() {
+  const parts = (location.hash || "").replace("#", "").split("-");
+  parts.forEach(p => { if (VARIANTS[p] && p.length === 1) state.v = p; if (MODELS[p]) state.m = p; if (p === "phone" || p === "desktop") state.f = p; });
+  render();
+}
+boot();
+</script>

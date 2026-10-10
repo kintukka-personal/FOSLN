@@ -217,6 +217,37 @@ a { color: inherit; }
 .d-panel { padding: 40px 28px 56px; max-width: 1100px; margin: 0 auto; }
 .d-car { display: none; }
 
+/* ── E · the bench (from UI-Design acier-reveal's product section) ── */
+.e-bench { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: clamp(24px, 5vw, 72px); align-items: center; max-width: 1240px; margin: 0 auto; padding: 40px 32px 56px; }
+.e-fig { margin: 0; display: grid; gap: 18px; justify-items: center; width: 100%; max-width: 600px; justify-self: center; }
+.e-stage { --rx: 0deg; --ry: 0deg; --lx: 50%; --ly: 30%; --lit: .4; position: relative; width: 100%; aspect-ratio: 1; perspective: 1100px; }
+.e-stage::before { content: ""; position: absolute; inset: 6%; border-radius: 50%; background: radial-gradient(closest-side at var(--plx, 50%) var(--ply, 45%), color-mix(in srgb, var(--accent) 13%, transparent), color-mix(in srgb, var(--accent) 4%, transparent) 60%, transparent 80%); pointer-events: none; }
+.e-dial { position: absolute; left: var(--dcx); top: var(--dcy); width: 96%; height: 96%; overflow: visible; transform: translate(-50%, -50%) translate(var(--dx, 0px), var(--dy, 0px)); }
+.e-dial line { stroke: var(--accent); opacity: .13; transition: opacity .9s ease; }
+.e-dial line.is-hour { stroke-width: 1.1; }
+.e-dial line:not(.is-hour) { stroke-width: .45; }
+.e-fig.is-sweep .e-dial line { animation: e-sweep .9s ease-out calc(var(--i) * 9ms) both; }
+@keyframes e-sweep { 0% { opacity: .13; } 18% { opacity: 1; stroke: var(--bone); } 100% { opacity: .13; } }
+.e-watch { position: absolute; left: 50%; top: 5%; height: 90%; aspect-ratio: var(--wa); transform: translateX(-50%) rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d; filter: drop-shadow(0 30px 36px rgba(0,0,0,.6)); }
+.e-watch > img, .e-watch > svg, .e-light, .e-hands { position: absolute; inset: 0; width: 100%; height: 100%; }
+.e-watch > img { object-fit: contain; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 9%, #000 91%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 9%, #000 91%, transparent 100%); }
+.e-light { background: radial-gradient(circle at var(--lx) var(--ly), rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 16%, transparent 40%); -webkit-mask: var(--wm) center / contain no-repeat; mask: var(--wm) center / contain no-repeat; mix-blend-mode: overlay; opacity: var(--lit); pointer-events: none; }
+.e-hands { overflow: visible; }
+.e-floor { position: absolute; left: 18%; right: 18%; bottom: 2%; height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
+.e-word { width: min(46%, 230px); height: auto; overflow: visible; }
+.e-note { font: 400 12px/1.4 var(--mono); color: var(--muted); text-align: center; }
+.e-copy { max-width: 34rem; display: grid; }
+.e-statement { margin: 0; font: 400 clamp(24px, 2.6vw, 34px)/1.32 var(--display); letter-spacing: -.01em; color: var(--bone); text-wrap: balance; }
+.e-statement em { font-style: italic; color: #FFFFFF; }
+.e-aside { display: flex; align-items: center; gap: 14px; margin: 24px 0 0; font: 400 12px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.e-aside::before { content: ""; flex: none; width: 36px; height: 1px; background: currentColor; opacity: .6; }
+.e-buy { display: grid; gap: 20px; margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line); }
+.e-buy .price { font-size: clamp(40px, 4.4vw, 56px); line-height: 1; letter-spacing: -.03em; }
+.e-buy .price .amt { background: var(--metal-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pdp[data-model="acier"] { --metal-text: linear-gradient(105deg, #7D838A 0%, #F2F4F5 28%, #9EA4AA 46%, #FFFFFF 62%, #8A9096 100%); }
+.pdp[data-model="cadre"] { --metal-text: linear-gradient(105deg, #8E6A32 0%, #F3DDA4 28%, #B48A45 46%, #FFF1C9 62%, #9A7438 100%); }
+.pdp[data-variant="e"] .b-strip .ph:first-child { display: grid; }
+
 /* ── phone width: every variant collapses to one column ── */
 @container (max-width: 760px) {
   .hdr { grid-template-columns: auto 1fr auto; padding: 0 16px; }
@@ -258,11 +289,19 @@ a { color: inherit; }
   .d-buy { padding: 20px 16px 28px; }
   .d-tabs { padding: 0 8px; }
   .d-panel { padding: 28px 16px 40px; }
+
+  .e-bench { grid-template-columns: 1fr; gap: 20px; padding: 12px 16px 32px; }
+  .e-fig { gap: 12px; }
+  .e-word { width: 52%; }
+  .e-statement { font-size: 22px; }
+  .e-buy { margin-top: 24px; padding-top: 22px; }
+  .pdp[data-variant="e"] .b-strip { display: grid; grid-auto-columns: 72%; }
 }
 
 /* quartz-step hands on the CADRE stand-in drawing */
 .hand { transition: transform .32s cubic-bezier(.3, 2.2, .55, 1); }
 @media (prefers-reduced-motion: reduce) {
+  .e-fig.is-sweep .e-dial line { animation: none; }
   *, .hand { transition: none !important; scroll-behavior: auto !important; }
   .ph:hover .sheen { transform: translateX(-100%); }
 }
@@ -276,6 +315,7 @@ a { color: inherit; }
   <div class="stage"><div class="viewport" id="vp"></div></div>
   <div class="bar" role="toolbar" aria-label="Prototype controls">
     <div class="grp" data-variants>
+      <button type="button" data-v="e">E · The bench</button>
       <button type="button" data-v="a">A · Sticky buy box</button>
       <button type="button" data-v="b">B · Stage, then sections</button>
       <button type="button" data-v="c">C · Pinned watch</button>
@@ -306,6 +346,12 @@ const MODELS = {
       { id: "chrome", label: "Chrome", sw: "radial-gradient(circle at 38% 32%, #fff, #c9cdd1 45%, #7e8389)" },
       { id: "onyx", label: "Onyx", sw: "radial-gradient(circle at 38% 32%, #4a4a4c, #0b0b0c 62%)" }
     ],
+    statement: d => `A faceted case flowing into a steel link bracelet, and ${d === "onyx" ? "an onyx" : "a chrome"} dial with <em>nothing on it but the hands.</em>`,
+    aside: "The quartz movement keeps it true to the second.",
+    bench: {
+      onyx: { img: "img/acier-onyx-bench.webp", w: 1064, h: 1756, wa: "532 / 878", cx: 49.1, cy: 48.3, live: true },
+      chrome: { img: "img/acier-chrome.webp", w: 671, h: 1191, wa: "671 / 1191", cx: 48.5, cy: 42.5, live: false, note: "Chrome: no hands-free photo yet, so its printed hands stand still" }
+    },
     size: [["Case", "37 mm"], ["Thick", "9.5 mm"], ["Wrist", "TBC"]],
     sizeLine: "37 mm wide, 9.5 mm thick",
     wrist: "On a 17 cm wrist (photo needed)",
@@ -323,6 +369,12 @@ const MODELS = {
       { id: "noir", label: "Noir", sw: "radial-gradient(circle at 38% 32%, #3a3a3a, #0c0c0c 62%)" },
       { id: "champagne", label: "Champagne", sw: "radial-gradient(circle at 38% 32%, #fbf0d6, #d9c08e 55%, #a8874f)" }
     ],
+    statement: d => `A square case with a gold frame round ${d === "noir" ? "a noir" : "a champagne"} dial, <em>and a date at 3 o'clock.</em>`,
+    aside: "The quartz movement keeps it true to the second.",
+    bench: {
+      noir: { svg: true, wa: "300 / 520", cx: 50, cy: 50, note: "Stand-in drawing, no CADRE photo yet" },
+      champagne: { svg: true, wa: "300 / 520", cx: 50, cy: 50, note: "Stand-in drawing, no CADRE photo yet" }
+    },
     size: [["Case", "32 × 36.3 mm"], ["Thick", "10 mm"], ["Wrist", "TBC"]],
     sizeLine: "32 × 36.3 mm (width × length), 10 mm thick",
     wrist: "On a 16 cm wrist (photo needed)",
@@ -345,6 +397,15 @@ const SLOTS = [
 ];
 
 const NOTES = {
+  e: { t: "E · The bench", s: "The product section of UI-Design's acier-reveal, made into the PDP's first screen, with B's sections underneath.", d: [
+    ["Section order", "The bench (the watch on its ticking dial, with the name in steel or gold under it) beside the statement, quartz line, price, Dials, Add to bag, policy lines and size line. Then a photo strip, description, Size & fit, Specifications, Delivery, returns and warranty, the other Model and the footer."],
+    ["Gallery", "One live watch on the bench. The other shots sit in a sideways strip under the first screen, at every width."],
+    ["Dial switching", "Named swatches under the price swap the bench watch, the statement's Dial word and the ?variant= link. ACIER Chrome has no hands-free photo yet, so its printed hands stand still."],
+    ["Price and CTA", "The price in brushed metal, $149 or $169, with no strikethrough. Add to bag is the solid metal bar. When it lands, a lap of light runs round the dial. On phones a bar sticks to the bottom until the main button is on screen."],
+    ["Spec table and fit", "A size line with a Size & fit link sits under the button. The full fit guidance and spec table are full-width sections below, as in B."],
+    ["Policy notes", "Three short lines under the button, and a full three-column section lower down."],
+    ["Motion", "The backdrop dial lights the current second with a six-second trail. The hands step like quartz. The watch tilts and the light follows the pointer, drifting when idle. The name has no build-in, which stays on the home page. Reduced motion: no tilt or drift, and the hands update without visible movement."]
+  ] },
   a: { t: "A · Sticky buy box", s: "The common DTC pattern. Photos scroll; the buy box stays put.", d: [
     ["Section order", "Gallery left, buy box right. The buy box holds everything else in accordions. Below the fold: the other Model, then the footer."],
     ["Gallery", "Desktop: six large photos stacked in the left column, scrolling past the buy box. Phone: a swipe carousel with dots."],
@@ -383,7 +444,7 @@ const NOTES = {
   ] }
 };
 
-const state = { v: "b", m: "acier", f: "desktop", dial: { acier: "chrome", cadre: "noir" }, aud: false, bag: 0, tab: "details", cPhoto: "cut", open: {}, notes: false };
+const state = { v: "e", m: "acier", f: "desktop", dial: { acier: "onyx", cadre: "noir" }, aud: false, bag: 0, tab: "details", cPhoto: "cut", open: {}, notes: false };
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
@@ -493,6 +554,36 @@ const carousel = () => `<div class="car" data-car>${SLOTS.map((s, i) => photo(s,
 
 /* ── the four layouts ── */
 const VARIANTS = {
+  e() {
+    const M = MODELS[state.m], dial = state.dial[state.m], B = M.bench[dial];
+    const vars = `--wa:${B.wa};--dcx:${B.cx}%;--dcy:${B.cy}%;${B.img ? `--wm:url('${B.img}');` : ""}`;
+    const watchEl = B.svg ? cadreSVG(dial) : `<img src="${B.img}" alt="" width="${B.w}" height="${B.h}" fetchpriority="high">`;
+    return `<section class="e-bench">
+      <figure class="e-fig" data-efig>
+        <div class="e-stage" data-estage style="${vars}" aria-hidden="true">
+          <svg class="e-dial" data-edial viewBox="-100 -100 200 200" focusable="false"></svg>
+          <div class="e-watch">${watchEl}${B.img ? '<div class="e-light"></div>' : ""}${B.live ? '<svg class="e-hands" data-ehands viewBox="0 0 532 878" focusable="false"></svg>' : ""}</div>
+          <div class="e-floor"></div>
+        </div>
+        <svg class="e-word" data-eword role="img" aria-label="${M.name}" focusable="false"></svg>
+        ${B.note ? `<span class="e-note">${B.note}</span>` : ""}
+        <figcaption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">${M.name} with the ${M.dials.find(d => d.id === dial).label} Dial, its hands showing your local time.</figcaption>
+      </figure>
+      <div class="e-copy">
+        <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">${M.name}</h1>
+        <p class="e-statement">${M.statement(dial)}</p>
+        <p class="e-aside">${M.aside}</p>
+        <div class="e-buy">
+          <div class="price-block"><div class="price"><span class="amt">${money(M.price)}</span>${state.aud ? `<span class="est">≈ A$${M.aud} estimate</span>` : ""}</div><div class="price-note">Free delivery in Australia</div></div>
+          ${dials()}${cta()}${policies()}${sizeLine("fit")}
+        </div>
+      </div></section>
+      <div class="b-strip">${SLOTS.map(s => `<div>${photo(s)}<div class="cap">${s.label}</div></div>`).join("")}</div>
+      <section class="b-sec"><div class="wrap"><h2 class="blk-h">About ${M.name}</h2>${details()}</div></section>
+      <section class="b-sec" id="sec-fit"><div class="wrap"><h2 class="blk-h">Size & fit</h2>${fit()}</div></section>
+      <section class="b-sec"><div class="wrap"><h2 class="blk-h">Specifications</h2>${specs()}</div></section>
+      <section class="b-sec"><div class="wrap">${pol3()}</div></section>${xsell()}${footer()}`;
+  },
   a() {
     const acc = [["details", "Details", details()], ["fit", "Size & fit", fit()], ["specs", "Specifications", specs()], ["delivery", "Delivery & returns", pol3()]];
     return `<div class="a-grid">
@@ -543,6 +634,113 @@ const VARIANTS = {
   }
 };
 
+/* ── The bench, ported from UI-Design acier-reveal: steel letters, live hands, the 60-tick dial ── */
+const NS = "http://www.w3.org/2000/svg";
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const outBack = (x, c = 1.7) => 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2);
+const r2 = v => Math.round(v * 100) / 100;
+function el(name, attrs, parent) { const n = document.createElementNS(NS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+const GLYPH = {
+  A: { w: 110, d: "M0 100L40 0H70L110 100H86L77 76H33L24 100ZM41 56H69L55 20Z" },
+  C: { w: 110, d: "M110 0H36A36 36 0 0 0 0 36V64A36 36 0 0 0 36 100H110V78H40A18 18 0 0 1 22 60V40A18 18 0 0 1 40 22H110Z" },
+  I: { w: 22, d: "M0 0H22V100H0Z" },
+  E: { w: 100, d: "M0 0H100V22H22V39H88V61H22V78H100V100H0Z" },
+  R: { w: 106, d: "M0 0H72A32 32 0 0 1 72 64H68L106 100H76L40 64H22V100H0ZM22 22V42H72A10 10 0 0 0 72 22Z" },
+  D: { w: 104, d: "M0 0H64A40 40 0 0 1 104 40V60A40 40 0 0 1 64 100H0ZM22 22V78H60A22 22 0 0 0 82 56V44A22 22 0 0 0 60 22Z" }
+};
+const METAL_STOPS = {
+  acier: [[0, "#6F757C"], [.16, "#E8EBEE"], [.3, "#9AA0A7"], [.47, "#FAFBFB"], [.6, "#868C93"], [.8, "#D7DADE"], [1, "#6B7178"]],
+  cadre: [[0, "#7A5A2A"], [.16, "#F3DDA4"], [.3, "#B48A45"], [.47, "#FFF1C9"], [.6, "#9A7438"], [.8, "#E6C88A"], [1, "#7A5A2A"]]
+};
+/* The name in metal bands, fully assembled: the link-by-link build-in stays on the home page */
+function buildWord(svg, word, model) {
+  const id = "w" + (uid++), GAP = 14, ROWS = 5, ROW_H = 20;
+  const total = [...word].reduce((a, ch) => a + GLYPH[ch].w, 0) + GAP * (word.length - 1);
+  svg.setAttribute("viewBox", `0 0 ${total} 100`);
+  const defs = el("defs", {}, svg);
+  const g = el("linearGradient", { id: id + "-m", gradientUnits: "userSpaceOnUse", x1: 0, y1: 0, x2: total, y2: 90, spreadMethod: "reflect" }, defs);
+  METAL_STOPS[model].forEach(s => el("stop", { offset: s[0], "stop-color": s[1] }, g));
+  let x = 0;
+  [...word].forEach((ch, li) => {
+    const L = GLYPH[ch], clip = el("clipPath", { id: `${id}-l${li}` }, defs);
+    el("path", { d: L.d, transform: `translate(${x} 0)`, "clip-rule": "evenodd" }, clip);
+    const grp = el("g", { "clip-path": `url(#${id}-l${li})` }, svg);
+    for (let r = 0; r < ROWS; r++) {
+      el("rect", { x: x - 4, y: r * ROW_H - .2, width: L.w + 8, height: ROW_H + .4, fill: `url(#${id}-m)` }, grp);
+      if (r < ROWS - 1) el("rect", { x: x - 4, y: r * ROW_H + ROW_H - 1.3, width: L.w + 8, height: 1.3, fill: "#25282C" }, grp);
+    }
+    x += L.w + GAP;
+  });
+  return g;
+}
+/* Hands on the photo's own pixel grid (532 x 878), centred on the dial */
+function buildHands(svg) {
+  const id = "h" + (uid++), defs = el("defs", {}, svg);
+  const hg = el("linearGradient", { id: id + "-g", x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
+  [[0, "#7E848A"], [.42, "#F3F5F6"], [.58, "#A7ADB3"], [1, "#666C72"]].forEach(s => el("stop", { offset: s[0], "stop-color": s[1] }, hg));
+  const f = el("filter", { id: id + "-s", x: "-50%", y: "-50%", width: "200%", height: "200%" }, defs);
+  el("feDropShadow", { dx: 2.5, dy: 3.5, stdDeviation: 2, "flood-color": "#000", "flood-opacity": .7 }, f);
+  const body = `url(#${id}-g)`, edge = "#3B3F44";
+  const root = el("g", { transform: "translate(257 422.5)", filter: `url(#${id}-s)` }, svg);
+  const sword = len => { const g = el("g", {}, root);
+    el("path", { d: "M-1.5 0V-17.5Q0 -18.6 1.5 -17.5V0Z", fill: body, stroke: edge, "stroke-width": .6 }, g);
+    el("path", { d: `M-4.8 -15L-3.4 ${-len}Q0 ${-(len + 5)} 3.4 ${-len}L4.8 -15Z`, fill: body, stroke: edge, "stroke-width": .7 }, g);
+    el("path", { d: `M-1.45 -27H1.45V${-(len - 6)}H-1.45Z`, fill: "#EEF1EA" }, g); return g; };
+  const hour = sword(96), minute = sword(138), second = el("g", {}, root);
+  el("line", { x1: 0, y1: 40, x2: 0, y2: -154, stroke: "#C3C7CB", "stroke-width": 1.7, "stroke-linecap": "round" }, second);
+  el("circle", { r: 8, fill: body, stroke: edge, "stroke-width": .7 }, root);
+  el("circle", { r: 3, fill: "#1A1B1D" }, root);
+  return { hour, minute, second };
+}
+const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+let bench = null;
+function initBench() {
+  bench = null;
+  const vp = $("#vp"), stage = vp.querySelector("[data-estage]");
+  if (!stage) return;
+  const dial = vp.querySelector("[data-edial]"), ticks = [];
+  for (let i = 0; i < 60; i++) {
+    const hr = i % 5 === 0, line = el("line", { x1: 0, x2: 0, y1: -96, y2: hr ? -86 : -91, transform: `rotate(${i * 6})` }, dial);
+    if (hr) line.setAttribute("class", "is-hour");
+    line.style.setProperty("--i", i); ticks.push(line);
+  }
+  const handsSvg = vp.querySelector("[data-ehands]");
+  const grad = buildWord(vp.querySelector("[data-eword]"), MODELS[state.m].name, state.m);
+  bench = { stage, ticks, grad, hands: handsSvg ? buildHands(handsSvg) : null, fig: vp.querySelector("[data-efig]"),
+    cur: { x: .5, y: .35 }, aim: { x: .5, y: .35 }, lit: .4, litAim: .4, hover: false, last: -1 };
+  stage.addEventListener("pointermove", e => { const r = stage.getBoundingClientRect(); bench.aim.x = clamp01((e.clientX - r.left) / r.width); bench.aim.y = clamp01((e.clientY - r.top) / r.height); bench.hover = e.pointerType === "mouse"; bench.litAim = .95; });
+  stage.addEventListener("pointerleave", () => { bench.hover = false; bench.litAim = .4; });
+  stage.style.pointerEvents = "auto";
+}
+function benchFrame() {
+  if (bench && bench.stage.isConnected) {
+    const d = new Date(), s = d.getSeconds(), ms = d.getMilliseconds(), live = !calm(), b = bench;
+    if (b.hands) {
+      b.hands.hour.setAttribute("transform", `rotate(${r2(30 * (d.getHours() % 12 + d.getMinutes() / 60 + s / 3600))})`);
+      b.hands.minute.setAttribute("transform", `rotate(${r2(6 * (d.getMinutes() + s / 60))})`);
+      b.hands.second.setAttribute("transform", `rotate(${r2(6 * (live ? s - 1 + outBack(clamp01(ms / 90), 2.2) : s))})`);
+      b.hands.second.style.display = live ? "" : "none";
+    }
+    if (s !== b.last) {   /* the dial keeps the real seconds: this second bright, the last six fading */
+      b.last = s;
+      for (let k = 0; k < 60; k++) { const age = (s - k + 60) % 60; b.ticks[k].style.opacity = age === 0 ? 1 : age < 7 ? r2(.13 + .55 * Math.pow(1 - age / 7, 2)) : ""; }
+    }
+    if (live) {
+      const t = performance.now() / 1000;
+      if (!b.hover) { b.aim.x = .5 + .22 * Math.sin(t * .45); b.aim.y = .32 + .1 * Math.sin(t * .31 + 1); }
+      b.cur.x += (b.aim.x - b.cur.x) * .08; b.cur.y += (b.aim.y - b.cur.y) * .08; b.lit += (b.litAim - b.lit) * .06;
+      const st = b.stage.style;
+      st.setProperty("--lx", r2(b.cur.x * 100) + "%"); st.setProperty("--ly", r2(b.cur.y * 100) + "%");
+      st.setProperty("--rx", r2((.5 - b.cur.y) * 9) + "deg"); st.setProperty("--ry", r2((b.cur.x - .5) * 12) + "deg");
+      st.setProperty("--dx", r2((.5 - b.cur.x) * 14) + "px"); st.setProperty("--dy", r2((.5 - b.cur.y) * 10) + "px");
+      st.setProperty("--lit", r2(b.lit)); st.setProperty("--plx", r2(50 + (b.cur.x - .5) * 30) + "%"); st.setProperty("--ply", r2(45 + (b.cur.y - .35) * 20) + "%");
+      b.grad.setAttribute("gradientTransform", `translate(${r2((b.cur.x - .5) * 160)} 0)`);   /* the light moves across the metal name */
+    }
+  }
+  requestAnimationFrame(benchFrame);
+}
+requestAnimationFrame(benchFrame);
+
 let io = [];
 function render(keepScroll) {
   const vp = $("#vp"), top = keepScroll ? vp.scrollTop : 0;
@@ -556,6 +754,7 @@ function render(keepScroll) {
   document.querySelectorAll("[data-f]").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === state.f));
   renderNotes();
   wire();
+  initBench();
   tick(true);
   try { history.replaceState(null, "", `#${state.v}-${state.m}-${state.f}`); } catch (e) {}
 }
@@ -634,6 +833,7 @@ document.addEventListener("click", ev => {
   const c = t.closest("[data-cta]"); if (c) {
     state.bag++;
     const bag = $("#vp").querySelector("[data-bag]"); if (bag) bag.textContent = `Bag (${state.bag})`;
+    if (bench && !calm()) { bench.fig.classList.remove("is-sweep"); void bench.fig.offsetWidth; bench.fig.classList.add("is-sweep"); setTimeout(() => bench && bench.fig.classList.remove("is-sweep"), 1600); }
     $("#vp").querySelectorAll("[data-cta]").forEach(b => { b.textContent = "Added to bag"; setTimeout(() => b.textContent = "Add to bag", 1400); });
     return;
   }

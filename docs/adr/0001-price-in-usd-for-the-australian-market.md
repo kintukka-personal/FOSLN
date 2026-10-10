@@ -28,7 +28,7 @@ Prices are set and charged in **USD**, including for Australian customers.
 
 - **Accepted legal risk.** In 2023 the Federal Court ordered Airbnb to pay A$15 million for showing Australians USD prices with a bare "$". Airbnb also had a currency selector. The owner accepts this risk. A bare "$" with a switcher is the same pattern. The fallback is to add "US$" to prices.
 - **Cost to the customer.** Australian banks add 2.2–3.5% to a USD charge. The customer's bank, not FOSLN, sets the AUD amount the customer finally pays.
-- **Cost to FOSLN.** While the store's base currency is AUD, Shopify takes a 2% conversion fee on every sale. "Choose the platform and architecture" checks whether a USD base currency or USD payout avoids it.
+- **Cost to FOSLN.** While payouts are in AUD, Shopify takes a 2% conversion fee on every USD sale, whatever the store currency. On Basic, payouts are AUD only, so the fee applies ([ADR 0005](0005-usd-store-currency-on-basic.md)).
 - **Exchange-rate exposure.** Costs are in AUD and revenue is in USD, so a stronger AUD cuts the margin. "Decide the launch price for each Model" sets when a currency move triggers a reprice.
 - **No repricing when going global.** A new Market that uses USD can reuse the same prices.
 

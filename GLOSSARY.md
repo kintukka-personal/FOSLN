@@ -53,3 +53,21 @@ _Avoid_: promo, deal, discount.
 A short-term incentive that leaves the shown price unchanged, such as free express delivery, a gift or store credit. An offer that states a saving is a sale, not an offer.
 
 _Avoid_: promo, deal, discount.
+
+## Return
+
+A customer sending a watch back because they changed their mind, for a refund. Only an unworn watch that hasn't been altered can be returned. A faulty watch is a fault claim, not a return.
+
+_Avoid_: exchange, refund (a refund is what a return or a fault claim ends in).
+
+## Altered
+
+Changed from how the watch was dispatched, such as links taken out, the bracelet resized or the case opened, whoever made the change. An altered watch can't be returned.
+
+_Avoid_: adjusted, used.
+
+## Fault claim
+
+A customer reporting that a watch is faulty, whether it arrived damaged or developed a defect under the warranty. A fault claim ends in a replacement or a refund, and the consumer guarantees always apply to it.
+
+_Avoid_: warranty return, RMA.

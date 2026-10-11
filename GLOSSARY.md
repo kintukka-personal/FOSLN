@@ -14,7 +14,7 @@ _Avoid_: colourway, colour, finish.
 
 ## Supplier
 
-The company that holds FOSLN's stock and sends each order straight to the customer. FOSLN never holds stock itself.
+The AliExpress seller that makes and stocks the FOSLN-branded watches, restocks them, and sends each order straight to the customer. FOSLN buys each watch as it is ordered and never holds stock itself.
 
 _Avoid_: vendor, warehouse, 3PL.
 

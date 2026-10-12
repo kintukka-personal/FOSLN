@@ -1,0 +1,567 @@
+<title>FOSLN Home Layouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* PROTOTYPE. Throwaway layouts for "Design the home page" (Kintukka2/FOSLN-WATCH#34). Not production code.
+   Layout: the home page (header, split hero, promise strip, footer) in four hero layouts (A-D), three build-in timings
+   and three promise-strip layouts, in a desktop or phone frame. Built on the locked Direction D, Two Metals, as amended
+   by "Design the PDP layout": dark only, so this page deliberately commits to one dark look. */
+:root {
+  --onyx: #0B0B0C; --warm: #0E0C09; --bone: #EDEBE6; --muted: #9A9C9F;
+  --steel: #C9CDD1; --gold: #D6B271;
+  --line: rgba(237,235,230,.12);
+  --display: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --chrome-bg: #0A0A0B; --chrome-ink: #F2F2F0; --chrome-dim: #A3A5A8; --chrome-line: rgba(255,255,255,.14);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--chrome-bg); color: var(--bone); font: 400 15px/1.55 var(--body); }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+
+/* ── prototype chrome ── */
+.proto { height: 100%; display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); }
+.note { display: flex; gap: 16px; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 8px 16px; font: 500 12px/1.4 var(--mono); color: var(--chrome-dim); border-bottom: 1px solid var(--chrome-line); }
+.note b { color: var(--chrome-ink); font-weight: 500; }
+.note .url { color: var(--chrome-ink); }
+.stage { min-height: 0; display: grid; place-items: stretch center; padding: 12px 16px; overflow: hidden; }
+.viewport { container: vp / inline-size; width: 100%; max-width: 1440px; height: 100%; overflow-y: auto; overflow-x: hidden; border: 1px solid var(--chrome-line); border-radius: 6px; background: var(--onyx); position: relative; }
+.proto[data-frame="phone"] .viewport { width: 390px; max-width: 100%; max-height: 844px; border-radius: 28px; border-width: 6px; border-color: #26272A; }
+.bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--chrome-line); }
+.grp { display: flex; gap: 2px; padding: 3px; max-width: 100%; overflow-x: auto; scrollbar-width: none; border: 1px solid var(--chrome-line); border-radius: 999px; background: #141416; }
+.grp button { border: 0; background: transparent; color: var(--chrome-ink); min-height: 34px; padding: 0 13px; border-radius: 999px; font: 500 13px/1 var(--body); cursor: pointer; white-space: nowrap; }
+.grp button[aria-pressed="true"] { background: var(--chrome-ink); color: #111; }
+.grp .k { align-self: center; padding: 0 6px 0 10px; font: 500 11px/1 var(--mono); color: var(--chrome-dim); white-space: nowrap; }
+.notes { position: fixed; right: 16px; bottom: 120px; width: min(460px, calc(100vw - 32px)); max-height: min(70vh, 680px); overflow: auto; z-index: 40; background: #161618; color: var(--chrome-ink); border: 1px solid var(--chrome-line); border-radius: 10px; padding: 18px 20px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.notes h2 { margin: 0 0 4px; font: 600 16px/1.3 var(--body); }
+.notes h3 { margin: 18px 0 8px; font: 500 12px/1.3 var(--mono); color: var(--chrome-dim); }
+.notes .sub { margin: 0 0 12px; color: var(--chrome-dim); font-size: 13px; }
+.notes dl { margin: 0; display: grid; gap: 10px; }
+.notes dt { font: 500 12px/1.3 var(--mono); color: var(--chrome-dim); }
+.notes dd { margin: 3px 0 0; font-size: 14px; line-height: 1.5; }
+.notes ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; line-height: 1.5; }
+@media (max-width: 700px) { .grp[data-frames] { display: none; } .stage { padding: 0; } .viewport, .proto[data-frame="phone"] .viewport { width: 100%; max-height: none; border: 0; border-radius: 0; } .notes { bottom: 170px; } }
+
+/* ── store header ── */
+.home { min-height: 100%; background: var(--onyx); color: var(--bone); }
+.hdr { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; height: 60px; padding: 0 28px; background: color-mix(in srgb, var(--onyx) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.hdr nav { display: flex; gap: 22px; }
+.hdr nav a { text-decoration: none; padding: 12px 0; font: 500 13px/1 var(--body); letter-spacing: .08em; color: var(--muted); }
+.hdr nav a:hover { color: var(--bone); }
+.menu { display: none; width: 44px; height: 44px; margin-left: -12px; background: none; border: 0; cursor: pointer; position: relative; }
+.menu::before, .menu::after { content: ""; position: absolute; left: 12px; right: 12px; height: 1.5px; background: var(--bone); }
+.menu::before { top: 17px; } .menu::after { top: 25px; }
+.wm { font: 400 17px/1 var(--display); letter-spacing: .32em; padding-left: .32em; }
+.tools { display: flex; justify-content: flex-end; gap: 18px; align-items: center; }
+.tools button { background: none; border: 0; cursor: pointer; min-height: 44px; padding: 0 2px; font: 500 13px/1 var(--body); }
+.tools .cur { color: var(--muted); }
+.tools .cur[aria-pressed="true"] { color: var(--bone); }
+
+/* ── hero, shared ── */
+.hero { position: relative; height: var(--hh, 640px); display: grid; overflow: hidden; isolation: isolate; }
+.half { position: relative; display: grid; min-width: 0; min-height: 0; text-decoration: none; color: inherit; overflow: hidden; }
+.half.st { --metal: var(--steel); --pool: #1E2023; background: var(--onyx); }
+.half.au { --metal: var(--gold); --pool: #241C11; background: var(--warm); }
+.half:focus-visible { outline: 2px solid var(--metal); outline-offset: -4px; }
+.vis { position: relative; display: grid; place-items: center; min-height: 0; min-width: 0; }
+.watch { position: relative; height: var(--wt, 400px); aspect-ratio: var(--ar); max-width: 100%; }
+.watch > img, .watch > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.watch > img { object-fit: contain; filter: drop-shadow(0 30px 34px rgba(0,0,0,.6)); }
+.watch .hands { pointer-events: none; }
+.stand { position: absolute; left: 50%; bottom: 2%; transform: translateX(-50%); z-index: 2; font: 500 10px/1 var(--mono); letter-spacing: .06em; padding: 5px 7px; white-space: nowrap; color: #fff; background: rgba(0,0,0,.62); }
+.meta { position: relative; z-index: 2; display: grid; gap: 12px; min-width: 0; }
+.word { display: block; height: var(--wh, 46px); width: auto; max-width: 100%; overflow: visible; }
+.shop { justify-self: start; color: var(--metal); font: 500 15px/1.35 var(--body); padding-bottom: 3px; border-bottom: 1px solid color-mix(in srgb, var(--metal) 45%, transparent); transition: border-color .2s; }
+.half:hover .shop { border-color: var(--metal); }
+.est { display: inline-block; margin-left: 8px; color: var(--muted); font: 400 12px/1 var(--mono); }
+.seam { position: absolute; z-index: 3; pointer-events: none; }
+.ring { position: absolute; z-index: 0; left: 50%; top: 50%; pointer-events: none; overflow: visible; }
+
+/* ── A · Hairline ── */
+.v-a { grid-template-columns: 1fr 1fr; }
+.v-a .half { grid-template-rows: minmax(0, 1fr) auto; padding: 24px 40px 36px; }
+.v-a .half { background: radial-gradient(58% 52% at 50% 44%, var(--pool), transparent 72%), var(--onyx); }
+.v-a .half.au { background: radial-gradient(58% 52% at 50% 44%, var(--pool), transparent 72%), var(--warm); }
+.v-a .watch { --wt: calc(var(--hh) * .64); }
+.v-a .meta { grid-template-columns: auto auto; justify-content: space-between; align-items: end; }
+.v-a .word { --wh: clamp(32px, 3.4cqi, 52px); }
+.v-a .seam { left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(transparent 6%, rgba(237,235,230,.28) 50%, transparent 94%); }
+
+/* ── B · One dial ── */
+.v-b { grid-template-columns: 1fr 1fr; background: linear-gradient(90deg, var(--onyx) 50%, var(--warm) 50%); }
+.v-b .half.st, .v-b .half.au { background: transparent; }
+.v-b .half { grid-template-rows: minmax(0, 1fr) auto; padding: 28px 5cqi 40px; }
+.v-b .half.st { justify-items: end; text-align: right; }
+.v-b .half.au { justify-items: start; }
+.v-b .half.st .shop { justify-self: end; }
+.v-b .half.st .word { margin-left: auto; }
+.v-b .watch { --wt: calc(var(--hh) * .58); }
+.v-b .meta { justify-items: inherit; }
+.v-b .word { --wh: clamp(30px, 3.1cqi, 46px); }
+.v-b .ring { width: min(calc(var(--hh) * .9), 66cqi); height: auto; aspect-ratio: 1; transform: translate(-50%, -52%); }
+.v-b .seam { left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(transparent, rgba(237,235,230,.1) 20%, rgba(237,235,230,.1) 80%, transparent); }
+.ring line { stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ring .t-st { stroke: var(--steel); opacity: .26; }
+.ring .t-au { stroke: var(--gold); opacity: .3; }
+.ring .t-ax { stroke: var(--bone); opacity: .5; }
+.ring .hr { stroke-width: 1.6; opacity: .55; }
+.ring .axis { stroke: var(--bone); opacity: .16; }
+
+/* ── C · Two columns ── */
+.v-c { grid-template-columns: 1fr 1fr; }
+.v-c .half { grid-template-rows: minmax(0, 1fr) auto; justify-items: center; text-align: center; padding: 28px 24px 44px; }
+.v-c .half { background: radial-gradient(52% 46% at 50% 42%, var(--pool), transparent 72%), var(--onyx); }
+.v-c .half.au { background: radial-gradient(52% 46% at 50% 42%, var(--pool), transparent 72%), var(--warm); }
+.v-c .watch { --wt: calc(var(--hh) * .62); }
+.v-c .meta { justify-items: center; }
+.v-c .shop { justify-self: center; }
+.v-c .word { --wh: clamp(32px, 3.4cqi, 52px); }
+.v-c .seam { left: 50%; top: 0; bottom: 0; width: 140px; transform: translateX(-50%); background: linear-gradient(90deg, var(--onyx), var(--warm)); z-index: 1; }
+
+/* ── D · Close-up ── */
+.v-d { grid-template-columns: 1fr 1fr; }
+.v-d .half { grid-template-rows: 1fr auto; }
+.v-d .vis { position: absolute; inset: 0; display: block; }
+.v-d .watch { --wt: calc(var(--hh) * 1.3); position: absolute; left: 50%; top: 50%; transform: translate(calc(var(--cx) * -100%), calc(var(--cy) * -100%)); }
+.v-d .stand { bottom: auto; top: 58%; }
+.v-d .half::after { content: ""; position: absolute; inset: 45% 0 0; z-index: 1; background: linear-gradient(transparent, color-mix(in srgb, var(--onyx) 92%, transparent) 70%); }
+.v-d .half.au::after { background: linear-gradient(transparent, color-mix(in srgb, var(--warm) 92%, transparent) 70%); }
+.v-d .meta { grid-row: 2; grid-template-columns: auto auto; justify-content: space-between; align-items: end; padding: 0 36px 34px; }
+.v-d .word { --wh: clamp(44px, 5.4cqi, 84px); }
+.v-d .seam { display: none; }
+
+/* ── promise strip ── */
+.promise { position: relative; z-index: 2; }
+.pr { text-decoration: none; display: grid; gap: 4px; min-width: 0; }
+.pr b { font: 500 15px/1.35 var(--body); color: var(--bone); }
+.pr b::after { content: "\2192"; margin-left: 8px; color: var(--muted); transition: transform .2s; display: inline-block; }
+.pr:hover b::after { transform: translateX(3px); }
+.pr span { font: 400 13px/1.45 var(--body); color: var(--muted); }
+.p-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 44px 40px 52px; border-top: 1px solid var(--line); }
+.p-line { display: flex; justify-content: center; flex-wrap: wrap; padding: 30px 24px; border-top: 1px solid var(--line); }
+.p-line .pr { padding: 4px 26px; }
+.p-line .pr + .pr { border-left: 1px solid var(--line); }
+.p-line .pr span { display: none; }
+.p-line .pr b::after { display: none; }
+.p-dock { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); background: var(--onyx); }
+.p-dock .pr { padding: 16px 24px 17px; justify-items: center; text-align: center; }
+.p-dock .pr + .pr { border-left: 1px solid var(--line); }
+.p-dock .pr span { display: none; }
+.p-dock .pr b { font-size: 14px; }
+.p-dock .pr b::after { display: none; }
+
+/* ── footer ── */
+.ftr { display: grid; gap: 36px; padding: 48px 40px 28px; border-top: 1px solid var(--line); }
+.ftr .top { display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+.ftr .cols { display: flex; gap: 56px; flex-wrap: wrap; }
+.ftr .cols div { display: grid; gap: 8px; align-content: start; font-size: 14px; }
+.ftr .cols b { font: 500 12px/1.4 var(--mono); color: var(--muted); font-weight: 500; }
+.ftr .cols a { text-decoration: none; color: var(--bone); }
+.ftr .base { display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.ftr .base .legal { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+.pay { display: flex; gap: 6px; flex-wrap: wrap; }
+.pay span { font: 500 10px/1 var(--mono); padding: 5px 6px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); }
+
+/* ── phones (the frame, or a real phone) ── */
+@container vp (max-width: 700px) {
+  .hdr { height: 56px; padding: 0 16px; }
+  .hdr nav { display: none; }
+  .menu { display: block; }
+  .tools { gap: 14px; }
+  .wm { font-size: 16px; }
+
+  .v-a { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .v-a .half { grid-template-rows: 1fr; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px; padding: 10px 18px; }
+  .v-a .half.au { grid-template-columns: minmax(0, 1fr) auto; }
+  .v-a .half.au .vis { order: 2; }
+  .v-a .half.au .meta { justify-items: end; text-align: right; }
+  .v-a .half.au .shop { justify-self: end; }
+  .v-a .half.au .word { margin-left: auto; }
+  .v-a .watch { --wt: calc(var(--hh) * .4); }
+  .v-a .meta { grid-template-columns: 1fr; align-content: center; gap: 12px; }
+  .v-a .word { --wh: 24px; }
+  .v-a .seam { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 1px; background: linear-gradient(90deg, transparent 4%, rgba(237,235,230,.28) 50%, transparent 96%); }
+
+  .v-b { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; background: linear-gradient(180deg, var(--onyx) 50%, var(--warm) 50%); }
+  .v-b .half { padding: 16px 16px 6px; justify-items: center; text-align: center; gap: 10px; }
+  .v-b .half.st { grid-template-rows: auto minmax(0, 1fr); justify-items: center; text-align: center; }
+  .v-b .half.st .meta { order: -1; }
+  .v-b .half.st .vis { align-items: end; }
+  .v-b .half.au { grid-template-rows: minmax(0, 1fr) auto; padding: 6px 16px 16px; justify-items: center; }
+  .v-b .half.au .vis { align-items: start; }
+  .v-b .half.st .shop, .v-b .shop { justify-self: center; }
+  .v-b .half.st .word { margin-inline: auto; }
+  .v-b .word { --wh: 26px; margin-inline: auto; }
+  .v-b .watch { --wt: calc(var(--hh) * .32); }
+  .v-b .ring { width: min(94cqi, calc(var(--hh) * .62)); transform: translate(-50%, -50%) rotate(90deg); }
+  .v-b .seam { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(237,235,230,.1) 20%, rgba(237,235,230,.1) 80%, transparent); }
+
+  .v-c .half { padding: 18px 10px 26px; align-content: center; }
+  .v-c .watch { --wt: min(calc(var(--hh) * .5), 268px); }
+  .v-c .word { --wh: 22px; }
+  .v-c .shop { font-size: 14px; }
+  .v-c .shop .est { display: block; margin: 6px 0 0; }
+  .v-c .seam { width: 56px; }
+
+  .v-d { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .v-d .watch { --wt: calc(var(--hh) * .82); }
+  .v-d .stand { top: 52%; }
+  .v-d .meta { padding: 0 18px 18px; gap: 10px; }
+  .v-d .word { --wh: 34px; }
+  .v-d .shop { font-size: 14px; }
+  .v-d .seam { display: block; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.6); }
+
+  .p-cols { grid-template-columns: 1fr; gap: 20px; padding: 32px 18px 36px; }
+  .p-line { flex-direction: column; align-items: center; gap: 6px; padding: 24px 18px; }
+  .p-line .pr + .pr { border-left: 0; }
+  .p-dock .pr { padding: 13px 6px 14px; }
+  .p-dock .pr b { font-size: 12.5px; line-height: 1.3; }
+
+  .ftr { padding: 36px 18px 24px; }
+  .ftr .cols { gap: 28px 40px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="proto" id="proto" data-frame="desktop">
+  <div class="note">
+    <span><b>Prototype</b> for "Design the home page". Throwaway. The ACIER photo is a placeholder and CADRE is a stand-in drawing.</span>
+    <span class="url">fosln.com/</span>
+  </div>
+  <div class="stage"><div class="viewport" id="vp"></div></div>
+  <div class="bar" role="toolbar" aria-label="Prototype controls">
+    <div class="grp" data-g="v"><span class="k">Hero</span>
+      <button type="button" data-val="a">A · Hairline</button>
+      <button type="button" data-val="b">B · One dial</button>
+      <button type="button" data-val="c">C · Two columns</button>
+      <button type="button" data-val="d">D · Close-up</button>
+    </div>
+    <div class="grp" data-g="b"><span class="k">Build-in</span>
+      <button type="button" data-val="together">Together</button>
+      <button type="button" data-val="relay">Relay</button>
+      <button type="button" data-val="quartz">Quartz step</button>
+      <button type="button" data-val="calm">Reduced motion</button>
+      <button type="button" id="replay" data-act="replay">Replay</button>
+    </div>
+    <div class="grp" data-g="p"><span class="k">Promise strip</span>
+      <button type="button" data-val="cols">Columns</button>
+      <button type="button" data-val="line">One line</button>
+      <button type="button" data-val="dock">On the first screen</button>
+    </div>
+    <div class="grp" data-g="d"><span class="k">Dials</span>
+      <button type="button" data-val="onyx">Onyx + Champagne</button>
+      <button type="button" data-val="chrome">Chrome + Noir</button>
+    </div>
+    <div class="grp" data-g="f" data-frames>
+      <button type="button" data-val="desktop">Desktop</button>
+      <button type="button" data-val="phone">Phone</button>
+    </div>
+    <div class="grp">
+      <button type="button" id="notes-btn" aria-pressed="false" aria-controls="notes">What it decides</button>
+    </div>
+  </div>
+  <aside class="notes" id="notes" hidden aria-live="polite"></aside>
+</div>
+
+<script>
+const MODELS = {
+  acier: { name: "ACIER", price: 149, aud: 214 },
+  cadre: { name: "CADRE", price: 169, aud: 243 }
+};
+const S = { v: "a", b: "together", p: "cols", d: "onyx", f: "desktop", aud: false, notes: false };
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+let uid = 0;
+function el(name, attrs, parent) { const n = document.createElementNS(NS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+const calm = () => S.b === "calm" || matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* CADRE stand-in: a drawn square case, because no CADRE photo exists yet (from the PDP prototype). */
+function cadreSVG(dial) {
+  const k = "c" + (uid++);
+  const face = dial === "champagne" ? ["#F6EAD0", "#D9C08E"] : ["#2A2A2C", "#0A0A0B"];
+  const ink = dial === "champagne" ? "#3A2E1A" : "#E9E2D2";
+  let idx = "";
+  for (let i = 0; i < 12; i++) { const long = i % 3 === 0; idx += `<rect x="149" y="${long ? 168 : 171}" width="2" height="${long ? 14 : 8}" fill="${ink}" opacity="${long ? .9 : .5}" transform="rotate(${i * 30} 150 260)"/>`; }
+  return `<svg viewBox="0 0 300 520" role="img" aria-label="CADRE stand-in drawing, ${dial === "champagne" ? "Champagne" : "Noir"} Dial">
+  <defs>
+    <linearGradient id="${k}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DDA4"/><stop offset=".35" stop-color="#C69A4F"/><stop offset=".6" stop-color="#F0D597"/><stop offset="1" stop-color="#8E6A32"/></linearGradient>
+    <linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d6f73"/><stop offset=".5" stop-color="#d4d7da"/><stop offset="1" stop-color="#5d5f63"/></linearGradient>
+    <radialGradient id="${k}d" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="${face[0]}"/><stop offset="1" stop-color="${face[1]}"/></radialGradient>
+    <filter id="${k}s" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#000" flood-opacity=".6"/></filter>
+  </defs>
+  <g filter="url(#${k}s)">
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${4 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  ${[0,1,2,3,4].map(i => `<rect x="92" y="${404 + i * 23}" width="116" height="21" rx="3" fill="url(#${k}b)"/>`).join("")}
+  <rect x="40" y="120" width="220" height="280" rx="34" fill="url(#${k}b)"/>
+  <rect x="52" y="132" width="196" height="256" rx="26" fill="url(#${k}g)"/>
+  <rect x="68" y="148" width="164" height="224" rx="16" fill="url(#${k}d)"/>
+  <rect x="261" y="246" width="12" height="28" rx="3" fill="url(#${k}b)"/>
+  </g>
+  <rect x="196" y="252" width="22" height="16" rx="2" fill="${dial === "champagne" ? "#fffaf0" : "#1b1b1d"}" stroke="${ink}" stroke-opacity=".4"/>
+  ${idx}
+  <text x="150" y="208" text-anchor="middle" font-family="Libre Baskerville, Georgia, serif" font-size="11" letter-spacing="2" fill="${ink}" opacity=".85">FOSLN</text>
+  <g>
+    <rect class="hand h" x="147" y="214" width="6" height="50" rx="3" fill="${ink}" style="transform-origin:150px 260px"/>
+    <rect class="hand m" x="148" y="190" width="4" height="74" rx="2" fill="${ink}" style="transform-origin:150px 260px"/>
+    <circle cx="150" cy="260" r="4.5" fill="${ink}"/>
+  </g>
+</svg>`;
+}
+
+/* Hero Dials: ACIER Onyx is the only front-on photo, with its printed hands painted out, so it gets drawn hands.
+   ACIER Chrome is the three-quarter render, whose printed hands stand still. */
+function watch(m) {
+  if (m === "acier" && S.d === "onyx") return `<div class="watch" style="--ar:532/878;--cx:.491;--cy:.483"><img src="img/acier-onyx-bench.webp" width="1064" height="1756" alt="" fetchpriority="high"><svg class="hands" viewBox="0 0 532 878" data-hands aria-hidden="true"></svg><span class="stand">Placeholder photo</span></div>`;
+  if (m === "acier") return `<div class="watch" style="--ar:671/1191;--cx:.485;--cy:.425"><img src="img/acier-chrome.webp" width="671" height="1191" alt="" fetchpriority="high"><span class="stand">Render, printed hands</span></div>`;
+  return `<div class="watch" style="--ar:300/520;--cx:.5;--cy:.5">${cadreSVG(S.d === "onyx" ? "champagne" : "noir")}<span class="stand">Stand-in drawing</span></div>`;
+}
+const money = n => "$" + n;
+function half(m) {
+  const M = MODELS[m];
+  return `<a class="half ${m === "acier" ? "st" : "au"}" href="#" data-noop aria-label="Shop ${M.name}, ${money(M.price)}">
+    <div class="vis">${watch(m)}</div>
+    <div class="meta"><svg class="word" data-word="${m}" aria-hidden="true" focusable="false"></svg>
+      <span class="shop">Shop ${M.name}, ${money(M.price)}${S.aud ? `<span class="est">≈ A$${M.aud}</span>` : ""}</span></div></a>`;
+}
+
+const PROMISES = [
+  ["Free delivery in Australia", "Dispatched within 1 business day", "Delivery"],
+  ["30-day returns", "For an unworn, unaltered watch", "Returns"],
+  ["2-year warranty", "On top of your rights under the Australian Consumer Law", "Warranty & care"]
+];
+const promise = () => `<section class="promise p-${S.p}" aria-label="Delivery, returns and warranty">${PROMISES.map(p => `<a class="pr" href="#" data-noop title="${p[2]}"><b>${p[0]}</b><span>${p[1]}</span></a>`).join("")}</section>`;
+
+function header() {
+  return `<header class="hdr"><nav aria-label="Models"><a href="#" data-noop>ACIER</a><a href="#" data-noop>CADRE</a></nav>
+  <button type="button" class="menu" aria-label="Menu"></button><span class="wm">FOSLN</span>
+  <div class="tools"><button type="button" class="cur" data-cur aria-pressed="${S.aud}" title="≈ A$ estimate. Charged in USD.">${S.aud ? "USD $ · ≈ A$" : "USD $"}</button><button type="button" data-noop>Bag</button></div></header>`;
+}
+function footer() {
+  return `<footer class="ftr"><div class="top"><span class="wm">FOSLN</span><div class="cols">
+    <div><b>Watches</b><a href="#" data-noop>ACIER</a><a href="#" data-noop>CADRE</a></div>
+    <div><b>Help</b><a href="#" data-noop>Delivery</a><a href="#" data-noop>Returns</a><a href="#" data-noop>Warranty &amp; care</a><a href="#" data-noop>FAQ</a><a href="#" data-noop>Contact</a></div>
+    <div><b>FOSLN</b><a href="#" data-noop>About</a></div></div></div>
+    <div class="base"><span>Prices in US dollars (USD). Free delivery in Australia.</span>
+      <span class="pay" aria-label="Payment methods">${["Visa", "Mastercard", "Amex", "Shop Pay", "Apple Pay", "G Pay"].map(p => `<span>${p}</span>`).join("")}</span>
+      <span class="legal"><a href="#" data-noop>Privacy</a><a href="#" data-noop>Terms</a><span>© 2026 FOSLN</span></span></div></footer>`;
+}
+
+/* ── the Model name in metal bands (glyphs and metals from the PDP prototype) ── */
+const GLYPH = {
+  A: { w: 110, d: "M0 100L40 0H70L110 100H86L77 76H33L24 100ZM41 56H69L55 20Z" },
+  C: { w: 110, d: "M110 0H36A36 36 0 0 0 0 36V64A36 36 0 0 0 36 100H110V78H40A18 18 0 0 1 22 60V40A18 18 0 0 1 40 22H110Z" },
+  I: { w: 22, d: "M0 0H22V100H0Z" },
+  E: { w: 100, d: "M0 0H100V22H22V39H88V61H22V78H100V100H0Z" },
+  R: { w: 106, d: "M0 0H72A32 32 0 0 1 72 64H68L106 100H76L40 64H22V100H0ZM22 22V42H72A10 10 0 0 0 72 22Z" },
+  D: { w: 104, d: "M0 0H64A40 40 0 0 1 104 40V60A40 40 0 0 1 64 100H0ZM22 22V78H60A22 22 0 0 0 82 56V44A22 22 0 0 0 60 22Z" }
+};
+const METAL_STOPS = {
+  acier: [[0, "#6F757C"], [.16, "#E8EBEE"], [.3, "#9AA0A7"], [.47, "#FAFBFB"], [.6, "#868C93"], [.8, "#D7DADE"], [1, "#6B7178"]],
+  cadre: [[0, "#7A5A2A"], [.16, "#F3DDA4"], [.3, "#B48A45"], [.47, "#FFF1C9"], [.6, "#9A7438"], [.8, "#E6C88A"], [1, "#7A5A2A"]]
+};
+/* Each letter is five bands, like five rows of bracelet links. Each band is one "link" the build-in lands. */
+function buildWord(svg, model) {
+  const word = MODELS[model].name, id = "w" + (uid++), GAP = 14, ROWS = 5, ROW_H = 20;
+  const total = [...word].reduce((a, ch) => a + GLYPH[ch].w, 0) + GAP * (word.length - 1);
+  svg.setAttribute("viewBox", `0 0 ${total} 100`);
+  const defs = el("defs", {}, svg);
+  const g = el("linearGradient", { id: id + "-m", gradientUnits: "userSpaceOnUse", x1: 0, y1: 0, x2: total, y2: 90, spreadMethod: "reflect" }, defs);
+  METAL_STOPS[model].forEach(s => el("stop", { offset: s[0], "stop-color": s[1] }, g));
+  const links = [];
+  let x = 0;
+  [...word].forEach((ch, li) => {
+    const L = GLYPH[ch], clip = el("clipPath", { id: `${id}-l${li}` }, defs);
+    el("path", { d: L.d, transform: `translate(${x} 0)`, "clip-rule": "evenodd" }, clip);
+    const grp = el("g", { "clip-path": `url(#${id}-l${li})` }, svg);
+    for (let r = 0; r < ROWS; r++) {
+      const lk = el("g", {}, grp);
+      el("rect", { x: x - 4, y: r * ROW_H - .2, width: L.w + 8, height: ROW_H + .4, fill: `url(#${id}-m)` }, lk);
+      if (r < ROWS - 1) el("rect", { x: x - 4, y: r * ROW_H + ROW_H - 1.3, width: L.w + 8, height: 1.3, fill: "#25282C" }, lk);
+      links.push({ node: lk, l: li, r });
+    }
+    x += L.w + GAP;
+  });
+  return { grad: g, links, total };
+}
+
+/* ── the build-in: three timings, starting after the first paint, never holding back the photos or links ── */
+const START = 250;
+const TIMING = {
+  together: { label: "Together", desc: "Both names build at once. Each letter fills band by band from the top, the letters a beat apart, left to right. Each band slides in with a slight overshoot.", plan: (k, n) => ({ delay: START + k.l * 90 + k.r * 55, dur: 300, from: "translateX(-14px)", ease: "cubic-bezier(.2,.9,.3,1.25)" }) },
+  relay: { label: "Relay", desc: "ACIER builds first, then CADRE, in reading order. Each name builds as in Together.", plan: (k, n) => ({ delay: START + n * 1000 + k.l * 90 + k.r * 55, dur: 300, from: "translateX(-14px)", ease: "cubic-bezier(.2,.9,.3,1.25)" }) },
+  quartz: { label: "Quartz step", desc: "One row of bands lands across both names on each step, four steps a second, with no easing between steps. It echoes the PDP's quartz-step hands.", plan: (k, n) => ({ delay: START + k.r * 250, dur: 110, from: "translateY(-6px)", ease: "linear", step: true }) }
+};
+const words = [];
+function runBuild() {
+  const ms = { together: 0, relay: 0, quartz: 0 };
+  words.forEach(w => w.links.forEach(k => k.node.getAnimations().forEach(a => a.cancel())));
+  if (calm()) return 0;
+  const T = TIMING[S.b];
+  let end = 0;
+  words.forEach((w, n) => w.links.forEach(k => {
+    const p = T.plan(k, n);
+    const frames = p.step
+      ? [{ transform: p.from, opacity: 0 }, { transform: "translateY(1.2px)", opacity: 1, offset: .55 }, { transform: "none", opacity: 1 }]
+      : [{ transform: p.from, opacity: 0 }, { transform: "none", opacity: 1 }];
+    k.node.animate(frames, { delay: p.delay, duration: p.dur, easing: p.ease, fill: "backwards" });
+    end = Math.max(end, p.delay + p.dur);
+  }));
+  /* the finishing beat: one pass of light across each name's metal */
+  const t0 = performance.now() + end;
+  const sweep = now => {
+    const t = (now - t0) / 900;
+    if (t < 0) return requestAnimationFrame(sweep);
+    const e = Math.min(t, 1), eased = 1 - Math.pow(1 - e, 3);
+    words.forEach(w => w.grad.setAttribute("gradientTransform", `translate(${(eased * 2 - 1) * w.total * .5} 0)`));
+    if (e < 1) requestAnimationFrame(sweep);
+    else words.forEach(w => w.grad.removeAttribute("gradientTransform"));
+  };
+  requestAnimationFrame(sweep);
+  return end + 900;
+}
+
+/* ── hands at the visitor's local time: hour and minute only, so nothing ticks on the home page ── */
+function buildHands(svg) {
+  const id = "h" + (uid++), defs = el("defs", {}, svg);
+  const hg = el("linearGradient", { id: id + "-g", x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
+  [[0, "#7E848A"], [.42, "#F3F5F6"], [.58, "#A7ADB3"], [1, "#666C72"]].forEach(s => el("stop", { offset: s[0], "stop-color": s[1] }, hg));
+  const f = el("filter", { id: id + "-s", x: "-50%", y: "-50%", width: "200%", height: "200%" }, defs);
+  el("feDropShadow", { dx: 2.5, dy: 3.5, stdDeviation: 2, "flood-color": "#000", "flood-opacity": .7 }, f);
+  const body = `url(#${id}-g)`, edge = "#3B3F44";
+  const root = el("g", { transform: "translate(257 422.5)", filter: `url(#${id}-s)` }, svg);
+  const sword = len => { const g = el("g", {}, root);
+    el("path", { d: "M-1.5 0V-17.5Q0 -18.6 1.5 -17.5V0Z", fill: body, stroke: edge, "stroke-width": .6 }, g);
+    el("path", { d: `M-4.8 -15L-3.4 ${-len}Q0 ${-(len + 5)} 3.4 ${-len}L4.8 -15Z`, fill: body, stroke: edge, "stroke-width": .7 }, g);
+    el("path", { d: `M-1.45 -27H1.45V${-(len - 6)}H-1.45Z`, fill: "#EEF1EA" }, g); return g; };
+  const hour = sword(96), minute = sword(138);
+  el("circle", { r: 8, fill: body, stroke: edge, "stroke-width": .7 }, root);
+  el("circle", { r: 3, fill: "#1A1B1D" }, root);
+  return { hour, minute };
+}
+let hands = [];
+function setHands() {
+  const d = new Date(), m = d.getMinutes(), h = (d.getHours() % 12) + m / 60;
+  hands.forEach(H => {
+    if (H.svg) { H.svg.hour.setAttribute("transform", `rotate(${h * 30})`); H.svg.minute.setAttribute("transform", `rotate(${m * 6})`); }
+    else { H.h.style.transform = `rotate(${h * 30}deg)`; H.m.style.transform = `rotate(${m * 6}deg)`; }
+  });
+}
+setInterval(setHands, 15000);
+
+/* ── B's dial: 60 ticks, steel on ACIER's side, gold on CADRE's, the 12 to 6 axis as the seam ── */
+function buildRing(svg) {
+  for (let i = 0; i < 60; i++) {
+    const hr = i % 5 === 0, side = i === 0 || i === 30 ? "t-ax" : i < 30 ? "t-au" : "t-st";
+    el("line", { x1: 0, x2: 0, y1: -96, y2: hr ? -84 : -90, transform: `rotate(${i * 6})`, class: side + (hr ? " hr" : "") }, svg);
+  }
+  el("line", { x1: 0, x2: 0, y1: -80, y2: 80, class: "axis" }, svg);
+}
+
+/* ── render ── */
+function render(replay) {
+  const vp = $("#vp"), keep = vp.scrollTop;
+  vp.innerHTML = `<div class="home">${header()}
+    <section class="hero v-${S.v}" aria-label="Choose a Model">
+      ${S.v === "b" ? '<svg class="ring" data-ring viewBox="-100 -100 200 200" aria-hidden="true"></svg>' : ""}
+      ${half("acier")}${half("cadre")}<span class="seam" aria-hidden="true"></span>
+    </section>
+    ${promise()}${footer()}</div>`;
+  words.length = 0; hands = [];
+  vp.querySelectorAll("[data-word]").forEach(s => words.push(buildWord(s, s.dataset.word)));
+  const hs = vp.querySelector("[data-hands]"); if (hs) hands.push({ svg: buildHands(hs) });
+  vp.querySelectorAll(".half.au svg[role=img]").forEach(s => hands.push({ h: s.querySelector(".hand.h"), m: s.querySelector(".hand.m") }));
+  setHands();
+  const ring = vp.querySelector("[data-ring]"); if (ring) buildRing(ring);
+  size();
+  vp.scrollTop = replay ? 0 : keep;
+  if (replay) runBuild();
+  document.querySelectorAll(".bar [data-g]").forEach(g => g.querySelectorAll("[data-val]").forEach(b => b.setAttribute("aria-pressed", String(S[g.dataset.g] === b.dataset.val))));
+  $("#proto").dataset.frame = S.f;
+  notes();
+  try { history.replaceState(null, "", "#" + [S.v, S.b, S.p, S.d, S.f].join("-")); } catch (e) {}
+}
+
+/* hero height: the frame's height under the header, minus the docked strip when it shares the first screen */
+function size() {
+  const vp = $("#vp"), hdr = vp.querySelector(".hdr");
+  if (!hdr) return;
+  const phone = vp.clientWidth <= 700;
+  const dock = S.p === "dock" ? vp.querySelector(".promise").offsetHeight : 0;
+  const H = vp.clientHeight - hdr.offsetHeight - dock;
+  /* C keeps the columns side by side on phones, so its hero only needs its content's height and the strip shows below it */
+  const hh = phone ? (S.v === "c" ? 460 : Math.max(H, 480)) : Math.min(Math.max(H, 520), 900);
+  vp.style.setProperty("--hh", hh + "px");
+}
+new ResizeObserver(size).observe($("#vp"));
+
+/* ── what each choice decides ── */
+const LAYOUTS = {
+  a: { name: "A · Hairline", stack: "Two bands, one per Model, each half the screen. Each band puts the watch on one side and the name and Shop link on the other, mirrored so the two watches sit on opposite sides.", seam: "A hairline, brightest at its centre and fading out at both ends. Vertical on desktop, horizontal on phones.", metal: "Each half has its own ground (onyx for ACIER, warm black for CADRE) and a faint pool of its metal's light behind the watch. The metal itself is only in the name and the Shop link." },
+  b: { name: "B · One dial", stack: "ACIER on top with its name above the watch, CADRE below with its name under the watch, so the two watches meet at the seam.", seam: "The 12 to 6 line of one large, faint 60-tick dial that spans both halves, like the PDP's bench dial. On phones the dial turns so the line runs 9 to 3.", metal: "The ticks on ACIER's side are steel and on CADRE's side gold, on the two grounds. The names and Shop links carry the metal too." },
+  c: { name: "C · Two columns", stack: "No stacking. The halves stay side by side on phones as two tall columns, and the Shop link wraps under the name. This leaves room below for the promise strip on the first screen.", seam: "No line. The two grounds blend over a short band.", metal: "As A: the grounds, a faint pool of light, the name and the Shop link." },
+  d: { name: "D · Close-up", stack: "Two bands, each filled by a close crop of the case and dial, with the name large across the bottom of the band.", seam: "The hard edge where the two crops meet, with no line on desktop and a dark hairline on phones.", metal: "The watch itself carries most of the metal. The name is large in its metal over a fade to the ground. This needs sharp, high-resolution front-on photos of all four Dials." }
+};
+const STRIPS = {
+  cols: "Three columns under the hero, each a short line and a muted second line, linking to its page. On phones they stack. Below the first screen everywhere except in C on phones.",
+  line: "One centred row of three short lines, separated by hairlines, each linking to its page. No second lines. On phones it stacks into three centred lines.",
+  dock: "Docked to the bottom of the first screen, so the promises show before any scroll. Three short lines only; the hero shrinks by the strip's height."
+};
+function notes() {
+  const n = $("#notes"); n.hidden = !S.notes; $("#notes-btn").setAttribute("aria-pressed", String(S.notes));
+  if (!S.notes) return;
+  const L = LAYOUTS[S.v], T = TIMING[S.b];
+  const total = { together: "about 1.1 s, then a 0.9 s pass of light", relay: "about 2.1 s, then a 0.9 s pass of light", quartz: "about 1.4 s, then a 0.9 s pass of light" };
+  n.innerHTML = `<h2>${L.name}</h2><p class="sub">What this combination decides for the home page.</p>
+  <dl>
+    <div><dt>Phones: how the halves stack</dt><dd>${L.stack}</dd></div>
+    <div><dt>The seam</dt><dd>${L.seam}</dd></div>
+    <div><dt>How each half carries its metal</dt><dd>${L.metal}</dd></div>
+    <div><dt>Build-in: ${S.b === "calm" ? "reduced motion" : T.label}</dt><dd>${S.b === "calm" ? "The fallback. The names show fully built from the first frame, and nothing on the page moves. The same happens for anyone whose device asks for reduced motion, whichever timing is chosen." : `${T.desc} It starts 0.25 s after the first paint and takes ${total[S.b]}. The photos and Shop links are there from the first frame, and the links work while the names build.`}</dd></div>
+    <div><dt>Promise strip</dt><dd>${STRIPS[S.p]}</dd></div>
+  </dl>
+  <h3>The same in every option</h3>
+  <ul>
+    <li>Each whole half is the link, read out as "Shop ACIER, $149" or "Shop CADRE, $169".</li>
+    <li>The hands show the visitor's local time, hour and minute only. Nothing ticks on the home page.</li>
+    <li>The build-in is the only metal-letter animation on the site. It plays once per visit; Replay is for this prototype only.</li>
+    <li>"USD $" in the header adds ≈ A$ estimates next to both prices.</li>
+    <li>Header, footer and copy follow "Decide the v1 page inventory" and "Decide the brand voice and PDP copy".</li>
+  </ul>
+  <h3>Still open</h3>
+  <ul>
+    <li>Which Dial each half shows. Try "Dials" in the bar.</li>
+    <li>The home hero needs a front-on cut-out of each Model; only ACIER Onyx has one, and it is soft.</li>
+  </ul>`;
+}
+
+/* ── controls ── */
+document.addEventListener("click", ev => {
+  const t = ev.target;
+  if (t.closest("#notes-btn")) { S.notes = !S.notes; notes(); return; }
+  if (t.closest("[data-act=replay]")) { $("#vp").scrollTop = 0; runBuild(); return; }
+  const b = t.closest(".bar [data-val]");
+  if (b) {
+    const g = b.closest("[data-g]").dataset.g; S[g] = b.dataset.val;
+    render(g === "v" || g === "b" || g === "d" || g === "f");
+    if (g === "f") requestAnimationFrame(() => { size(); });
+    return;
+  }
+  if (t.closest("[data-cur]")) { S.aud = !S.aud; render(false); return; }
+  if (t.closest("[data-noop]")) ev.preventDefault();
+});
+
+/* read a bare #b-relay-dock-onyx-phone style anchor */
+function boot() {
+  (location.hash || "").replace("#", "").split("-").forEach(p => {
+    if (LAYOUTS[p]) S.v = p; if (TIMING[p] || p === "calm") S.b = p; if (STRIPS[p]) S.p = p;
+    if (p === "onyx" || p === "chrome") S.d = p; if (p === "phone" || p === "desktop") S.f = p;
+  });
+  render(true);
+}
+boot();
+</script>

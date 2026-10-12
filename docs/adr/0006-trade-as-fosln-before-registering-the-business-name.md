@@ -25,6 +25,7 @@ FOSLN launches as planned, selling as FOSLN before the business name is register
 - **The trigger is unchanged.** The ABN and the "FOSLN" business name are registered in the first month with more than 5 orders.
 - **The warranty names the legal person.** Until registration it reads "This warranty is given by [the owner's full legal name], who sells as FOSLN", on the Warranty page, on the card in the box and in Terms.
 - **Nowhere else carries the owner's name.** Shopify's legal business name stays blank, so Contact, Privacy and checkout show FOSLN only.
+  - _Amended by [Decide the Shopify Payments and GST setup](https://github.com/Kintukka2/FOSLN-WATCH/issues/42):_ this holds only until the switch to Sole trader. From then on, Shopify's legal business name has to match the ABR entity name, which is the owner's own name. The card statement name stays "FOSLN".
 
 ## Alternatives considered
 
@@ -37,7 +38,7 @@ FOSLN launches as planned, selling as FOSLN before the business name is register
 - **The fallback** if ASIC writes: register the ABN and business name the same day.
 - **Registration checklist**, for the first month with more than 5 orders:
   - register the ABN and the "FOSLN" business name;
-  - switch Shopify Payments from Individual to Sole trader, which means turning Payments off first;
+  - switch Shopify Payments from Individual to Sole trader, which means turning Payments off first. Do it on a weekday morning with the store behind its password page, keep the same payout bank account so there's no 3–5 business day payout hold, enter the details exactly as the ABR shows them, and reopen as soon as Payments is reactivated;
   - change the warranty name to "[legal name] trading as FOSLN" on the Warranty page, in Terms and on a reprinted card;
   - show the registered name and the ABN on invoices and receipts (s 19).
 - **Cards are printed in small runs**, because the warranty name changes at registration.

@@ -30,7 +30,8 @@ The store runs on **Basic**, with **USD as the store currency** and AUD payouts.
 
 - **About A$8.20 in total fees on an ACIER sale** on an Australian card, against about A$3.93 if it were charged in AUD. The 55% price floor from "Decide the launch price for each Model" already covers this.
 - **Changing the store currency later is costly.** Prices keep their numbers under a new currency label, gift cards stop working, and refunds and reports are affected. Treat USD as fixed.
+- **No Afterpay or Zip.** Both need the store currency to match their region, AUD for Australia, so neither can be offered while the store currency is USD. Klarna and Shop Pay Installments aren't offered to Australian stores either. Checkout loses buy-now-pay-later, which many Australian shoppers expect on a purchase of about A$200 ([Decide the Shopify Payments and GST setup](https://github.com/Kintukka2/FOSLN-WATCH/issues/42)).
 - **Reports are in USD**, while costs and, later, GST are in AUD.
 - **Revisit at Advanced volume.** If sales pass roughly 280 a month, USD payouts on Advanced become cheaper.
 
-Sources: [Charging USD from an Australian Shopify store](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/shopify-usd-currency/docs/research/shopify-usd-currency.md).
+Sources: [Charging USD from an Australian Shopify store](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/shopify-usd-currency/docs/research/shopify-usd-currency.md); [Shopify Payments, payment methods and GST](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/shopify-payments-gst/docs/research/shopify-payments-gst.md).

@@ -16,6 +16,7 @@ fosln.com v1 is a **Shopify Online Store 2.0 theme**: a custom theme built from 
 
 - The theme sits at the root of this repo's `main`, next to `CLAUDE.md`, `GLOSSARY.md` and `docs/`. `main` is connected to the live theme through Shopify's GitHub integration, and theme-editor saves commit back as the `shopify` bot.
 - Changes go straight to live. Each session runs Theme Check and renders the changed pages, pulls the bot's commits, then opens and merges its own pull request, so GitHub's **Revert** button undoes any change.
+  - _Amended by [Set performance and accessibility targets](https://github.com/Kintukka2/FOSLN-WATCH/issues/55#issuecomment-6142775088):_ changes go to a `preview` branch first, connected to an unpublished theme. The session runs Theme Check, Lighthouse and axe against that theme's preview link, and merges to `main` only when all pass. Revert stays the rollback.
 - The owner edits store data in the admin, and copy and images in the theme editor. Layout, the metal treatments, motion, the spec drawing and the wrist guide are code-only.
 - An app is added only when a ticket decides one is needed. It must install as a theme app block or app embed.
 
@@ -30,6 +31,7 @@ fosln.com v1 is a **Shopify Online Store 2.0 theme**: a custom theme built from 
 - **Lock-in.** Liquid only runs on Shopify. Leaving Shopify means rebuilding the theme, though product data can be exported.
 - **Checkout styling is limited.** Below Plus, the checkout can be restyled (logo, colours, fonts) but not redesigned.
 - **No preview step.** A bad push reaches the live store immediately. Theme Check, a render check and the Revert button are the safety net.
+  - _Amended by [Set performance and accessibility targets](https://github.com/Kintukka2/FOSLN-WATCH/issues/55#issuecomment-6142775088):_ the preview theme now catches a bad change before it reaches the live store. The release gates are a Lighthouse mobile score of 90 or more and WCAG 2.2 AA.
 - **Shopify's scripts stay.** `content_for_header` can't be removed, so every app embed adds weight to every page.
 
 Sources: [Can a Shopify theme carry the FOSLN designs?](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/theme-vs-headless/docs/research/theme-vs-headless.md), [How Shopify's GitHub sync works with this repo](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/shopify-github-sync/docs/research/shopify-github-sync.md), [Is there a better platform than Shopify?](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/platform-alternatives/docs/research/platform-alternatives.md), [Putting checkout on fosln.com via Cloudflare](https://github.com/Kintukka2/FOSLN-WATCH/blob/research/domain-checkout-cloudflare/docs/research/domain-checkout-cloudflare.md).

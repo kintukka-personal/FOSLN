@@ -26,6 +26,7 @@ FOSLN launches as planned, selling as FOSLN before the business name is register
 - **The warranty names the legal person.** Until registration it reads "This warranty is given by [the owner's full legal name], who sells as FOSLN", on the Warranty page, on the card in the box and in Terms.
 - **Nowhere else carries the owner's name.** Shopify's legal business name stays blank, so Contact, Privacy and checkout show FOSLN only.
   - _Amended by [Decide the Shopify Payments and GST setup](https://github.com/Kintukka2/FOSLN-WATCH/issues/42):_ this holds only until the switch to Sole trader. From then on, Shopify's legal business name has to match the ABR entity name, which is the owner's own name. The card statement name stays "FOSLN".
+  - _Amended by [Decide analytics, consent and email capture at launch](https://github.com/Kintukka2/FOSLN-WATCH/issues/53#issuecomment-6159105764):_ email footers are the second exception, because the Spam Act (s 17) requires the sender to be named accurately. Every email (Shopify's notifications and Judge.me's review request) ends "Sent by [the owner's full legal name], who sells as FOSLN · [Private PO Box] · hello@fosln.com". After registration it becomes "[legal name] trading as FOSLN", as on the warranty.
 
 ## Alternatives considered
 
